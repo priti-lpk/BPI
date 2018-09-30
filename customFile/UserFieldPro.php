@@ -1,120 +1,84 @@
 <?php
-ob_start();
-include '../shreeLib/session_info.php';
+
+//include '../shreeLib/session_info.php';
 include_once '../shreeLib/DBAdapter.php';
 include_once '../shreeLib/dbconn.php';
+date_default_timezone_set('Asia/Kolkata');
 if ($_POST['action'] == 'add') {
-
     $dba = new DBAdapter();
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $sql1 = "INSERT INTO system_user (user_name,user_pass,user_mobile,user_address) VALUES ('" . $_POST['user_name'] . "','" . $_POST['user_pass'] . "','" . $_POST['user_mobile'] . "','" . $_POST['user_address'] . "')";
-        //mysqli_query($con, $sql1);
-        //print_r($sql1);
-        $last_id = $dba->getLastID("id", "system_user", "1");
+    $createdby = $dba->createdby();
+    unset($_POST['action']);
+    unset($_POST['id']);
+    $_POST['user_createdby'] = $createdby;
+//    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $password = md5($_POST['user_login_password']);
+    $_POST['user_login_password'] = $password;
+    //print_r($password);
+    if ($_POST['disable'] == 1) {
+        $_POST['role_rights_id'] = '0';
+    } elseif ($_POST['disable'] == 0) {
+        $role = $_POST['role_rights_id'];
+        $roles = implode(',', $role);
 
-        $totalrow = count($_POST['user_name']);
-
-        $rowcount = count($_POST['mod_id']);
-        //print_r($rowcount);
-        // for ($i = 0; $i < $rowcount; $i++) {
-       
-        //  print_r($_POST['check_list']);
-        // if (!empty($_POST['check_list'])) {
-        for ($i = 1; $i <= $rowcount; $i++) {
-            
-            $role_create = isset($_POST['role_create'][$i]) ? 1 : 0;
-            //print_r($role_create);
-            $role_edit = isset($_POST['role_edit'][$i]) ? 1 : 0;
-            $role_view = isset($_POST['role_view'][$i]) ? 1 : 0;
-            $role_delete = isset($_POST['role_delete'][$i]) ? 1 : 0;
-            //print_r($_POST['role_delete']);
-
-            $sql = "INSERT INTO  role_rights (user_id,mod_id,role_create,role_edit,role_view,role_delete) VALUES ('" . $last_id . "','" . $_POST['mod_id'][$i-1] . "','" . $role_create . "','" . $role_edit . "','" . $role_view . "','" . $role_delete . "')";
-            // mysqli_query($con, $sql);
-            print_r($sql);
-            echo "</br>";
-        }
-
-        // }
-        //header('location:../AddPurchaseList.php');
+        $_POST['role_rights_id'] = $roles;
     }
+    $userpass = md5($_POST['user_login_password']);
+    unset($_POST['disable']);
+    $result = $dba->setData("create_user", $_POST);
+    //$sql1 = "INSERT INTO create_user (branch_id,roles_id,role_rights_id,user_fullname,user_contact,user_email,user_login_username,user_login_password,user_createdby) VALUES ('" . $_POST['branch_id'] . "','".$_POST['roles_id']."','".$roles."','" . $_POST['user_fullname'] . "','" . $_POST['user_contact'] . "','" . $_POST['user_email'] . "','" . $_POST['user_login_username'] . "','" . $userpass . "','" . $_POST['user_createdby'] . "')";
+//        $sql1 = "INSERT INTO create_user (branch_id,user_fullname,user_contact,user_email,user_login_username,user_login_password,user_type,user_createdby,user_status) VALUES ('" . $_POST['branch_id'] . "','" . $_POST['user_fullname'] . "','" . $_POST['user_contact'] . "','" . $_POST['user_email'] . "','" . $_POST['user_login_username'] . "','" . $userpass . "','" . $_POST['user_type'] . "','" . $_POST['user_createdby'] . "','" . $_POST['user_status'] . "')";
+    //mysqli_query($con, $sql1);
+    //print_r($sql1);
+
+    $mailToList = array();
+    $email_subject = "Blue Parl International Import Export";
+    $fromemail = "info@recommercexpo.com";
+    $headers = "From: " . $fromemail . " \r\n";
+    $headers .= "Reply-To: " . $fromemail . "\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $message = "Username: " . $_POST['user_login_username'] . "\r\n Password:" . $password . "\r\nBranch Name: " . $_POST['branch_id'] . "\r\nUrl: http://demo.bpiindia.in/";
+    //echo $message;
+    header('location:../UserField.php');
+    //}
+    //  }
 } elseif ($_POST['action'] == 'edit') {
 
-    $totalrowcount = count($_POST['item_name']);
-
     $dba = new DBAdapter();
 
+
+    $createdby = $dba->createdby();
+    // print_r($createdby);
+    $_POST['user_createdby'] = $createdby;
     $id = $_POST['id'];
-    $rowcount = $_POST['rowcount_no'];
 
-    if ($totalrowcount >= 1) {
-        $query = "UPDATE purchase_list set party_id='" . $_POST['party_id'] . "', p_invoice_no='" . $_POST['p_invoice_no'] . "', pl_date='" . $_POST['pl_date'] . "',total_amount='" . $_POST['total_amount'] . "',pay_type='" . $_POST['pay_type'] . "', note='" . $_POST['note'] . "' WHERE id=" . $id;
-        mysqli_query($con, $query);
+//    $rowcount = $_POST['r_count'];
+    $userpass = md5($_POST['user_login_password']);
+//    if ($rowcount >= 1) {
+    $query = "UPDATE create_user set branch_id='" . $_POST['branch_id'] . "',roles_id='" . $_POST['roles_id'] . "', user_fullname='" . $_POST['user_fullname'] . "',user_contact ='" . $_POST['user_contact'] . "', user_email='" . $_POST['user_email'] . "',user_login_password='" . $userpass . "',user_createdby='" . $_POST['user_createdby'] . "' WHERE id=" . $id;
 
-        for ($i = 0; $i < $rowcount; $i++) {
-            $id1 = $_POST['p_id'][$i];
-            $query1 = "UPDATE purchase_item_list set item_id='" . $_POST['item_id'][$i] . "', item_qnty='" . $_POST['item_qnty'][$i] . "', item_rate='" . $_POST['item_rate'][$i] . "',sub_total='" . $_POST['sub_total'][$i] . "',gst='" . $_POST['gst'][$i] . "', total='" . $_POST['total'][$i] . "' WHERE id=" . $id1;
-            mysqli_query($con, $query1);
-            $itemid = $_POST['item_id'][$i];
-            $qntynew = $_POST['item_qnty'][$i];
+//        $query = "UPDATE create_user set branch_id='" . $_POST['branch_id'] . "', user_contact ='" . $_POST['user_contact'] . "', user_email='" . $_POST['user_email'] . "',user_login_password='" . $userpass . "',user_type='" . $_POST['user_type'] . "',user_createdby='" . $_POST['user_createdby'] . "',user_status='" . $_POST['user_status'] . "' WHERE id=" . $id;
+    //print_r($query);
+    mysqli_query($con, $query);
 
-            $qntyold = $_POST['p_qnty'][$i];
 
-            $qnty = ($qntynew - $qntyold) * (-1);
-            $dba->updateStock($itemid, $qnty);
-        }
-        if ($rowcount < $totalrowcount) {
-            for ($i = $rowcount; $i < $totalrowcount; $i++) {
-                $sql = "INSERT INTO  purchase_item_list (pl_id , item_id , item_qnty, item_rate, sub_total , gst , total ) VALUES ('" . $id . "','" . $_POST['item_id'][$i] . "','" . $_POST['item_qnty'][$i] . "','" . $_POST['item_rate'][$i] . "','" . $_POST['sub_total'][$i] . "','" . $_POST['gst'][$i] . "','" . $_POST['total'][$i] . "')";
-                mysqli_query($con, $sql);
-                $itemid = $_POST['item_id'][$i];
-                $itemqnty = $_POST['item_qnty'][$i];
-                $qnty = ($itemqnty * (-1));
-                $dba->updateStock($itemid, $qnty);
-            }
-        }
-    }
-    if ($_POST['pay_type'] == 'Debit' & $_POST['p_type'] == 'Debit') {
+    header('location:../UserField.php');
+} elseif ($_POST['action'] == "changeStatus") {
 
-        $pid = $_POST['party_id'];
-        $pamount = $_POST['total_amount'];
-        $oldamount = $_POST['pl_amount'];
-        $dba->updatePartyAmount($pid, $pamount - $oldamount, 'Credit');
-    } elseif ($_POST['pay_type'] == 'Debit' & $_POST['p_type'] == 'Cash') {
-
-        $pid = $_POST['party_id'];
-        $pamount = $_POST['total_amount'];
-        $oldamount = $_POST['pl_amount'];
-        $dba->updatePartyAmount($pid, $pamount, 'Credit');
-    } elseif ($_POST['pay_type'] == 'Cash' & $_POST['p_type'] == 'Debit') {
-
-        $pid = $_POST['party_id'];
-        $pamount = $_POST['total_amount'];
-        $oldamount = $_POST['pl_amount'];
-        $dba->updatePartyAmount($pid, $pamount, 'Debit');
-    }
-    header('location:../AddPurchaseList.php');
-} elseif ($_POST['action'] == 'delete') {
+    include_once '../shreeLib/DBAdapter.php';
 
     $dba = new DBAdapter();
 
-    $id = $_POST['purchase_id'];
+    $field = array("user_status" => $_POST['ustatus'], "user_created_date" => date("Y-m-d H:i"));
 
-
-    unset($_POST['action']);
-
-    unset($_POST['purchase_id']);
-
-    $result = $dba->deleteRow("purchase_list", $_POST, "id=" . $id);
+    $result = $dba->updateRow("create_user", $field, "id=" . $_POST['uid']);
 
     $responce = array();
 
     if ($result) {
 
         $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-
-        header('location:../AddPurchaseList');
     } else {
 
         $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
