@@ -28,15 +28,13 @@ function addParty() {
             $('input:checkbox').removeAttr('checked');
         },
         fail: function () {
-            $('#addparty').modal('toggle');
+//            $('#addparty').modal('toggle');
             swal("Error!", "Error while performing operation!", "error");
         },
 
         error: function (data, status, jq) {
-            console.log(data);
-            console.log(data.status);
-
-            $('#addparty').modal('toggle');
+            
+//            $('#addparty').modal('toggle');
             swal("Error!", data.responseText, "error");
         }
     });

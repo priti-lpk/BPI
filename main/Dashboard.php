@@ -1,76 +1,101 @@
 <?php
-include './shreeLib/session_info.php';
+ob_start();
+require_once "shreeLib/session_info.php";
+if (!isset($_SESSION)) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
+
     <head>
-        <title>Welcome To Blue Parl Import Export</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Blue Pearl International</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+        <link rel="stylesheet" href="../plugins/morris/morris.css">
 
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
-    <body class="topnav-fixed dashboard">
-        <!-- WRAPPER -->
-        <div id="wrapper" class="wrapper">
-            <!-- TOP BAR -->
+
+    <body>
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
             <?php include './topbar.php' ?>
-            <!-- /top -->
-            <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+            <!-- Top Bar End -->
 
-            <!-- left sidebar -->
+            <!-- ========== Left Sidebar Start ========== -->
             <?php include './sidebar.php' ?>
-            <!-- end left sidebar -->
-            <!-- content-wrapper -->
-            <div id="main-content-wrapper" class="content-wrapper ">
-                <div class="row">
-                    <div class="col-md-4 ">
-                        <ul class="breadcrumb">
-                            <li><i class="fa fa-home"></i><a href="Home">Home</a></li>
-                            <li class="active">Dashboard</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- main -->
-                <div class="content">
-                    <div class="main-header">
-                        <h2>DASHBOARD</h2>
-                        <em>Welcome to Blue Parl Import Export</em>
-                    </div>
-                    <div class="main-content">
+            <!-- Left Sidebar End -->
 
-                    </div>
-                    <!-- /main-content -->
-                </div>
-                <!-- /main -->
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Dashboard</h4>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">Welcome to Blue Pearl International Dashboard</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container-fluid -->
+
+                </div> <!-- content -->
+                <?php include './footer.php' ?>
+
 
             </div>
-            <!-- /content-wrapper -->
+
+
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
 
         </div>
-        <!-- /row -->
+        <!-- END wrapper -->
 
-        <!-- /wrapper -->
-        <!-- FOOTER -->
-        <script src="assets/js/jquery/jquery-2.1.0.min.js"></script>
-        <script src="assets/js/bootstrap/bootstrap.js"></script>
-        <script src="assets/js/plugins/modernizr/modernizr.js"></script>
-        <script src="assets/js/plugins/bootstrap-tour/bootstrap-tour.custom.js"></script>
-        <script src="assets/js/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <script src="assets/js/king-common.js"></script>
-        <script src="demo-style-switcher/assets/js/deliswitch.js"></script>
-        <script src="assets/js/plugins/stat/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/plugins/raphael/raphael-2.1.0.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.resize.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.time.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.pie.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.tooltip.min.js"></script>
-        <script src="assets/js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
-        <script src="assets/js/plugins/datatable/jquery.dataTables.min.js"></script>
-        <script src="assets/js/plugins/datatable/dataTables.bootstrap.js"></script>
-        <script src="assets/js/plugins/jquery-mapael/jquery.mapael.js"></script>
-        <script src="assets/js/plugins/raphael/maps/usa_states.js"></script>
-        <script src="assets/js/king-chart-stat.js"></script>
-        <script src="assets/js/king-table.js"></script>
-        <script src="assets/js/king-components.js"></script>
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/metisMenu.min.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/waves.min.js"></script>
+
+        <script src="plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+        <!-- Peity JS -->
+        <script src="plugins/peity/jquery.peity.min.js"></script>
+
+        <script src="plugins/morris/morris.min.js"></script>
+        <script src="plugins/raphael/raphael-min.js"></script>
+
+        <script src="assets/pages/dashboard.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+
     </body>
+
 </html>

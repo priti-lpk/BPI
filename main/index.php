@@ -1,88 +1,122 @@
 <?php
 if ($_POST) {
-    include './shreeLib/DBAdapter.php';
+    ob_start();
+    include 'shreeLib/DBAdapter.php';
+    
     $dba = new DBAdapter();
     $_POST['user_pass'] = md5($_POST['user_pass']);
     $msg;
     $data = $dba->getRow("admin", array("*"), "username='" . $_POST['user_username'] . "' and password='" . $_POST['user_pass'] . "'");
     if (!empty($data)) {
         if ($_POST['user_username'] === $data[0][1] && $_POST['user_pass'] === $data[0][2]) {
+
             session_start();
             $_SESSION['mainuser'] = $data[0][1];
-            header("Location:./Dashboard.php");
+            header("Location:Dashboard.php");
         } else {
+
             $msg = "Authentication Fail!";
         }
     } else {
+
         $msg = "Authentication Fail!";
     }
 }
 ?>
-<html lang="en" class="no-js">
+<!DOCTYPE html>
+<html lang="en">
+
     <head>
-        <title>Login | Blue Parl Import Export</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Blue Parl Import Export">
-        <meta name="author" content="LPK Technosoft">
-        <!-- CSS -->
+        <base href="http://localhost/bpiindia1/main/">
+
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Login | Blue Pearl International</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
-        <!--[if lte IE 9]>
-         <link href="assets/css/main-ie.css" rel="stylesheet" type="text/css" />
-         <link href="assets/css/main-ie-part2.css" rel="stylesheet" type="text/css" />
-        <![endif]-->
-        <!-- Fav and touch icons -->
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/kingadmin-favicon144x144.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/kingadmin-favicon114x114.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/kingadmin-favicon72x72.png">
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="assets/ico/kingadmin-favicon57x57.png">
-        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
-        <div class="wrapper full-page-wrapper page-auth page-login text-center">
-            <div class="inner-page">
-                <div class="logo">
-                    <a href="index.php"><h1>Welcome to Blue Parl Import Export</h1></a>
-                </div>
-                <div class="login-box center-block">
-                    <form class="form-horizontal" method="post" role="form">
-                        <p class="title">Login</p>
-                        <div class="form-group">
-                            <label for="username" class="control-label sr-only">Username</label>
-                            <div class="col-sm-12">
-                                <div class="input-group">
-                                    <input type="text" placeholder="username" id="user_username" name="user_username" class="form-control" required>
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+
+        <!-- Background -->
+        <div class="account-pages"></div>
+        <!-- Begin page -->
+        <div class="wrapper-page">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <!--                    <h3 class="text-center m-0">
+                                            <a href="index.php" class="logo logo-admin"><img src="logo/logo-1.png" height="80" alt="logo"></a>
+                                        </h3>-->
+
+                    <div class="p-3">
+                        <h4 class="text-muted font-18 m-b-5 text-center">Welcome Back !</h4>
+                        <p class="text-muted text-center">Sign in to continue to Blue Pearl International</p>
+
+                        <form class="form-horizontal m-t-30" action="index.php" method="post">
+
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="user_username" placeholder="Enter username">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="userpassword">Password</label>
+                                <input type="password" class="form-control" id="password" name="user_pass" placeholder="Enter password">
+                            </div>
+
+                            <div class="form-group ">                               
+                                <div class="">
+                                    <button class="btn btn-primary btn-block w-md waves-effect waves-light" type="submit">Log In</button>
+
+                                </div>
+
+                            </div>
+                            <?php
+                            if ($_POST) {
+                                echo $msg;
+                            }
+                            ?>
+                            <div class="form-group m-t-10 mb-0 row">
+                                <div class="col-12 m-t-20">
+                                    <a href="pages-recoverpw.html" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
                                 </div>
                             </div>
-                        </div>
-                        <label for="password" class="control-label sr-only">Password</label>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <div class="input-group">
-                                    <input type="password" placeholder="password" name="user_pass" id="password" class="form-control" required>
-                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn btn-custom-primary btn-lg btn-block btn-auth"><i class="fa fa-arrow-circle-o-right"></i> Login</button>
-                    </form>
-                    <div class="text-danger">
-                        <?php
-                        if ($_POST) {
-                            echo $msg;
-                        }
-                        ?>
+                        </form>
                     </div>
+
                 </div>
             </div>
+
+            <div class="m-t-40 text-center">                
+                <p class="text-muted">Developed with <i class="mdi mdi-heart text-danger"></i> by LPK Technosoft </p>
+            </div>
+
         </div>
-        <?php include 'footer.php'; ?>
-        <!-- Javascript -->
+
+        <!-- END wrapper -->
+
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/metisMenu.min.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/waves.min.js"></script>
+
+<!--        <script src="assets/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+         App js 
+        <script src="assets/js/app.js"></script>-->
 
     </body>
+
 </html>

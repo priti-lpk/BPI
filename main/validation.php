@@ -19,7 +19,7 @@ if (isset($_GET['user-name'])) {
         echo "0";
     }
 } elseif (isset($_GET['create-rights'])) {
-    $sql = "SELECT role_rights.role_create FROM role_rights INNER JOIN module ON role_rights.mod_id=module.id WHERE role_rights.role_id = '" . $_GET['create-rights'] . "' AND role_rights.mod_id=9";
+    $sql = "SELECT role_rights.role_create FROM role_rights INNER JOIN module ON role_rights.mod_id=module.id WHERE role_rights.role_id = '" . $_GET['create-rights'] . "' AND role_rights.mod_id=7";
     //print_r($sql);
     $select = mysqli_query($con, $sql);
 

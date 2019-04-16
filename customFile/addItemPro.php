@@ -1,6 +1,7 @@
 <?php
 
 ob_start();
+
 include_once '../shreeLib/DBAdapter.php';
 include_once '../shreeLib/dbconn.php';
 include_once '../shreeLib/Controls.php';
@@ -26,7 +27,8 @@ if ($_POST['action'] == 'add') {
     if ($result) {
 
         $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-        header('location:../AddItems.php');
+//        header('location:../Items.php');
+        echo "<script>alert('Successfully Inserted Item');top.location='../Items.php';</script>";
     } else {
 
         $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
@@ -47,47 +49,18 @@ if ($_POST['action'] == 'add') {
 
     $create = $_POST['item_name'];
 
-    $createdby = $dba->createdby($_SESSION['user_login_username']);
-    $_POST['item_created_by'] = $createdby;
+
 
     unset($_POST['action']);
-    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+    $last_id = $dba->getLastID("branch_id", "create_user", "1");
 
-    $_POST['branch_id'] = $last_id;
+    //$_POST['branch_id'] = $last_id;
     if ($dba->updateRow("create_item", $_POST, "id=" . $id)) {
         $msg = "Edit Successfully";
-        header("location:../AddItems.php");
+        echo "<script>alert('Successfully Edited Item');top.location='../Items.php';</script>";
     } else {
         $msg = "Edit Fail Try Again";
     }
-} elseif ($_POST['action'] == 'delete') {
-
-    include_once '../shreeLib/DBAdapter.php';
-
-    $dba = new DBAdapter();
-
-    $id = $_POST['id'];
-
-
-    unset($_POST['action']);
-
-    unset($_POST['item_id']);
-
-    $result = $dba->deleteRow("item_list", $id);
-
-    $responce = array();
-
-    if ($result) {
-
-        $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-
-        header('location:../AddItems');
-    } else {
-
-        $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
-    }
-
-    echo json_encode($responce);
 }
 ?>
 

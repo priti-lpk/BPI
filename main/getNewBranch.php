@@ -9,7 +9,7 @@ if (!isset($_SESSION)) {
 
 $last_id1 = $dba->getLastID("id", "create_branch", "1");
 
-echo ' <select name="branch_id" id="create_branch" class="select2" required> ';
+echo ' <select name="branch_id" id="create_branch" class="form-control select2" required> ';
 echo '<option>Select Branch</option>';
 
 $data = $dba->getRow("create_branch", array("id", "branch_name"), "create_branch.branch_status='true'");

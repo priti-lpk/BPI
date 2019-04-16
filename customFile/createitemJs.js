@@ -5,7 +5,7 @@ function addItem() {
         url: "customFile/createitemPro.php",
         enctype: 'multipart/form-data',
         data: {
-            sub_cat_id: $("#sub_category").val(),
+            cat_id: $("#main_category").val(),
             item_name: $("#item_name").val(),
             item_unit_id: $("#unit_list").val(),
             remark: $("#remark").val(),
@@ -13,7 +13,8 @@ function addItem() {
         },
         dataType: "json",
         success: function (data) {
-            var blankrow = $("#item_name1").val();
+            var blankrow = $("#unit1").val();
+            //alert("123");
             if (blankrow == "") {
                 $('#row1').remove();
             }
@@ -28,7 +29,7 @@ function addItem() {
                 data: my_object,
                 success: function (data1) {
                     var data = "<tr id='row" + i + "' data='no'><td><input type = 'checkbox' class = 'case' id='check" + i + "' name='check[]' value='" + i + "'></td><td><input type='text' id = 'snum" + i + "' value='" + i + "' class='snum' /></td>";
-                    data += "<td>" + data1 + "</td><td><input type='text' id='item_name" + i + "' class='itemname' name='item_name[]' required/></td> <td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]' required/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]' required/></td></tr>";
+                    data += "<td>" + data1 + "</td> <td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]' required/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]'/></td></tr>";
                     $('#item_table').append(data);
 
                     rowgetValue(i);

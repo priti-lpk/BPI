@@ -6,9 +6,10 @@ function addrow() {
         dataType: "html",
         data: my_object,
         success: function (data1) {
+            //alert(data1);
             //  count = $('.item_table tr ').length;
             var data = "<tr id='row" + i + "' data='no'><td><input type = 'checkbox' class = 'case' id='check" + i + "' name='check[]' value='" + i + "'></td><td><input type='text' id = 'snum" + i + "' value='" + i + "' class='snum' /></td>";
-            data += "<td>" + data1 + "</td><td><input type='text' id='item_name" + i + "' class='itemname' name='item_name[]' required/></td> <td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]' required/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]' required/></td></tr>";
+            data += "<td>" + data1 + "</td><td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]' required readonly/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]' onblur='addrow();'/></td></tr>";
             $('#item_table').append(data);
             i++;
         },
@@ -35,8 +36,8 @@ function getValue(rowid) {
             $('#qnty' + i).val('');
 
             var data = Data.split(",");
-            $('#item_name' + i).val(data[0]);
-            $('#unit' + i).val(data[1]);
+            //$('#item_name' + i).val(data[0]);
+            $('#unit' + i).val(data[0]);
 
         },
         error: function (errorThrown) {
@@ -61,12 +62,7 @@ function rowgetValue(rowid) {
             $('#qnty' + i).val('');
 
             var data = Data.split(",");
-            $('#item_name' + i).val(data[0]);
-            $('#unit' + i).val(data[1]);
-            $('#rate' + i).val(data[2]);
-            $('#gst' + i).val(data[3]);
-            $('#itemstock' + i).text(data[4]);
-            $('#dbstock' + i).val(data[4]);
+            $('#unit' + i).val(data[0]);
         },
         error: function (errorThrown) {
             alert(errorThrown);

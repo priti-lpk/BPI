@@ -1,66 +1,39 @@
-
-<!-- LEFT SIDEBAR -->
-<div id="left-sidebar" class="left-sidebar ">
-
-    <!-- main-nav -->
-    <div class="sidebar-scroll">
-        <nav class="main-nav">
-            <ul class="main-menu">
-                <li>
-                    <a href="index.php">
-                        <i class="fa fa-list fw"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="AddBranch.php">
-
-                        <i class="fa fa-edit fa-fw"></i>
-
-                        <span class="text">Add Branch</span>
-
-                    </a>
-
-                </li>
+<div class="left side-menu">
 
 
-                <li>
-                    <a href="role_master.php">
+    <!--- Sidemenu -->
+    <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+        <ul class="metismenu" id="side-menu">
+            <li>
+                <a href="index.php" class="waves-effect">
+                    <i class="mdi mdi-home"></i><span> Dashboard </span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-clipboard"></i><span> Create <span class="float-right menu-arrow"><i class="mdi mdi-plus"></i></span> </span></a>
+                <ul class="submenu">
+                    <li><a href="AddBranch.php">Create Branch</a></li>
+                    <li><a href="role_master.php">Create Role</a></li>
+                    <li><a href="UserField.php">Create User</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-view-grid"></i><span> View <span class="float-right menu-arrow"><i class="mdi mdi-plus"></i></span> </span></a>
+                <ul class="submenu">
+                    <li><a href="ViewRole.php">View Role</a></li>
+                    <li><a href="ViewUser.php">View User</a></li>
+                </ul>
+            </li>
+            
+        </ul>
 
-                        <i class="fa fa-edit fa-fw"></i>
-
-                        <span class="text">Roles</span>
-
-                    </a>
-
-                </li>
-                <li>
-                    <a href="UserField.php">
-
-                        <i class="fa fa-edit fa-fw"></i>
-
-                        <span class="text">Add User</span>
-
-                    </a>
-
-                </li>
-                <li>
-
-                    <a href="ViewUser.php">
-
-                        <i class="fa fa-list fa-fw"></i>
-
-                        <span class="text">View User</span>
-
-                    </a>
-
-                </li>
-
-
-            </ul>
-        </nav>
-        <!-- /main-nav -->
     </div>
+    <!-- sidebar -->
+    <div class="clearfix"></div>
+
+
+    <!-- sidebar -left -->
+
 </div>
-<!-- END LEFT SIDEBAR -->
+

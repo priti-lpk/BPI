@@ -1,4 +1,4 @@
- <?php
+<?php
 
 include_once '../shreeLib/DBAdapter.php';
 include_once '../shreeLib/dbconn.php';
@@ -12,7 +12,7 @@ if ($_POST['action'] == 'add') {
 
     $dba = new DBAdapter();
     $cdba = new Controls();
-    $create = $_POST['supplier_name'];
+    $create = $_POST['sup_name'];
 
     $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
     $_POST['created_user'] = $createdby;
@@ -33,8 +33,9 @@ if ($_POST['action'] == 'add') {
     if ($result) {
 
         $responce = array("status" => TRUE, "msg" => "Operation Successful!");
+        echo "<script>alert('Successfully Inserted Supplier');top.location='../Supplier.php';</script>";
 
-        header('location:../AddSupplier.php');
+//        header('location:../Supplier.php');
     } else {
 
         $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
@@ -55,7 +56,7 @@ if ($_POST['action'] == 'add') {
         session_start();
     }
     $cdba = new Controls();
-    $create = $_POST['supplier_name'];
+    //$create = $_POST['supplier_name'];
 
     $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
 
@@ -66,7 +67,7 @@ if ($_POST['action'] == 'add') {
     $_POST['branch_id'] = $last_id;
     if ($dba->updateRow("supplier", $_POST, "id=" . $id)) {
         $msg = "Edit Successfully";
-        header("location:../AddSupplier.php");
+        echo "<script>alert('Successfully Edited Supplier');top.location='../Supplier.php';</script>";
     } else {
         $msg = "Edit Fail Try Again";
     }

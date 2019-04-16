@@ -1,18 +1,14 @@
 <?php
-
-ob_start();
 include 'shreeLib/dbconn.php';
 include_once 'shreeLib/DBAdapter.php';
 
-if (!isset($_SESSION)) {
-    session_start();
-}
 
 $dba = new DBAdapter();
 $data = $dba->getRow("cities", array("id", "name"), "country_id='" . $_GET['countries'] . "'");
-$count = count($data);
+//$count = count($data);
+//echo json_encode($data);
 //print_r($count);
-echo ' <select name = "city_id" id = "cities" class = "change_item_dropdown_ajax" required> ';
+echo '<select class="form-control select2 chosen" tabindex="8" name="city_id" id="cities" required="">';
 echo '<option>Select City</option>';
 
 
@@ -25,6 +21,10 @@ foreach ($data as $subData) {
 echo '</select>';
 ?>
 <script type="text/javascript">
-    $(".change_item_dropdown_ajax").select2("destroy");
-    $(".change_item_dropdown_ajax").select2();
+    $(document).ready(function () {
+        $('.chosen').select2();
+    });
+    
 </script>
+
+<!--<script type="text/javascript" src="customFile/getcityJS.js"></script>-->

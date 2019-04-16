@@ -11,25 +11,34 @@ if ($_POST['action'] == 'add') {
     unset($_POST['action']);
     unset($_POST['id']);
     $_POST['user_createdby'] = $createdby;
-//    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = md5($_POST['user_login_password']);
     $_POST['user_login_password'] = $password;
-    //print_r($password);
     if ($_POST['disable'] == 1) {
-        $_POST['role_rights_id'] = '0';
+        $role = "0";
+
+        $rolestring = json_encode($role, TRUE);
+        //print_r($rolestring);
+        $_POST['role_rights_id'] = $rolestring;
     } elseif ($_POST['disable'] == 0) {
         $role = $_POST['role_rights_id'];
-        $roles = implode(',', $role);
+       // print_r($role);
 
-        $_POST['role_rights_id'] = $roles;
+        $rolestring = json_encode($role, TRUE);
+       // print_r($rolestring);
+        $_POST['role_rights_id'] = $rolestring;
     }
+
+
     $userpass = md5($_POST['user_login_password']);
     unset($_POST['disable']);
+    //print_r($_POST);
     $result = $dba->setData("create_user", $_POST);
-    //$sql1 = "INSERT INTO create_user (branch_id,roles_id,role_rights_id,user_fullname,user_contact,user_email,user_login_username,user_login_password,user_createdby) VALUES ('" . $_POST['branch_id'] . "','".$_POST['roles_id']."','".$roles."','" . $_POST['user_fullname'] . "','" . $_POST['user_contact'] . "','" . $_POST['user_email'] . "','" . $_POST['user_login_username'] . "','" . $userpass . "','" . $_POST['user_createdby'] . "')";
-//        $sql1 = "INSERT INTO create_user (branch_id,user_fullname,user_contact,user_email,user_login_username,user_login_password,user_type,user_createdby,user_status) VALUES ('" . $_POST['branch_id'] . "','" . $_POST['user_fullname'] . "','" . $_POST['user_contact'] . "','" . $_POST['user_email'] . "','" . $_POST['user_login_username'] . "','" . $userpass . "','" . $_POST['user_type'] . "','" . $_POST['user_createdby'] . "','" . $_POST['user_status'] . "')";
-    //mysqli_query($con, $sql1);
-    //print_r($sql1);
+
+
+    $last_id = $dba->getLastID("id", "create_user", "1");
+
+    $rowcount = count($role);
+
 
     $mailToList = array();
     $email_subject = "Blue Parl International Import Export";
@@ -39,31 +48,50 @@ if ($_POST['action'] == 'add') {
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     $message = "Username: " . $_POST['user_login_username'] . "\r\n Password:" . $password . "\r\nBranch Name: " . $_POST['branch_id'] . "\r\nUrl: http://demo.bpiindia.in/";
-    //echo $message;
-    header('location:../UserField.php');
-    //}
-    //  }
+//    header('location:../UserField.php'); 
+    echo "<script>alert('Successfully Inserted User');top.location='../UserField.php';</script>";
+   
 } elseif ($_POST['action'] == 'edit') {
 
     $dba = new DBAdapter();
-
+    unset($_POST['action']);
 
     $createdby = $dba->createdby();
-    // print_r($createdby);
     $_POST['user_createdby'] = $createdby;
     $id = $_POST['id'];
+    if ($_POST['disable'] == 1) {
+        $role = "0";
 
-//    $rowcount = $_POST['r_count'];
+        $rolestring = json_encode($role, TRUE);
+       // print_r($rolestring);
+        $_POST['role_rights_id'] = $rolestring;
+    } elseif ($_POST['disable'] == 0) {
+        $role = $_POST['role_rights_id'];
+        //print_r($role);
+
+        $rolestring = json_encode($role, TRUE);
+       // print_r($rolestring);
+        $_POST['role_rights_id'] = $rolestring;
+    }
     $userpass = md5($_POST['user_login_password']);
-//    if ($rowcount >= 1) {
-    $query = "UPDATE create_user set branch_id='" . $_POST['branch_id'] . "',roles_id='" . $_POST['roles_id'] . "', user_fullname='" . $_POST['user_fullname'] . "',user_contact ='" . $_POST['user_contact'] . "', user_email='" . $_POST['user_email'] . "',user_login_password='" . $userpass . "',user_createdby='" . $_POST['user_createdby'] . "' WHERE id=" . $id;
-
-//        $query = "UPDATE create_user set branch_id='" . $_POST['branch_id'] . "', user_contact ='" . $_POST['user_contact'] . "', user_email='" . $_POST['user_email'] . "',user_login_password='" . $userpass . "',user_type='" . $_POST['user_type'] . "',user_createdby='" . $_POST['user_createdby'] . "',user_status='" . $_POST['user_status'] . "' WHERE id=" . $id;
-    //print_r($query);
-    mysqli_query($con, $query);
-
-
-    header('location:../UserField.php');
+    $_POST['user_login_password'] = $userpass;
+    unset($_POST['disable']);
+    $result = $dba->updateRow("create_user", $_POST, "id=" . $id);
+  //  print_r($result);
+//    $last_id = $dba->getLastID("id", "create_user", "1");
+//
+//    $rowcount = count($role);
+//    for ($i = 1; $i <= $rowcount; $i++) {
+//
+//        $modid = $role[$i - 1];
+//
+//        $role_create = 1;
+//        $role_edit = 1;
+//        $role_view = 1;
+//        $role_delete = 1;
+//        $result = $dba->updateRow("role_rights", $_POST, "id=" . $id);
+//    }
+    echo "<script>alert('Successfully Edited User');top.location='../UserField.php';</script>";
 } elseif ($_POST['action'] == "changeStatus") {
 
     include_once '../shreeLib/DBAdapter.php';

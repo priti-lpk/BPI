@@ -1,13 +1,12 @@
 <?php
-ob_start();
-//include 'session_info.php';
+
 class DBAdapter {
 
     private $con;
 
     public function __construct() {
-        include 'dbconn.php';
         include_once 'Controls.php';
+        include 'dbconn.php';
         $this->con = $con;
     }
 
@@ -36,7 +35,7 @@ class DBAdapter {
             $i++;
         }
         $query = $text . $string . ") " . "VALUES(" . $field_val . ");";
-        //echo $query;
+//        echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             return TRUE;
@@ -75,7 +74,7 @@ class DBAdapter {
             echo 'Data can not fetch<br>';
             return FALSE;
         }
-        //echo $query;
+        echo $query;
     }
 
     function getRow($table, $field, $clause) {
@@ -95,8 +94,8 @@ class DBAdapter {
             $i++;
         }
         $query = $text . $string . " from " . $table . " where " . $clause;
-//      echo '</br>';echo '</br>';echo '</br>';echo '</br>';
-//       echo $query;
+//        echo '</br>';echo '</br>';echo '</br>';echo '</br>';
+        //echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             $i = 0;
@@ -226,8 +225,8 @@ class DBAdapter {
 
     function createdby() {
         if (!isset($_SESSION)) {
-        session_start();
-    }
+            session_start();
+        }
         $cdba = new Controls();
         $user = $_SESSION['user_login_username'];
 //        print_r($user);

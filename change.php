@@ -1,16 +1,20 @@
 <?php
-include './shreeLib/dbconn.php';
-if(isset($_POST['id'])) //to check the old password only, not to change
+ob_start();
+//include_once './config/session_info.php';
+include_once 'shreeLib/dbconn.php';
+include_once 'shreeLib/DBAdapter.php';
+
+if(isset($_POST['old'])) //to check the old password only, not to change
 {
 	$old=$_POST['old'];
-	//$en_pass=md5($old);
-//	$en_pass = stripslashes($en_pass);
-//	$en_pass= mysqli_real_escape_string($con,$en_pass);
+	$en_pass=md5($old);
+	$en_pass = stripslashes($en_pass);
+	$en_pass= mysqli_real_escape_string($con,$en_pass);
 	
-	$sql="select `user_pass` from system_user where id=".$_POST['id'];
+	$sql="select `user_login_password` from `create_user` where id='".$_POST['id']."'";
 	$result=mysqli_query($con,$sql);
 	$row=mysqli_fetch_array($result);
-	if($row['user_pass']==$old)
+	if($row['user_login_password']==$en_pass)
 		echo '1';
 		else
 		echo '0';
@@ -18,13 +22,14 @@ if(isset($_POST['id'])) //to check the old password only, not to change
 if(isset($_POST['change']))
 {
 	$new = $_POST['new'];
-//	$en_pass=md5($new);
-//	$en_pass = stripslashes($en_pass);
-//	$en_pass= mysqli_real_escape_string($con,$en_pass);
-	$sql="update system_user set user_pass='".$new."' where id=".$_POST['change'];
+	$en_pass=md5($new);
+	$en_pass = stripslashes($en_pass);
+	$en_pass= mysqli_real_escape_string($con,$en_pass);
+	$sql="update `create_user` set user_login_password='".$en_pass."' where id='".$_POST['change']."'";
 	if($result=mysqli_query($con,$sql))
 		echo '1';
 		else
 		echo '0';
 }
 ?>
+   

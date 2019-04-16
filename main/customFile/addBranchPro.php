@@ -35,7 +35,8 @@ if ($_POST['action'] == 'add') {
     if ($result) {
 
         $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-        header('location:../AddBranch.php');
+//        header('location:../AddBranch.php');
+        echo "<script>alert('Successfully Inserted Branch');top.location='../AddBranch.php';</script>";
     } else {
 
         $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
@@ -55,7 +56,7 @@ if ($_POST['action'] == 'add') {
     } else {
 
         $_POST['branch_status'] = "false";
-    }    
+    }
 
     $id = $_POST['id'];
 
@@ -65,7 +66,8 @@ if ($_POST['action'] == 'add') {
 
     if ($dba->updateRow("create_branch", $_POST, "id=" . $id)) {
         $msg = "Edit Successfully";
-        header("location:../AddBranch.php");
+        
+        echo "<script>alert('Successfully Edited Branch');top.location='../AddBranch.php';</script>";
     } else {
         $msg = "Edit Fail Try Again";
     }

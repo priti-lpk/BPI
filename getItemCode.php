@@ -12,11 +12,11 @@ $dba = new DBAdapter();
 
 $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
 
-$sql = "SELECT create_item.id, create_item.item_name FROM create_item INNER JOIN sub_category ON create_item.sub_cat_id=sub_category.id";
+$sql = "SELECT create_item.id, create_item.item_name FROM create_item INNER JOIN main_category ON create_item.cat_id=main_category.id";
 $result = mysqli_query($con, $sql);
 //print_r($sql);
 ?>
-<select name='item_id[]' id='item_code<?php echo $code ?>' class='itemcode select2' required="" onchange="getValue(this);">
+<select style = "width:250px;" name='item_id[]' id='item_code<?php echo $code ?>' class='form-control select2 chosen' required="" onchange="getValue(this);">
     <?php if (!isset($_GET['codename'])) { ?>
         <option value="">Select Item</option>
         <?php
@@ -36,4 +36,9 @@ $result = mysqli_query($con, $sql);
     }
     ?>
 </select>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.chosen').select2();
+    });
 
+</script>

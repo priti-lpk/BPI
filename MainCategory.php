@@ -15,236 +15,251 @@ if (isset($_SESSION['user_id'])) {
     $servername1 = basename($_SERVER['PHP_SELF']);
     //echo $servername1;
     $field = array("role_rights.id");
-    $mod_data = $edba->getRow("role_rights INNER JOIN  module ON role_rights.mod_id= module.id", $field, " module.mod_pagename='" . $servername1 . "' and role_rights.user_id=" . $_SESSION['user_id']);
-    echo "<input type='hidden' id='user_id' value='" . $mod_data[0][0] . "'>";
+    $data = $dba->getLastID("roles_id", "create_user", "id=" . $_SESSION['user_id']);
 
+    $mod_data = $edba->getRow("role_rights INNER JOIN  module ON role_rights.mod_id= module.id", $field, " module.mod_pagename='" . $servername1 . "' and role_rights.role_id=" . $data);
+    echo "<input type='hidden' id='role_id' value='" . $mod_data[0][0] . "'>";
 
     $field = array("role_rights.id,role_rights.role_edit,role_rights.role_delete,role_rights.role_create");
     $role_data = $edba->getRow("role_rights INNER JOIN  module ON role_rights.mod_id= module.id", $field, " role_rights.id=" . $mod_data[0][0]);
-    echo "<input type='hidden' id='user_id' value='" . $role_data[0][0] . "'>";
+    echo "<input type='hidden' id='role_id' value='" . $role_data[0][0] . "'>";
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 
     <head>
-        <title>
-            Add Main Category
-        </title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Moltera Ceramic Pvt.Ltd">
-        <meta name="author" content="LPK Technosoft">	
-        <link href="assets/js/datatable/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/js/datatable/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css"> 
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title><?php
+            if (isset($_GET['type']) && isset($_GET['id'])) {
+                echo 'Edit Main Category';
+            } else {
+                echo 'Add Main Category';
+            }
+            ?></title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link href="plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+        <link href="plugins/bootstrap-md-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+        <link href="plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 
+        <link href="plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
 
-    <body class="text-editor">
-        <!-- WRAPPER -->
-        <div class="wrapper">				
-            <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+    <body>
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
             <?php include 'topbar.php'; ?>
-            <div class="bottom">
-                <div class="container">
-                    <div class="row">
-                        <!-- left sidebar -->
-                        <?php include 'sidebar.php'; ?>
-                        <!-- end left sidebar -->
-                        <!-- content-wrapper -->
-                        <div class="col-md-10 content-wrapper">
-                            <div class="row">
-                                <div class="col-lg-4 ">
-                                    <ul class="breadcrumb">
-                                        <li><i class="fa fa-home"></i><a href="Home">Home</a></li>
-                                        <li class="active">Add Main Category</li>
-                                    </ul>
+            <!-- Top Bar End -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <?php include 'sidebar.php'; ?>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Main Category</h4>
                                 </div>
                             </div>
-                            <!-- main -->
-                            <div class="content">
-                                <div class="main-header">
-                                    <h2>Create Category</h2>
-                                    <em>Add New</em>
-                                </div>
-                                <div class="main-content">
-                                    <!-- WYSIWYG EDITOR -->
-                                    <form action="customFile/addMainCategoryPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                        </div>
+                        <!-- end row -->
 
-                                        <div class="form-group">
-                                            <label for="ticket-name" class="col-sm-2 control-label" id="lblcatname">Category Name</label>
-                                            <div class="col-sm-3" id="partydue">
-                                                <input type="text" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : '') ?>" name="name" id="name" class="form-control" placeholder="Category Name" required>
-                                            </div>
-                                        </div>
-                                        <div class="widget-footer">
-                                            <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
-                                            <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : "") ?>">
-                                            <button type="submit" id="btn_save" class="btn btn-primary"><i class="fa fa-floppy-o"></i> <?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
-
-                                        </div>
-                                    </form>
-
-                                    <div class="main-content">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="widget widget-table">
-                                                    <div class="widget-header">
-                                                        <h3><i class="fa fa-table"></i>Main Category List</h3>
+                        <div class="page-content-wrapper">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card m-b-20">
+                                        <div class="card-body">                   
+                                            <form action="customFile/addMainCategoryPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Main Catgeory</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="text"  placeholder="Main Category Name" id="name" name="name" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : ''); ?>" required="">
                                                     </div>
-                                                    <div class="widget-content">
-                                                        <table id="featured-datatable" class="table table-sorting table-striped table-hover datatable">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Category Name</th>
-                                                                    <?php if ($role_data[0][1] == 1) { ?>
-                                                                        <th>Edit</th> <?php } ?>
-                                                                    <?php //if ($role_data[0][2] == 1) { ?> 
-<!--                                                                        <th>Delete</th>-->
-                                                                    <?php //} ?>
-                                                                </tr>
-                                                            </thead>
-                                                            <!--<tbody id="category_list">-->
-                                                            <?php
-                                                            include_once 'shreeLib/DBAdapter.php';
-                                                            $dba = new DBAdapter();
+                                                </div>
+                                                <div class="button-items">
+                                                    <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                    <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
+                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
 
-                                                            $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card m-b-20">
+                                        <div class="card-body">
 
-                                                            $field = array("main_category.id,main_category.name");
-                                                            $data = $dba->getRow("main_category", $field, "main_category.branch_id=" . $last_id);
+                                            <h4 class="mt-0 header-title">View of Branch</h4><br>
+                                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th> Main Category Name</th>
+                                                        <th>Edit</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    include_once 'shreeLib/DBAdapter.php';
+                                                    $dba = new DBAdapter();
 
-                                                            $count = count($data);
-                                                            if ($count >= 1) {
-                                                                foreach ($data as $subData) {
-                                                                    // if ($userid == $subData[2]) {
-                                                                    echo "<tr>";
-                                                                    echo "<td>" . $subData[0] . "</td>";
-                                                                    echo "<td>" . $subData[1] . "</td>";
-                                                                    if ($role_data[0][1] == 1) {
-                                                                        echo "<td><a href='AddMainCategory.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
-                                                                    }
+                                                    //$last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+
+                                                    $field = array("main_category.id,main_category.name");
+                                                    $data = $dba->getRow("main_category", $field, "1");
+
+                                                    $count = count($data);
+                                                    if ($count >= 1) {
+                                                        foreach ($data as $subData) {
+                                                            // if ($userid == $subData[2]) {
+                                                            echo "<tr>";
+                                                            echo "<td>" . $subData[0] . "</td>";
+                                                            echo "<td>" . $subData[1] . "</td>";
+                                                            if ($role_data[0][1] == 1) {
+                                                                echo "<td><a href='MainCategory.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                            }
 
 //                                                                    if ($role_data[0][2] == 1) {
 //                                                                        echo "<td> <button class='btn btn-danger btn_delete' id='" . $subData[0] . "' onclick='SetForDelete(this.id);'><i class='fa fa-trash-o'>  Delete</button></td>";
 //                                                                    }
-                                                                    echo '</tr>';
-                                                                    // }
-                                                                }
-                                                            }
-                                                            ?>  
-                                                            <!--</tbody>-->
-                                                        </table>
-                                                    </div>
-                                                </div> <!-- /widget widget-table -->
-                                            </div>
+                                                            echo '</tr>';
+                                                            // }
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>                                                      
-
-
-
-                                </div>
-                                <!-- /main-content -->                              
+                                    </div>
+                                </div> <!-- end col -->
                             </div>
-                            <!-- /content -->
-                        </div>
-                        <!-- /content-wrapper -->
-                    </div>
-                    <!-- /row -->
-                </div>
-                <!-- /container -->
-            </div>
-            <!-- END BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
-        </div>
-        <!-- /wrapper -->
-        <!-- FOOTER -->
-        <footer class="footer">
-            2018 © <a href="http://lpktechnosoft.com" target="_blank">LPK Technosoft</a>
-        </footer>  
+                            <!--end row-->
 
-        <script src="customFile/addCategoryJs.js" ></script>
-        <!-- END FOOTER -->
-        <!-- Javascript -->
-        <script src="assets/js/jquery/jquery-2.1.0.min.js"></script>
-        <script src="assets/js/jquery/jquery-1.12.4.min.js"></script>
-        <script src="assets/js/bootstrap/bootstrap.js"></script>
-        <script src="assets/js/plugins/modernizr/modernizr.js"></script>
-        <script src="assets/js/plugins/bootstrap-tour/bootstrap-tour.custom.js"></script>
-        <script src="assets/js/king-common.js"></script>
-        <script src="demo-style-switcher/assets/js/deliswitch.js"></script>
-        <!--        <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.css" rel="stylesheet">
-                <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.js"></script>-->
-        <script src="assets/js/plugins/markdown/markdown.js"></script>
-        <script src="assets/js/plugins/markdown/to-markdown.js"></script>
-        <script src="assets/js/plugins/markdown/bootstrap-markdown.js"></script>
-        <!--<script src="assets/js/king-elements.js"></script>-->
-        <script src="assets/js/plugins/select2/select2.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/jquery.dataTables.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/dataTables.buttons.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/buttons.flash.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/pdfmake.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/jszip.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/vfs_fonts.js"></script>
-        <script src="assets/js/datatable/datatable-js/buttons.html5.min.js"></script>        
-        <script src="assets/js/datatable/datatable-js/buttons.print.min.js"></script>        
+
+                        </div>
+
+                        <!--end page content-->
+
+                    </div> <!--container-fluid -->
+
+                </div> <!--content -->
+
+                <?php include 'footer.php'
+                ?>
+
+            </div>
+
+
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/metisMenu.min.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/waves.min.js"></script>
+
+        <script src="plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+        <script src="plugins/bootstrap-md-datetimepicker/js/moment-with-locales.min.js"></script>
+        <script src="plugins/bootstrap-md-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+
+        <!-- Plugins js -->
+        <script src="plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
+        <script src="plugins/select2/js/select2.min.js"></script>
+        <script src="plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+        <script src="plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js"></script>
+        <script src="plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js"></script>
+        <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="plugins/datatables/dataTables.buttons.min.js"></script>
+        <script src="plugins/datatables/buttons.bootstrap4.min.js"></script>
+        <script src="plugins/datatables/jszip.min.js"></script>
+        <script src="plugins/datatables/pdfmake.min.js"></script>
+        <script src="plugins/datatables/vfs_fonts.js"></script>
+        <script src="plugins/datatables/buttons.html5.min.js"></script>
+        <script src="plugins/datatables/buttons.print.min.js"></script>
+        <script src="plugins/datatables/buttons.colVis.min.js"></script>
+        <!-- Responsive examples -->
+        <script src="plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="plugins/datatables/responsive.bootstrap4.min.js"></script>
+        <script src="assets/pages/datatables.init.js"></script>
+
+        <!-- Plugins Init js -->
+        <script src="assets/pages/form-advanced.js"></script>
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
         <script>
-            $(document).ready(function () {
-                $('#featured-datatable').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+            function approveuser(sid) {
+                $.ajax({
+                    url: "updatestatus.php",
+                    type: "POST",
+                    data: {
+                        sid: sid,
+                        status: $("#" + sid).data('status'),
+                        action: "mainstatus",
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data);
+                        if (data.status) {
+                            //alert("sucess");
+                            window.location.reload();
+                        } else {
+                            alert("fail");
+                        }
+
+                    },
+                    fail: function () {
+                        swal("Error!", "Error while performing operation!", "error");
+                    },
+                    error: function (data, status, jg) {
+                        swal("Error!", data.responseText, "error");
+                    }
                 });
-            });
-        </script> 
+            }
+            //           
+        </script>
         <script type="text/javascript">
 
             function SetForDelete(id) {
-                swal({
-                    title: "Are you sure?",
-                    text: "This will remove all data related to this?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                        function (isConfirm) {
-                            if (isConfirm) {
-                                location.href = "Delete.php?type=cat_list&id=" + id;
-                                swal("Deleted!", "Category has been deleted.", "success");
-                            } else {
-                                swal("Cancelled", "You have cancelled this :)", "error");
-                            }
-                        });
+                location.href = "Delete.php?type=main_category&id=" + id;
+
             }
-        </script>
-
-        <script type="text/javascript">
-
-            var btn_crate =<?php echo (isset($_SESSION['user_id']) ? $role_data[0][3] : '') ?>;
-
-            var btn_edit =<?php echo (isset($_GET['id']) ? 1 : 0) ?>;
-            //alert(btn_crate);
-
-            if (btn_crate === 0) {
-                $('#btn_save').prop('disabled', true);
-            }
-            if (btn_edit === 1) {
-                $('#btn_save').prop('disabled', false);
-            }
-
         </script>
     </body>
+
 </html>
-
-
-
-
-
-
-

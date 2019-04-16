@@ -1,12 +1,12 @@
 <?php
-ob_start();
+
 class DBAdapter {
 
     private $con;
 
     public function __construct() {
-        include 'dbconn.php';
         include_once 'Controls.php';
+        include 'dbconn.php';
         $this->con = $con;
     }
 
@@ -35,8 +35,7 @@ class DBAdapter {
             $i++;
         }
         $query = $text . $string . ") " . "VALUES(" . $field_val . ");";
-
-        //echo $query;
+//        echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             return TRUE;
@@ -75,7 +74,7 @@ class DBAdapter {
             echo 'Data can not fetch<br>';
             return FALSE;
         }
-        echo $query;
+        //echo $query;
     }
 
     function getRow($table, $field, $clause) {
@@ -95,8 +94,8 @@ class DBAdapter {
             $i++;
         }
         $query = $text . $string . " from " . $table . " where " . $clause;
-        //echo '<br><br><br><br><br>';
-        //echo $query;
+//        echo '</br>';echo '</br>';echo '</br>';echo '</br>';
+      //echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             $i = 0;
@@ -206,10 +205,10 @@ class DBAdapter {
             while ($row = mysqli_fetch_row($result)) {
                 // print_r($amount);
                 if ($creditDebit == "Debit") {
-                    //  print_r($row[0]);
+
                     $newAmount = $row[0] + $amount;
-                    // print_r($newAmount);
                 } elseif ($creditDebit == "Credit") {
+                    // echo '</br>';
                     $newAmount = $row[0] - $amount;
                     // print_r($newAmount);
                 }
@@ -218,15 +217,60 @@ class DBAdapter {
             $newAmount = $amount;
             //  print_r($newAmount);
         }
-        $query1 = "update party_list set party_amount=" . $newAmount . "  where id=" . $id;
+        $query1 = "update party_list set party_amount=" . round($newAmount, 2) . "  where id=" . $id;
         mysqli_query($this->con, $query1);
-        //echo $query1;
+    }
+
+    function createuser() {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        $cdba = new Controls();
+        $user = $_SESSION['user_name'];
+
+        $ip_id = $cdba->get_client_ip();
+
+        date_default_timezone_set('Asia/Kolkata');
+        $date = date('d-m-Y h:i:s');
+
+        $user_array = array($user, $ip_id, $date);
+
+        $user_string = json_encode($user_array, TRUE);
+        return $user_string;
+    }
+
+    function edituser($id, $table) {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+
+        $cdba = new Controls();
+        $user = $_SESSION['user_name'];
+
+        $ip_id = $cdba->get_client_ip();
+
+        $last_id = $this->getLastID("user_info", $table, "id=" . $id);
+
+        $json = json_decode($last_id, true);
+
+        $crate_user = array_slice($json, 0, 3);
+
+
+        date_default_timezone_set('Asia/Kolkata');
+        $date = date('d-m-Y h:i:s');
+
+        $user_array = array($user, $ip_id, $date);
+
+        $merge = array_merge($crate_user, $user_array);
+
+        $user_edit = json_encode($merge, TRUE);
+        return $user_edit;
     }
 
     function createdby() {
         if (!isset($_SESSION)) {
-        session_start();
-    }
+            session_start();
+        }
         $cdba = new Controls();
         $user = $_POST['user_fullname'];
 //        print_r($user);

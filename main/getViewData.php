@@ -7,10 +7,10 @@ if (isset($_GET['user_id'])) {
 
     $id = $_GET['user_id'];
     // print_r($id);
-    $sql = "SELECT role_rights.id,module.mod_name, module.mod_order,role_rights.mod_id,role_rights.role_create,role_rights.role_edit,role_rights.role_view,role_rights.role_delete FROM role_rights INNER JOIN module ON role_rights.mod_id=module.id WHERE role_rights.user_id=" . $id . " order by module.mod_order asc";
+    $sql = "SELECT role_rights.id,module.mod_name, module.mod_order,role_rights.mod_id,role_rights.role_create,role_rights.role_edit,role_rights.role_view,role_rights.role_delete FROM role_rights INNER JOIN module ON role_rights.mod_id=module.id WHERE role_rights.role_id=" . $id . " order by module.mod_order asc Limit 10";
 
     $resultset = mysqli_query($con, $sql);
-    print_r($sql);
+    //print_r($sql);
 
     while ($rows = mysqli_fetch_array($resultset)) {
         echo " <tr>";

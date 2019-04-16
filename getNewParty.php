@@ -10,7 +10,7 @@ include_once 'shreeLib/DBAdapter.php';
     $dba = new DBAdapter();
     $last_id1 = $dba->getLastID("id", "create_party", "1");
    // print_r($last_id1);
-    echo ' <select name = "party_id" id = "create_party" class = "select2" required> ';
+    echo ' <select name = "party_id" id = "create_party" class = "form-control select2" required> ';
     echo '<option>Select Party</option>';
    
     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);

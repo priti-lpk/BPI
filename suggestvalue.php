@@ -6,14 +6,14 @@ include_once 'shreeLib/dbconn.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $sql = "SELECT create_item.id,create_item.item_name,unit_list.unit_name FROM create_item inner join unit_list on create_item.item_unit_id=unit_list.id WHERE create_item.id=" . $id;
+    $sql = "SELECT create_item.id,unit_list.unit_name FROM create_item inner join unit_list on create_item.item_unit_id=unit_list.id WHERE create_item.id=" . $id;
     //print_r($sql);
     $resultset = mysqli_query($con, $sql);
     while ($rows = mysqli_fetch_assoc($resultset)) {
-        $item_name = $rows['item_name'];
+        
         $unit_id = $rows['unit_name'];
 
-        echo $item_name .",". $unit_id;
+        echo $unit_id;
     }
 } elseif (isset($_GET['order_id'])) {
     // print_r($_GET['order_id']);

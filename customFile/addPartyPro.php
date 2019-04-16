@@ -33,8 +33,9 @@ if ($_POST['action'] == 'add') {
     if ($result) {
 
         $responce = array("status" => TRUE, "msg" => "Operation Successful!");
+        echo "<script>alert('Successfully Inserted Party');top.location='../Party.php';</script>";
 
-        header('location:../AddParty.php');
+//        header('location:../Party.php');
     } else {
 
         $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
@@ -66,7 +67,7 @@ if ($_POST['action'] == 'add') {
     $_POST['branch_id'] = $last_id;
     if ($dba->updateRow("create_party", $_POST, "id=" . $id)) {
         $msg = "Edit Successfully";
-        header("location:../AddParty.php");
+        echo "<script>alert('Successfully Edited Party');top.location='../Party.php';</script>";
     } else {
         $msg = "Edit Fail Try Again";
     }

@@ -1,72 +1,99 @@
+<?php
+ob_start();
+//require_once "./shreeLib/session_info.php";
+if (!isset($_SESSION)) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
+
     <head>
-        <title>Welcome To Blue Parl Import Export Admin Panel</title>
-        <link href="assets/js/datatable/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-        <link href="assets/js/datatable/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Blue Pearl International Dashboard</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+        <link rel="stylesheet" href="plugins/morris/morris.css">
+        <link href="plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <!-- Responsive datatable examples -->
+        <link href="plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
-    <body class="topnav-fixed dashboard">
-        <!-- WRAPPER -->
-        <div id="wrapper" class="wrapper">
-            <!-- TOP BAR -->
+
+    <body>
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
             <?php include './topbar.php' ?>
-            <!-- /top -->
-            <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+            <!-- Top Bar End -->
 
-            <!-- left sidebar -->
+            <!-- ========== Left Sidebar Start ========== -->
             <?php include './sidebar.php' ?>
-            <!-- end left sidebar -->
-            <!-- content-wrapper -->
-            <div id="main-content-wrapper" class="content-wrapper ">
-                <div class="row">
-                    <div class="col-md-4 ">
-                        <ul class="breadcrumb">
-                            <li><i class="fa fa-home"></i><a href="Home">Home</a></li>
-                            <li class="active">Dashboard</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- main -->
-                <div class="content">
-                    <div class="main-header">
-                        <h2>DASHBOARD</h2>
-                        <em>Welcome to Blue Parl Import Export</em>
-                    </div>
-                    <div class="main-content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="widget widget-table">
-                                    <div class="widget-header">
-                                        <h3><i class="fa fa-table"></i>Inquiry List</h3>
-                                    </div>
+            <!-- Left Sidebar End -->
 
-                                    <div class="widget-content">
-                                        <div class="table-responsive">
-                                            <table id="datatable-data-export" class="table table-sorting table-striped table-hover table-bordered datatable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Party Name</th>
-                                                        <th>Date</th>
-                                                        <th>Remark</th>
-                                                        <th>Send</th> 
-                                                    </tr>
-                                                </thead>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Dashboard</h4>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">Welcome to Blue Pearl International Dashboard</li>
+                                    </ol>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card m-b-20">
+                                    <div class="card-body">
+
+                                        <h4 class="mt-0 header-title">View Of Inquiry List</h4><br>
+                                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Party Name</th>
+                                                    <th>Date</th>
+                                                    <th>Remark</th>
+                                                    <th>Send</th> 
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 <?php
                                                 include_once 'shreeLib/DBAdapter.php';
                                                 $dba = new DBAdapter();
                                                 $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                $field = array("inquiry.id,create_party.party_name,inquiry.inq_date,inquiry.inq_remark");
-                                                $data = $dba->getRow("inquiry INNER JOIN create_party ON inquiry.party_id=create_party.id", $field, "inquiry.branch_id=" . $last_id);
+                                                $field = array("inquiry.id,create_party.party_name,inquiry.inq_date,inquiry.inq_remark,inquiry_send_to.inq_id");
+                                                $data = $dba->getRow("inquiry_send_to RIGHT JOIN inquiry ON inquiry_send_to.inq_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id", $field, "inquiry_send_to.inq_id IS Null");
                                                 $count = count($data);
                                                 //print_r($count);
+                                                $i = 1;
                                                 if ($count >= 1) {
                                                     foreach ($data as $subData) {
                                                         echo "<tr>";
-                                                        echo "<td>" . $subData[0] . "</td>";
+                                                        echo "<td>" . $i++ . "</td>";
                                                         echo "<td>" . $subData[1] . "</td>";
-                                                        echo "<td>" . $subData[2] . "</td>";
+                                                        $date1 = $subData[2];
+                                                        $dates1 = date("d-m-Y", strtotime($date1));
+                                                        echo "<td>" . $dates1 . "</td>";
                                                         echo "<td>" . $subData[3] . "</td>";
                                                         echo "<td><a href='inquiry_main_details.php?id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-save'></i> Send</a></td>";
                                                         echo "</tr>";
@@ -74,65 +101,101 @@
                                                 } else {
                                                     // echo 'No Data Available';
                                                 }
-                                                ?>      
-                                            </table>
-                                        </div>
+                                                ?> 
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> <!-- end col -->
                         </div>
-                    </div>
-                    <!-- /main-content -->
-                </div>
-                <!-- /main -->
+                        <!-- end row -->
+
+                    </div> <!-- container-fluid -->
+
+                </div> <!-- content -->
+                <?php include './footer.php' ?>
+
 
             </div>
-            <!-- /content-wrapper -->
+
+
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
 
         </div>
-        <!-- /row -->
+        <!-- END wrapper -->
 
-        <!-- /wrapper -->
-        <!-- FOOTER -->
-        <script src="assets/js/jquery/jquery-2.1.0.min.js"></script>
-        <script src="assets/js/bootstrap/bootstrap.js"></script>
-        <script src="assets/js/plugins/modernizr/modernizr.js"></script>
-        <script src="assets/js/plugins/bootstrap-tour/bootstrap-tour.custom.js"></script>
-        <script src="assets/js/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-        <script src="assets/js/king-common.js"></script>
-        <script src="demo-style-switcher/assets/js/deliswitch.js"></script>
-        <script src="assets/js/plugins/stat/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/plugins/raphael/raphael-2.1.0.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.resize.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.time.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.pie.min.js"></script>
-        <script src="assets/js/plugins/stat/flot/jquery.flot.tooltip.min.js"></script>
-        <script src="assets/js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
-        <script src="assets/js/plugins/datatable/jquery.dataTables.min.js"></script>
-        <script src="assets/js/plugins/datatable/dataTables.bootstrap.js"></script>
-        <script src="assets/js/plugins/jquery-mapael/jquery.mapael.js"></script>
-        <script src="assets/js/plugins/raphael/maps/usa_states.js"></script>
-        <script src="assets/js/king-chart-stat.js"></script>
-        <script src="assets/js/king-table.js"></script>
-        <script src="assets/js/king-components.js"></script>
-        <script src="assets/js/datatable/datatable-js/jquery.dataTables.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/dataTables.buttons.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/buttons.flash.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/pdfmake.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/jszip.min.js"></script>
-        <script src="assets/js/datatable/datatable-js/vfs_fonts.js"></script>
-        <script src="assets/js/datatable/datatable-js/buttons.html5.min.js"></script>        
-        <script src="assets/js/datatable/datatable-js/buttons.print.min.js"></script>        
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/metisMenu.min.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/waves.min.js"></script>
+
+        <script src="plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+        <!-- Peity JS -->
+        <script src="plugins/peity/jquery.peity.min.js"></script>
+
+        <script src="plugins/morris/morris.min.js"></script>
+        <script src="plugins/raphael/raphael-min.js"></script>
+        <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="plugins/datatables/dataTables.buttons.min.js"></script>
+        <script src="plugins/datatables/buttons.bootstrap4.min.js"></script>
+        <script src="plugins/datatables/jszip.min.js"></script>
+        <script src="plugins/datatables/pdfmake.min.js"></script>
+        <script src="plugins/datatables/vfs_fonts.js"></script>
+        <script src="plugins/datatables/buttons.html5.min.js"></script>
+        <script src="plugins/datatables/buttons.print.min.js"></script>
+        <script src="plugins/datatables/buttons.colVis.min.js"></script>
+        <!-- Responsive examples -->
+        <script src="plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+        <!-- Datatable init js -->
+        <script src="assets/pages/datatables.init.js"></script>
+
+        <script src="assets/pages/dashboard.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
         <script>
-            $(document).ready(function () {
-                $('#datatable-data-export').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+            if (window.Notification && Notification.permission !== "denied") {
+                Notification.requestPermission(function (status) {  // status is "granted", if accepted by user
+                    var n = new Notification('Blue Pearl International Import Export', {
+                        body: 'I am the body text!',
+                        //icon: 'assets/images/bg.jpg' // optional
+                    });
+                });
+            }
+
+        </script>
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+        <script>
+            var OneSignal = window.OneSignal || [];
+            OneSignal.push(function () {
+                OneSignal.init({
+                    appId: "c76f642c-0cee-4596-bb34-f06ba04bcce3",
                 });
             });
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function (err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+
         </script>
     </body>
+
 </html>

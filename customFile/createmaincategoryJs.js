@@ -1,5 +1,5 @@
 function addmainCategory() {
-    
+    //alert("dsf");
     $.ajax({
         type: "POST",
         url: "customFile/createmaincategoryPro.php",
@@ -22,11 +22,11 @@ function addmainCategory() {
 
         },
         fail: function () {
-            $('#addmaincategory').modal('toggle');
+            //$('#addmaincategory').modal('toggle');
             swal("Error!", "Error while performing operation!", "error");
         },
         error: function (data, status, jq) {
-            $('#addmaincategory').modal('toggle');
+           // $('#addmaincategory').modal('toggle');
             swal("Error!", data.responseText, "error");
         }
     });

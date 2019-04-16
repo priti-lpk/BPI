@@ -4,399 +4,229 @@ include_once 'shreeLib/dbconn.php';
 
 if (isset($_GET['type']) && isset($_GET['id'])) {
     $edba = new DBAdapter();
-    $edata = $edba->getRow("create_user", array("*"), "id=" . $_GET['id']);
-    echo "<input type='hidden' id='create_user_id' value='" . $_GET['id'] . "'>";
+//    echo '<br><br><br>';
+    $edata = $edba->getRow("role_master", array("*"), "id=" . $_GET['id']);
+    echo "<input type='hidden' id='role_master_id' value='" . $_GET['id'] . "'>";
 
     $field1 = array("COUNT(mod_id)");
-    $countrow = $edba->getRow("role_rights", $field1, "user_id=" . $_GET['id']);
-    //$crow= count($countrow[0][1]);
+    $countrow = $edba->getRow("role_rights", $field1, "role_id=" . $_GET['id']);
     echo "<input type='hidden' id='rowcount' value='" . $countrow[0][0] . "'>";
 }
 ?>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 
     <head>
-        <title>
-            User Field
-        </title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="Moltera Ceramic Pvt.Ltd">
-        <meta name="author" content="LPK Technosoft">	
-        <style>
-            #lblpartydue{width:105px;margin-top: 3px;}
-            #lblconpass{width:150px;margin-top: 3px;}
-            #partydue{width:200px;}
-            @font-face{font-family: Lobster;src: url('Lobster.otf');}
-            h1{font-family: Lobster;text-align:center;}
-            table{border-collapse:collapse;border-radius:25px;width:500px;}
-            table, td, th{border:1px solid #00BB64;}
-            tr,input{height:30px;border:1px solid #fff;}
-            input:focus{border:1px solid yellow;} 
-            .space{margin-bottom: 2px;}
-            .module_name{width:200px;}
-            #container{margin-left:180px;}
-            .but{width:270px;background:#00BB64;border:1px solid #00BB64;height:40px;border-radius:3px;color:white;margin-top:10px;margin:0px 0px 0px 290px;}
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title><?php
+            if (isset($_GET['type']) && isset($_GET['id'])) {
+                echo 'Edit User Field';
+            } else {
+                echo 'Add User Field';
+            }
+            ?></title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link href="plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+        <link href="plugins/bootstrap-md-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+        <link href="plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 
-        </style>
-
+        <link href="plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <link href="plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     </head>
 
-    <body class="text-editor">
-        <!-- WRAPPER -->
-        <div class="wrapper">				
-            <!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+    <body>
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
             <?php include 'topbar.php'; ?>
-            <div class="bottom">
-                <div class="container">
-                    <div class="row">
-                        <!-- left sidebar -->
-                        <?php include 'sidebar.php'; ?>
-                        <!-- end left sidebar -->
-                        <!-- content-wrapper -->
-                        <div class="col-md-10 content-wrapper">
+            <!-- Top Bar End -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <?php include 'sidebar.php'; ?>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">User Field</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        <div class="page-content-wrapper">
                             <div class="row">
-                                <div class="col-lg-4 ">
-                                    <ul class="breadcrumb">
-                                        <li><i class="fa fa-home"></i><a href="Home">Home</a></li>
-                                        <li class="active">Add Roles</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- main -->
-                            <div class="content">
-                                <div class="main-header">
-                                    <h2>Create Role</h2>
-                                    <em>Add New</em>
-                                </div>
-                                <!--<button type="submit" id="enable" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addbranch"><b>Add New Branch</b></button><br><br>-->
+                                <div class="col-12">
+                                    <div class="card m-b-20">
+                                        <div class="card-body">                   
+                                            <form action="customFile/role_masterPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                <h4 class="mt-0 header-title">Textual inputs</h4>
+                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Role Name</label>
+                                                    <div class="col-sm-4">
+                                                        <input class="form-control" type="text"  placeholder="Role Name" id="role_name" name="role_name" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : ''); ?>" required="">
+                                                    </div>
+                                                </div><br>
+                                                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="text-align:center; width: 70px;">ID</th>
+                                                           <th style="text-align:center;width: 250px;">Module Name</th>
+                                                           <th style="text-align:center;width: 100px;">Create&nbsp;&nbsp;&nbsp;<input class='check_all_create' id="ck_create" type='checkbox' onclick="select_all()"/></th>
+                                                           <!--<th style="text-align:center;width: 100px;"><input class='check_all' type='checkbox' onclick="select_all()"/>&nbsp;Create</th>-->
+                                                           <th style="text-align:center;width: 100px;">Edit&nbsp;&nbsp;&nbsp;<input class='check_all_edit' id="ck_edit" type='checkbox' onclick="select_all()"/></th>
+                                                           <th style="text-align:center;width: 80px;">View&nbsp;&nbsp;&nbsp;<input class='check_all_view' id="ck_view" type='checkbox' onclick="select_all()"/></th>
+                                                           <th style="text-align:center;width: 80px;">Delete&nbsp;&nbsp;&nbsp;<input class='check_all_delete' id="ck_delete" type='checkbox' onclick="select_all()"/></th>
 
-                                <div class="main-content">
-                                    <!-- WYSIWYG EDITOR -->
-                                    <form action="./customFile/role_masterPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data"  >  
-                                        <!--                                        <div class="form-group">
-                                                                                    <label for="ticket-name" class="col-sm-2 control-label" id="lblusername1">Select Branch</label>
-                                                                                    <div class="col-sm-3" id="branchlist">
-                                                                                        <select name="branch_id" id="create_branch" class="select2" onchange="clear_rdbtn();" required>
-                                                                                            <option>Select Branch</option>
-                                        <?php
-                                        $dba = new DBAdapter();
-                                        $data = $dba->getRow("create_branch", array("id", "branch_name"), "branch_status='true'");
-                                        foreach ($data as $subData) {
-                                            echo" <option " . ($subData[0] == $edata[0][1] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
-                                        }
-                                        ?>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                        
-                                        -->                                        <div class="form-group">
-                                            <label for="ticket-name" class="col-sm-2 control-label" id="lblpartydue">Role Name</label>
-                                            <div class="col-sm-3" >
-                                                <input type="text" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : '') ?>" name="role_name" class="form-control" placeholder="Role Name" required>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="view_data1" name="view_data">
+                                                        <?php
+                                                        $sql = "SELECT id, mod_name, mod_order,mod_role from module order by mod_order limit 10";
+                                                        //print_r($sql);
+                                                        $result = mysqli_query($con, $sql);
+                                                        while ($row = mysqli_fetch_array($result)) {
+                                                            ?>
+                                                            <tr>
+                                                                <td style="text-align:center; width: 70px;"><span id = 'snum'><?= $row['mod_order'] ?></span></td>
+                                                                <td style="text-align:center;width: 250px;"><?= $row['mod_name'] ?></td>
+                    <!--                                                            <input type='text' id='module_name' class='module_name'  name='mod_name[]' value="<?= $row['mod_name'] ?>" disabled=""/></td>-->
+                                                                <td style="text-align:center;width: 100px;"><input type = 'checkbox' class = 'create' name="role_create[<?= $row['mod_order'] ?>]" value=""/></td>
+                                                                <td style="text-align:center;width: 100px;"><input type = 'checkbox' id="edit<?= $row['id'] ?>" class = 'edit'  name="role_edit[<?= $row['mod_order'] ?>]" onclick="edit(<?= $row['id'] ?>)" /></td>
+                                                                <td style="text-align:center;width: 80px;"><input type = 'checkbox' id="view<?= $row['id'] ?>" class = 'view' name="role_view[<?= $row['mod_order'] ?>]" onclick="view(<?= $row['id'] ?>)" /></td>
+                                                                <td style="text-align:center;width: 80px;"><input type = 'checkbox' class = 'delete1' name="role_delete[<?= $row['mod_order'] ?>]"/></td>
+                                                        <input type='hidden' id='module_id' class='module_name' name='mod_id[]' value="<?= $row['id'] ?>" />
+                                                        <input type = 'hidden' id = 'mod_role' class = 'module_name' name = 'mod_role[]' value = '<?php echo $row['mod_role']; ?>' />
+                                                        <input type = 'hidden' id = 'mod_order' class = 'mod_order' name = 'mod_order[]' value = '<?php echo $row['mod_order']; ?>' />
 
-                                            </div>
+                                                        </tr>
 
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                                <div class="button-items">
+                                                    <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                    <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : "") ?>"/>
+                                                    <input type="hidden" name="r_count" id="rid" value="<?php echo (isset($_GET['id']) ? $countrow[0][0] : "") ?>">
+                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                </div>
+                                            </form>
                                         </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+                            <!-- end row -->
 
-
-                                        <table id="user_table" class="user_table" border="1" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th style="text-align:center; width: 70px;">ID</th>
-                                                    <th style="text-align:center;width: 250px;">Module Name</th>
-                                                    <th style="text-align:center;width: 100px;">Create</th>
-                                                    <th style="text-align:center;width: 100px;">Edit</th>
-                                                    <th style="text-align:center;width: 80px;">View</th>
-                                                    <th style="text-align:center;width: 80px;">Delete</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody id="view_data1" name="view_data">
-                                                <?php
-                                                include_once 'shreeLib/dbconn.php';
-                                                $sql = "SELECT id, mod_name, mod_order from module order by mod_order";
-                                                //print_r($sql);
-                                                $result = mysqli_query($con, $sql);
-                                                while ($row = mysqli_fetch_array($result)) {
-                                                    ?>
-                                                    <tr>
-                                                        <td style="text-align:center; width: 70px;"><span id = 'snum'><?= $row['mod_order'] ?></span></td>
-                                                        <td style="text-align:center;width: 250px;"><?= $row['mod_name'] ?></td>
-            <!--                                                            <input type='text' id='module_name' class='module_name'  name='mod_name[]' value="<?= $row['mod_name'] ?>" disabled=""/></td>-->
-                                                        <td style="text-align:center;width: 100px;"><input type = 'checkbox' class = 'create' name="role_create[<?= $row['mod_order'] ?>]" value=""/></td>
-                                                        <td style="text-align:center;width: 100px;"><input type = 'checkbox' id="edit<?= $row['id'] ?>" class = 'edit'  name="role_edit[<?= $row['mod_order'] ?>]" onclick="edit(<?= $row['id'] ?>)" /></td>
-                                                        <td style="text-align:center;width: 80px;"><input type = 'checkbox' id="view<?= $row['id'] ?>" class = 'view' name="role_view[<?= $row['mod_order'] ?>]" onclick="view(<?= $row['id'] ?>)" /></td>
-                                                        <td style="text-align:center;width: 80px;"><input type = 'checkbox' class = 'delete1' name="role_delete[<?= $row['mod_order'] ?>]"/></td>
-                                                <input type='hidden' id='module_id' class='module_name' name='mod_id[]' value="<?= $row['id'] ?>" />
-                                                </tr>
-
-                                            <?php } ?>
-                                            </tbody>                   
-                                        </table><br>
-                                        <div class="widget-footer">
-                                            <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>">
-                                            <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : "") ?>">
-                                            <input type="hidden" name="r_count" id="rid" value="<?php echo (isset($_GET['id']) ? $countrow[0][0] : "") ?>">
-                                            <button type="submit" id="btn_save" class="btn btn-primary"><i class="fa fa-floppy-o"></i> <?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
-                                        </div>
-                                    </form>
-                                    <!-- /main-content -->
-                                </div>
-                                <!-- /main -->
-                            </div>
-                            <!-- /content-wrapper -->
                         </div>
-                        <!-- /main-content -->
-                    </div>
-                    <!-- /main -->
+                        <!-- end page content-->
+
+                    </div> <!-- container-fluid -->
+
                 </div>
-                <!-- /content-wrapper -->
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- END BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
-</div>
-<div class="modal fade" id="addbranch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-
-                <h4 class="modal-title" id="myModalLabel">Add New Branch</h4>
-
             </div>
 
-            <div class="modal-body">                                        
-                <div id="form"> 
-                    <form action="javascript:void(0);" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" onsubmit="addBranch();" >
-                        <div class="form-group">
-                            <label  for="ticket-name" class="col-sm-3 control-label">Branch Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="branch_name" id="branch_name" class="form-control" placeholder="Name" required="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="ticket-name" class="col-sm-3 control-label">Branch Address</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="branch_address" id="branch_address" class="form-control" placeholder="Address" required="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="ticket-name" class="col-sm-3 control-label">Branch Contact</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="branch_contact" id="branch_contact" class="form-control" placeholder="Contact" required="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="ticket-name" class="col-sm-3 control-label">Branch Email</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="branch_email" id="branch_email" class="form-control" placeholder="Email" required="">
-                            </div>
-                        </div>
+            <!-- end page content-->
 
-                        <div class="form-group">
-                            <label for="ticket-name" class="col-sm-3 control-label" id="lblpartydue" style="margin-top: -3px;">Active</label>
-                            <div class="col-md-6" style="margin-left: 40px;">
-                                <div class="control-inline onoffswitch">
-                                    <input type="checkbox" name="branch_status" id="branch_status" class="onoffswitch-checkbox" <?php echo (isset($_GET['type']) && isset($_GET['id']) ? ($edata[0][6] == 'false' ? '' : 'checked') : 'checked') ?>>
-                                    <label class="onoffswitch-label " for="branch_status">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+        </div> <!-- container-fluid -->
 
-                        <div class="modal-footer">
-                    <!--<input type="hidden" name="action" id="action" value="add"/>-->
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle"></i> Close</button>
+    </div> <!-- content -->
 
-                            <button type="submit" class="btn btn-custom-primary" ><i class="fa fa-check-circle" ></i>Add</button>
-
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    <?php include 'footer.php' ?>
 
 </div>
-<!-- /wrapper -->
-<!-- FOOTER -->
-<footer class="footer">
-    2018 © <a href="http://lpktechnosoft.com" target="_blank">LPK Technosoft</a>
-</footer>  
 
-<!-- END FOOTER -->
-<!-- Javascript -->
-<script src="customFile/createbranchJs.js"></script>
-<script src="assets/js/jquery/jquery-2.1.0.min.js"></script>
 
-<script src="assets/js/bootstrap/bootstrap.js"></script>
-<script src="assets/js/plugins/modernizr/modernizr.js"></script>
-<script src="assets/js/plugins/bootstrap-tour/bootstrap-tour.custom.js"></script>
-<script src="assets/js/king-common.js"></script>
-<script src="demo-style-switcher/assets/js/deliswitch.js"></script>
-<script src="assets/js/plugins/markdown/to-markdown.js"></script>
-<script src="assets/js/plugins/markdown/bootstrap-markdown.js"></script>
-<script src="assets/js/plugins/select2/select2.min.js"></script>
-<script type="text/javascript">
+<!-- ============================================================== -->
+<!-- End Right content here -->
+<!-- ============================================================== -->
 
-                        $('#user_type').focusout(function () {
-                            var username = document.getElementById("user_type").value;
-                            var createbranch = document.getElementById("create_branch").value;
 
-                            var my_object = {"user-type": username, "createbranch": createbranch};
-                            //alert(my_object);
-                            $.ajax({
-                                url: 'usertype_validation.php',
-                                dataType: "html",
-                                data: my_object,
-                                cache: false,
-                                success: function (Data) {
-                                    // alert(Data);
-                                    var useri = Data;
-                                    if (useri == 1) {
-                                        $("#user-msg1").text("This already exist! You Check Other Option..");
-                                        $("#btn_save").prop('disabled', true);
-                                    } else {
-                                        $("#user-msg1").text("");
-                                        $("#btn_save").prop('disabled', false);
-                                    }
+</div>
+<!-- END wrapper -->
 
-                                },
-                                error: function (errorThrown) {
-                                    alert(errorThrown);
-                                    alert("There is an error with AJAX!");
-                                }
-                            });
-                        });
-                        function clear_rdbtn() {
-                            $("#user-msg1").text("");
-                            $("#btn_save").prop('disabled', false);
 
-                        }
-                        ;
-</script>
+<!-- jQuery  -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/metisMenu.min.js"></script>
+<script src="assets/js/jquery.slimscroll.js"></script>
+<script src="assets/js/waves.min.js"></script>
+
+<script src="plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+<script src="plugins/bootstrap-md-datetimepicker/js/moment-with-locales.min.js"></script>
+<script src="plugins/bootstrap-md-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+
+<!-- Plugins js -->
+<script src="plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
+<script src="plugins/select2/js/select2.min.js"></script>
+<script src="plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+<script src="plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js"></script>
+<script src="plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js"></script>
+<!--<script src="plugins/datatables/jquery.dataTables.min.js"></script>-->
+<script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- Buttons examples -->
+<script src="plugins/datatables/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables/buttons.bootstrap4.min.js"></script>
+<script src="plugins/datatables/jszip.min.js"></script>
+<script src="plugins/datatables/pdfmake.min.js"></script>
+<script src="plugins/datatables/vfs_fonts.js"></script>
+<script src="plugins/datatables/buttons.html5.min.js"></script>
+<script src="plugins/datatables/buttons.print.min.js"></script>
+<script src="plugins/datatables/buttons.colVis.min.js"></script>
+<!-- Responsive examples -->
+<script src="plugins/datatables/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables/responsive.bootstrap4.min.js"></script>
+<script src="assets/pages/datatables.init.js"></script>
+
+<!-- Plugins Init js -->
+<script src="assets/pages/form-advanced.js"></script>
+<!-- App js -->
+<script src="assets/js/app.js"></script>
+
 
 <script type="text/javascript">
-
-    $('#user_login_username').focusout(function () {
-        var username = document.getElementById("user_login_username").value;
-
-        var my_object = "user-name=" + username;
-        $.ajax({
-            url: 'user_validation.php',
-            dataType: "html",
-            data: my_object,
-            cache: false,
-            success: function (Data) {
-                //  alert(Data);
-                var useri = Data;
-                if (useri == 1) {
-                    $("#user-msg").text("This user name already exist!");
-                    $("#btn_save").prop('disabled', true);
-                } else {
-                    $("#user-msg").text("");
-                    $("#btn_save").prop('disabled', false);
-                }
-
-                //$('#view_data1').html(Data);
-            },
-            error: function (errorThrown) {
-                alert(errorThrown);
-                alert("There is an error with AJAX!");
-            }
-        });
-    });</script>
-
-<script type="text/javascript">
-    function checkPasswordMatch() {
-        var password = $("#user_pass").val();
-        var confirmPassword = $("#user_conpass").val();
-
-        if (password != confirmPassword) {
-            $("#pass-conf").text("Password does not math!!");
-            $("#btn_save").prop('disabled', true);
-        } else {
-            $("#pass-conf").text("");
-            $("#btn_save").prop('disabled', false);
-        }
-
-    }
-</script>
-
-<script type="text/javascript">
-    function getbranch() {
-
-        $.ajax({
-            url: 'getNewBranch.php',
-            dataType: "html",
-            cache: false,
-            success: function (Data) {
-                //alert(Data);
-                $('#branchlist').html(Data);
-            },
-            error: function (errorThrown) {
-                alert(errorThrown);
-                alert("There is an error with AJAX!");
-            }
-        });
-    }
-    ;</script>
-
-<script type="text/javascript">
-    function numbers() {
-        var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;
-        // alert(pidd);
-        var my_object = "user_id=" + pidd;
-        $.ajax({
-            url: '../main/getViewData.php',
-            dataType: "html",
-            data: my_object,
+                                                                    function numbers() {
+                                                                        var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;
+                                                                        // alert(pidd);
+                                                                        var my_object = "user_id=" + pidd;
+                                                                        $.ajax({
+                                                                            url: './getViewData.php',
+                                                                            dataType: "html",
+                                                                            data: my_object,
 //            cache: false,
-            success: function (Data) {
-                //  alert(Data);
-                $('#view_data1').html(Data);
-            },
-            error: function (errorThrown) {
-                alert(errorThrown);
-                alert("There is an error with AJAX!");
-            }
-        });
-    }
-    ;
-    numbers();
-
-</script>
-<script>
-    function AvoidSpace(event) {
-        var k = event ? event.which : window.event.keyCode;
-        if (k == 32)
-            return false;
-    }
-
-</script>
-<script type="text/javascript">
-    var text = document.getElementById('user_login_username');
-    text.addEventListener('input', function (e) {
-        var keyCode = e.keyCode ? e.keyCode : e.which;
-        this.value = this.value.replace(/\s/g, '')
-        if (keyCode === 32)
-            return;
-    })
+                                                                            success: function (Data) {
+                                                                                //alert(Data);
+                                                                                $('#view_data1').html(Data);
+                                                                            },
+                                                                            error: function (errorThrown) {
+                                                                                alert(errorThrown);
+                                                                                alert("There is an error with AJAX!");
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    ;
+                                                                    numbers();
 
 </script>
 
@@ -420,37 +250,46 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
             $("#edit" + rowno).prop("checked", false);
         }
     }
-    ;</script>
-<script type="text/javascript">
-
-    var editdata =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;
-    if (editdata === <?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>) {
-        // $('#user_name1').prop('disabled', false);
-        document.getElementById("user_login_username").disabled = true;
-    }
-
-</script>
-<script type="text/javascript">
-//    function numericFilter(txb) {
-//        txb.value = txb.value.replace(/[^\0-9]/ig, "");
-//        
-//        onKeyUp="numericFilter(this);"
-//        
-//        
-//    }
-    function isNumber(evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
+    ;
+    
+    function select_all() {
+        if ($("#ck_create").is(':checked')) {
+         
+            $(".create").prop("checked", true);
+           
+        } else {
+            $(".create").prop("checked", false);
         }
-        return true;
+        if ($("#ck_edit").is(':checked')) {
+         
+            $(".edit").prop("checked", true);
+            
+        } else {
+            $(".edit").prop("checked", false);
+        }
+        if ($("#ck_view").is(':checked')) {
+
+            $(".view").prop("checked", true);
+            
+        } else {
+            $(".view").prop("checked", false);
+        }
+        if ($("#ck_delete").is(':checked')) {
+
+            $(".delete1").prop("checked", true);
+            
+        } else {
+            $(".delete1").prop("checked", false);
+        }
+    }
+    ;
+</script>
+
+<script type="text/javascript">
+    function SetForDelete(id) {
+        location.href = "Delete.php?type=main_category&id=" + id;
     }
 </script>
 </body>
+
 </html>
-
-
-
-
-
