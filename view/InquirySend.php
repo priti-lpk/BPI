@@ -36,13 +36,11 @@ include_once '../shreeLib/DBAdapter.php';
                 font-weight: normal;
                 padding: .5em .6em;
                 font-size: 95%;
-                // font-weight: 700;
                 line-height: 1;
                 color: #fff;
                 text-align: center;
                 white-space: nowrap;
                 vertical-align: baseline;
-                // border-radius: .25em;
             }
             .btn .badge {
                 position: relative;
@@ -56,7 +54,6 @@ include_once '../shreeLib/DBAdapter.php';
                 text-align: center;
                 white-space: nowrap;
                 vertical-align: middle;
-                //background-color: #777;
                 border-radius: 10px;
             }
         </style>
@@ -98,12 +95,14 @@ include_once '../shreeLib/DBAdapter.php';
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div><br>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
-                                                        <th>Party Name</th>
+                                                        <th>Reference No.</th>
                                                         <th>Item Name</th>
                                                         <th>Unit</th>
                                                         <th>Qty.</th>
@@ -118,15 +117,15 @@ include_once '../shreeLib/DBAdapter.php';
                                                     include_once '../shreeLib/DBAdapter.php';
                                                     $dba = new DBAdapter();
                                                     $i = 1;
-                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                    $field = array("inquiry_item_list.id,create_item.item_name,inquiry_item_list.item_unit,inquiry_item_list.item_quantity,inquiry_item_list.remark,inquiry_send_to.due_date,inquiry_send_to.inquiry_created_date,inquiry_item_list.inq_id,create_party.party_name,inquiry.inq_date,inquiry.inq_remark,create_user.user_login_username");
-                                                    $data = $dba->getRow("inquiry_item_list INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id INNER JOIN inquiry_send_to ON inquiry_item_list.id=inquiry_send_to.inq_item_list_id INNER JOIN inquiry ON inquiry_send_to.inq_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id INNER JOIN create_user ON create_user.id=inquiry_send_to.user_id", $field, "inquiry_send_to.branch_id=" . $last_id . " AND inquiry.user_id=" . $_SESSION['user_id']);
+//                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                    $field = array("inquiry_item_list.id,create_item.item_name,inquiry_item_list.item_unit,inquiry_item_list.item_quantity,inquiry_item_list.remark,inquiry_send_to.due_date,inquiry_send_to.inquiry_created_date,inquiry_item_list.inq_id,create_party.party_name,inquiry.inq_date,inquiry.inq_remark,create_user.user_login_username,inquiry.reference_no");
+                                                    $data = $dba->getRow("inquiry_item_list INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id INNER JOIN inquiry_send_to ON inquiry_item_list.id=inquiry_send_to.inq_item_list_id INNER JOIN inquiry ON inquiry_send_to.inq_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id INNER JOIN create_user ON create_user.id=inquiry_send_to.user_id", $field, "1");
                                                     $count = count($data);
                                                     if ($count >= 1) {
                                                         foreach ($data as $subData) {
                                                             echo "<tr>";
                                                             echo "<td>" . $i++ . "</td>";
-                                                            echo "<td>" . $subData[8] . "</td>";
+                                                            echo "<td>" . $subData[12] . "</td>";
                                                             echo "<td>" . $subData[1] . "</td>";
                                                             echo "<td>" . $subData[2] . "</td>";
                                                             echo "<td>" . $subData[3] . "</td>";
@@ -169,8 +168,6 @@ include_once '../shreeLib/DBAdapter.php';
 
                 </div> <!-- content -->
                 <div class="col-sm-6 col-md-3 m-t-30">
-                    
-
                     <div class="modal fade" id="addinq" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -211,7 +208,31 @@ include_once '../shreeLib/DBAdapter.php';
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> This is view of inquiry send for users.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the add quotation button then fill the item quotation.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the view quotation button then view the quotation what users you fill the quotation.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the view inquiry button then view the inquiry details.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->
@@ -263,33 +284,33 @@ include_once '../shreeLib/DBAdapter.php';
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-       <script>
-            $(document).ready(function () {
+        <script>
+                                        $(document).ready(function () {
 
-                $('#addinq').on('show.bs.modal', function (e) {
-                    var i_Id = $(e.relatedTarget).data('id');
-//                    alert(i_Id);
-                    $(e.currentTarget).find('input[name="subject"]').val(i_Id);
-                    var name = $(e.relatedTarget).data('party-name');
-                    $(e.currentTarget).find('input[name="subject1"]').val(name);
-                    var date = $(e.relatedTarget).data('inq-date');
-                    $(e.currentTarget).find('input[name="subject2"]').val(date);
-                    var inq_remark = $(e.relatedTarget).data('inq-remark');
-                    $(e.currentTarget).find('input[name="subject3"]').val(inq_remark);
-                    var item = $(e.relatedTarget).data('item-name');
-                    $(e.currentTarget).find('input[name="subject4"]').val(item);
-                    var unit = $(e.relatedTarget).data('unit');
-                    $(e.currentTarget).find('input[name="subject5"]').val(unit);
-                    var qua = $(e.relatedTarget).data('quantity');
-                    $(e.currentTarget).find('input[name="subject6"]').val(qua);
-                    var remark = $(e.relatedTarget).data('item-remark');
-                    $(e.currentTarget).find('input[name="subject7"]').val(remark);
+                                            $('#addinq').on('show.bs.modal', function (e) {
+                                                var i_Id = $(e.relatedTarget).data('id');
+                                                //                    alert(i_Id);
+                                                $(e.currentTarget).find('input[name="subject"]').val(i_Id);
+                                                var name = $(e.relatedTarget).data('party-name');
+                                                $(e.currentTarget).find('input[name="subject1"]').val(name);
+                                                var date = $(e.relatedTarget).data('inq-date');
+                                                $(e.currentTarget).find('input[name="subject2"]').val(date);
+                                                var inq_remark = $(e.relatedTarget).data('inq-remark');
+                                                $(e.currentTarget).find('input[name="subject3"]').val(inq_remark);
+                                                var item = $(e.relatedTarget).data('item-name');
+                                                $(e.currentTarget).find('input[name="subject4"]').val(item);
+                                                var unit = $(e.relatedTarget).data('unit');
+                                                $(e.currentTarget).find('input[name="subject5"]').val(unit);
+                                                var qua = $(e.relatedTarget).data('quantity');
+                                                $(e.currentTarget).find('input[name="subject6"]').val(qua);
+                                                var remark = $(e.relatedTarget).data('item-remark');
+                                                $(e.currentTarget).find('input[name="subject7"]').val(remark);
 
 
-                });
-            });
+                                            });
+                                        });
         </script>
-    
+
     </body>
 
 </html>

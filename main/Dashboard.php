@@ -56,6 +56,60 @@ if (!isset($_SESSION)) {
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class = "col-xl-4 col-md-6">
+                                <div class = "card bg-primary mini-stat position-relative">
+                                    <div class = "card-body">
+                                        <div class = "mini-stat-desc" style="font-size: 20px;">
+                                            <div class="text-white">
+                                                <?php
+                                                include_once './shreeLib/DBAdapter.php';
+                                                $dba = new DBAdapter();
+                                                $data = $dba->getRow("inquiry left join inquiry_send_to on inquiry.id=inquiry_send_to.inq_id", array("count(inquiry.id) as total"), " inquiry_send_to.inq_id IS Null");
+                                                $i = 1;
+                                                if (!empty($data)) {
+
+                                                    foreach ($data as $row) {
+                                                        ?>
+                                                        <button class="totalpost"><h3 style="font-size: 22px;"><?= $row[0] ?></h3></button>&nbsp;&nbsp;Total Inquiry
+                                                        <hr>
+                                                        <span class = "ml-2 viewpost"><a href="view_send.php">View Inquiry</a></span>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "col-xl-4 col-md-6">
+                                <div class = "card bg-primary mini-stat position-relative">
+                                    <div class = "card-body">
+                                        <div class = "mini-stat-desc" style="font-size: 20px;">
+                                            <div class = "text-white">
+                                                <?php
+                                                include_once './shreeLib/DBAdapter.php';
+                                                $dba = new DBAdapter();
+                                                $data = $dba->getRow("add_quotation", array("count(id) as total"), "1");
+                                                $i = 1;
+                                                if (!empty($data)) {
+                                                    foreach ($data as $row) {
+                                                        ?>
+                                                        <button class="totalpost"><h3 style="font-size: 22px;"><?= $row[0] ?></h3></button>&nbsp;&nbsp;Total Quotation
+                                                        <hr>
+                                                        <span class = "ml-2 viewpost"><a href="Quotation.php">View Quotation</a></span>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col--> 
+                        </div>
                         <!-- end row -->
 
                     </div> <!-- container-fluid -->

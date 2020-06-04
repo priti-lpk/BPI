@@ -66,6 +66,7 @@ if (isset($_SESSION['user_id'])) {
         <link href="../assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
         <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
         <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+
         <style>
             @media print {
                 h4{
@@ -109,7 +110,10 @@ if (isset($_SESSION['user_id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">                   
+                                        <div class="card-body"> 
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
                                             <form action="" id="form_data" class="form-horizontal" role="form" method="get" enctype="multipart/form-data" >  
 
                                                 <div class="form-group row">
@@ -155,26 +159,26 @@ if (isset($_SESSION['user_id'])) {
                                                             IE CODE :- 2095000382 DT :- 20/10/1995
                                                         </td>
                                                         <td colspan="2"style="font-size: 12px; font-family:Arial; width: auto;"><b>Supplier Name:</b>&nbsp;<label name="p_invoice_no" style="border: none;width:auto;"><?php
-                                                            if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
-                                                                echo $edata1[0][0];
-                                                            }
-                                                            ?></label><br><b>Address:</b>&nbsp;<label  name="p_invoice_no" style="border: none;width: auto;"><?php
-                                                            if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
-                                                                echo $edata1[0][1];
-                                                            }
-                                                            ?></label><br><b>Contact:</b>&nbsp;<label name="p_invoice_no" style="border: none;width: auto;" ><?php
-                                                            if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
-                                                                echo $edata1[0][2];
-                                                            }
-                                                            ?></label><br></td>
+                                                                if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
+                                                                    echo $edata1[0][0];
+                                                                }
+                                                                ?></label><br><b>Address:</b>&nbsp;<label  name="p_invoice_no" style="border: none;width: auto;"><?php
+                                                                if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
+                                                                    echo $edata1[0][1];
+                                                                }
+                                                                ?></label><br><b>Contact:</b>&nbsp;<label name="p_invoice_no" style="border: none;width: auto;" ><?php
+                                                                    if (isset($_GET['inq_id']) && isset($_GET['sup_id'])) {
+                                                                        echo $edata1[0][2];
+                                                                    }
+                                                                    ?></label><br></td>
 
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" style="font-size: 12px; font-family:Arial; width: 150px;"><b>Reference No.:</b>&nbsp;<label style="border:none;width: 100px" ><?php
-                                                            if (isset($_GET['inq_id'])) {
-                                                                echo $edata2[0][1];
-                                                            }
-                                                            ?></label><br></td></tr>
+                                                                if (isset($_GET['inq_id'])) {
+                                                                    echo $edata2[0][1];
+                                                                }
+                                                                ?></label><br></td></tr>
                                                     <tr>
                                                         <td style="font-size: 12px; font-family:Arial; width: 50px;"><b>NO.</b></td>
                                                         <td style="font-size: 12px; font-family:Arial;"><b>ITEM NAME</b></td>
@@ -187,15 +191,15 @@ if (isset($_SESSION['user_id'])) {
                                                         include_once '../shreeLib/DBAdapter.php';
                                                         $dba = new DBAdapter();
                                                         $id = $_GET['sup_id'];
-                                                        $sql = "SELECT create_item.item_name,inquiry_item_list.item_quantity FROM item_supplier INNER JOIN inquiry_item_list ON item_supplier.item_id=inquiry_item_list.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id  WHERE FIND_IN_SET('" . $id . "',item_supplier.supplier_id)";
+                                                        $sql = "SELECT item_supplier.item_name,item_supplier.item_qty FROM item_supplier  WHERE find_in_set('" . $id . "',item_supplier.supplier_id)";
                                                         $result = mysqli_query($con, $sql);
-//                                                                    print_r($sql);
+                                                        // print_r($sql);
                                                         $i = 1;
                                                         while ($row = mysqli_fetch_array($result)) {
                                                             echo "<tr>";
                                                             echo "<td>" . $i++ . "</td>";
                                                             echo "<td>" . $row['item_name'] . "</td>";
-                                                            echo "<td>" . $row['item_quantity'] . "</td>";
+                                                            echo "<td>" . $row['item_qty'] . "</td>";
                                                             echo "<td></td>";
                                                             echo "<td></td>";
                                                             echo "</tr>";
@@ -253,7 +257,29 @@ if (isset($_SESSION['user_id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> It is a view of suppplier's items.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> First of  all you select the supplier then search the supplier's items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->
@@ -331,6 +357,16 @@ if (isset($_SESSION['user_id'])) {
 
                                                     win.print();    // PRINT THE CONTENTS.
                                                 }
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').on(
+                        'select2:close',
+                        function () {
+                            $(this).focus();
+                        }
+                );
+            });
         </script>
     </body>
 

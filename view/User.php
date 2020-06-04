@@ -89,7 +89,9 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div><br>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
@@ -99,7 +101,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                         <th>Email</th>
                                                         <th>Login Username</th>
                                                         <?php // if ($role_data[0][1] == 1) { ?>
-                                                        <th>Edit</th> <?php //}   ?>
+                                                        <th>Edit</th> <?php //}    ?>
                                                     </tr>
                                                 </thead>
 
@@ -110,7 +112,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
                                                     //print_r($last_id);
                                                     $field = array("*");
-                                                    $data = $dba->getRow("create_user", $field, "create_user.branch_id=" . $last_id);
+                                                    $data = $dba->getRow("create_user", $field, "1");
                                                     $count = count($data);
                                                     if ($count >= 1) {
                                                         foreach ($data as $subData) {
@@ -121,7 +123,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                             echo "<td>" . $subData[7] . "</td>";
                                                             echo "<td>" . $subData[8] . "</td>";
                                                             //if ($role_data[0][1] == 1) {
-                                                            echo "<td><a href='UserField.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                            echo "<td><a href='UserField.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
                                                             //}
                                                             echo '</tr>';
                                                         }
@@ -146,7 +148,29 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+<div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> You can view the user.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the edit button then edit the user details.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->

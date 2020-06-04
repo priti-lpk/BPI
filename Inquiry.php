@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 ob_start();
 include_once 'shreeLib/DBAdapter.php';
 include_once 'shreeLib/dbconn.php';
@@ -71,7 +71,7 @@ if (isset($_SESSION['user_id'])) {
             .unit1{width:80px;}
             .qnty1{width:80px;}
             .remark1{width:420px;}
-            .snum{width: 20px;}
+            .snum{width: 40px;}
             #container{margin-left:180px;}
             #xyz{padding-right: 150px;}
             .short{float: right;}
@@ -117,128 +117,144 @@ if (isset($_SESSION['user_id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body"> 
-                                            <div class="short">
-                                                <?php // if ($role_data[0][4] == '2') {
-                                                ?>
-                                                <button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addparty"><b>Create Party</b></button>
-                                                <?php //} ?>
-                                                <?php //if ($role_data[0][4] == '1') {
-                                                ?>
-                                                &nbsp;<button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#additem"><b>create Item</b></button>
-                                                <?php //} ?>
-                                            </div>
-                                            <br><br>
-                                            <form action="customFile/AddInquiryPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
-
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label" style="width:300px;">Select Party</label>
-                                                    <div class="col-sm-5" id="partylist5">
-                                                        <select class="form-control select2" name="party_id" id="create_party" required="">
-                                                            <option>Select Party</option>
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                            $data = $dba->getRow("create_party", array("id", "party_name"), "1");
-                                                            //print_r($data);
-                                                            foreach ($data as $subData) {
-                                                                echo" <option " . ($subData[1] == $edata[0][1] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <label for="example-date-input" class="col-sm-1 col-form-label">Date</label>
-                                                    <div class="col-sm-3">
-                                                        <input class="form-control"  id="datevalue" type="date" name="inq_date" id="inq_date" id="example-date-input" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : ''); ?>" required="">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-1 col-form-label">Remark</label>
-                                                    <div>
-                                                        <textarea  class="form-control"  name="inq_remark" id="inq_remark" rows="2" cols="90" style="margin-left: 15px;"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][3] : '') ?></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-1 col-form-label">Status</label>
+                                            <div class="form-group row">
+                                                <div class="col-sm-12">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit Inquiry' : '') ?></b></h4>
                                                     <?php
-                                                    if (isset($_GET['type']) && isset($_GET['id'])) {
-                                                        // echo $edata[0][4];
-                                                        if ($edata[0][4] == '1') {
-                                                            ?>
-                                                            <input type="checkbox" id="switch" switch="none" name="status" checked />
-                                                            <label for="switch" data-on-label="On"data-off-label="Off"</label>
-                                                        <?php } elseif ($edata[0][4] == '0') {
-                                                            ?>
-                                                            <input type="checkbox" id="switch" switch="none" name="status" />
-                                                            <label for="switch" data-on-label="On"data-off-label="Off"</label>
-                                                            <?php
-                                                        }
+                                                    if (isset($_GET['id'])) {
+                                                        ?>
+                                                        <div class="short" style="margin-top: -50px">
+                                                            <button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addparty"><b>Create Party</b></button>
+                                                            &nbsp;<button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#additem"><b>create Item</b></button>
+                                                        </div>
+                                                        <?php
                                                     } else {
                                                         ?>
-                                                        <input type="checkbox" id="switch" switch="none" name="status" checked/>
-                                                        <label for="switch" data-on-label="On"data-off-label="Off"></label>
+                                                        <div class="short">
+                                                            <button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addparty"><b>Create Party</b></button>
+                                                            &nbsp;<button type="button" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#additem"><b>create Item</b></button>
+                                                        </div>
                                                         <?php
                                                     }
                                                     ?>
-                                                    <!--                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Cancel Message</label>
-                                                                                                        <div>
-                                                                                                            <input class="form-control" type="text"  placeholder="Cancel Message" id="message" name="message" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : ''); ?>" required="">
-                                                                                                        </div>-->
-
                                                 </div>
-                                                <div class="col-sm-9" id="rowcount1">
-                                                    <input type="hidden" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $countrow[0][0] : '') ?>" name="rowcount_no" id="row_count"   class="form-control" placeholder="rowcount" required>
+                                            </div>
 
-                                                </div>
-                                                <table id="item_table" class="item_table" border="1" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>ID</th>
-                                                            <th>Select Item </th>
-                                                            <!--<th>Item Name</th>-->
-                                                            <th>Unit</th>
-                                                            <th>Qnty</th>
-                                                            <th>Remark</th>
+                                            <br><br>
+                                            <?php
+//                                            if (isset($_GET['id'])) {
+                                                ?>
+                                                <form action="customFile/AddInquiryPro.php" style="margin-top: -50px" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                    <?php
+//                                                } else {
+                                                    ?>
+                                                    <!--<form action="customFile/AddInquiryPro.php" style="margin-top: -50px" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >-->  
+                                                        <?php
+//                                                    }
+                                                    ?>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label" style="width:300px;">Select Party</label>
+                                                        <div class="col-sm-5" id="partylist5">
+                                                            <select class="form-control select2" name="party_id" id="create_party" required="">
+                                                                <option>Select Party</option>
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                                $data = $dba->getRow("create_party", array("id", "party_name"), "1");
+                                                                //print_r($data);
+                                                                foreach ($data as $subData) {
+                                                                    echo" <option " . ($subData[1] == $edata[0][1] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                        <label for="example-date-input" class="col-sm-1 col-form-label">Date</label>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control"  id="datevalue" type="date" name="inq_date" id="inq_date" id="example-date-input" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : ''); ?>" required="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-1 col-form-label">Remark</label>
+                                                        <div>
+                                                            <textarea  class="form-control"  name="inq_remark" id="inq_remark" rows="2" cols="90" style="margin-left: 15px;"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][3] : '') ?></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-1 col-form-label">Status</label>
+                                                        <?php
+                                                        if (isset($_GET['type']) && isset($_GET['id'])) {
+                                                            // echo $edata[0][4];
+                                                            if ($edata[0][4] == 'on') {
+                                                                ?>
+                                                                <input type="checkbox" id="switch" switch="none" name="status" checked />
+                                                                <label for="switch" data-on-label="On"data-off-label="Off"</label>
+                                                            <?php } elseif ($edata[0][4] == 'off') {
+                                                                ?>
+                                                                <input type="checkbox" id="switch" switch="none" name="status" />
+                                                                <label for="switch" data-on-label="On"data-off-label="Off"</label>
+                                                                <?php
+                                                            }
+                                                        } else {
+                                                            ?>
+                                                            <input type="checkbox" id="switch" switch="none" name="status" checked/>
+                                                            <label for="switch" data-on-label="On"data-off-label="Off"></label>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-sm-9" id="rowcount1">
+                                                        <input type="hidden" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $countrow[0][0] : '') ?>" name="rowcount_no" id="row_count"   class="form-control" placeholder="rowcount" required>
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="view_data1" name="view_data">
-                                                        <tr id = "row1" data='no'>
-                                                            <td><input type = 'checkbox' class = 'case' id='check1' name='check[]' value='1'/></td>
-                                                            <td><input type="text" id = 'snum1' value="1" class="snum" /></td>
-                                                            <td>
-                                                                <select style="width:250px;" name = 'item_id[]' id = 'item_code1' class = 'itemcode select2' onchange="getValue(this);">
-                                                                    <option>Select item</option>
-                                                                    <?php
-                                                                    $dba = new DBAdapter();
+                                                    </div>
+                                                    <table id="item_table" class="item_table" border="1" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Sr No.</th>
+                                                                <th>Select Item </th>
+                                                                <!--<th>Item Name</th>-->
+                                                                <th>Unit</th>
+                                                                <th>Qnty</th>
+                                                                <th>Remark</th>
 
-                                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                                    $data = $dba->getRow("create_item INNER JOIN main_category ON create_item.cat_id=main_category.id", array("create_item.id", "create_item.item_name"), "1");
-                                                                    $count = count($data);
-                                                                    if ($count >= 1) {
-                                                                        foreach ($data as $subData) {
-                                                                            echo "<option value='" . $subData[0] . "'>" . $subData[1] . "</option>";
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="view_data1" name="view_data">
+                                                            <tr id = "row1" data='no'>
+                                                                <td><input type = 'checkbox' class = 'case' id='check1' name='check[]' value='1'/></td>
+                                                                <td><input type="text" id = 'snum1' value="1" class="snum" /></td>
+                                                                <td>
+                                                                    <select style="width:250px;" name = 'item_id[]' id = 'item_code1' class = 'itemcode select2' onchange="getValue(this);" >
+                                                                        <option>Select item</option>
+                                                                        <?php
+                                                                        $dba = new DBAdapter();
+                                                                        $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                                        $data = $dba->getRow("create_item INNER JOIN main_category ON create_item.cat_id=main_category.id", array("create_item.id", "create_item.item_name"), "1");
+                                                                        $count = count($data);
+                                                                        if ($count >= 1) {
+                                                                            foreach ($data as $subData) {
+                                                                                echo "<option value='" . $subData[0] . "'>" . $subData[1] . "</option>";
+                                                                            }
                                                                         }
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </td>
-                                                            <!--<td><input type='text' id='item_name1' class='itemname' name='item_name[]' required/></td>-->
-                                                            <td><input type='text' id='unit1' class='unit1' name='item_unit[]' required readonly=""/></td>
-                                                            <td id="qtn"><input type='text' id='qnty1' class='qnty1' name='item_quantity[]' onchange="changeQnty(this);" required /> </td>
-                                                            <td><input type='text' id='remark1' class='remark1' name='remark[]'  onblur="addrow();"/> </td>
-                                                        </tr>
-                                                    </tbody>  
-                                                </table><br>
-                                                <button type="button" class='delete btn btn-primary waves-effect waves-light' onclick="deleterow(<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][0] : '0') ?>)"><b>- Delete</b></button>
-                                                <button type="button" class='addmore btn btn-primary waves-effect waves-light' id="add_more" onclick="addrow();" ><b>+ Add More</b></button>
-                                                <br><br>
-                                                <div class="button-items">
-                                                    <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
-                                                    <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
-                                                </div>
-                                            </form>
+                                                                        ?>
+                                                                    </select>
+                                                                </td>
+                                                                <!--<td><input type='text' id='item_name1' class='itemname' name='item_name[]' required/></td>-->
+                                                                <td><input type='text' id='unit1' class='unit1' name='item_unit[]'  readonly=""/></td>
+                                                                <td id="qtn"><input type='text' id='qnty1' class='qnty1' name='item_quantity[]' onchange="changeQnty(this);" required="" /> </td>
+                                                                <td><input type='text' id='remark1' class='remark1' name='remark[]'  /> </td>
+                                                            </tr>
+                                                        </tbody>  
+                                                    </table><br>
+                                                    <button type="button" class='delete btn btn-primary waves-effect waves-light' onclick="deleterow(<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][0] : '0') ?>)"><b>- Delete</b></button>
+                                                    <button type="button" class='addmore btn btn-primary waves-effect waves-light' id="add_more" onclick="addrow();" ><b>+ Add More</b></button>
+                                                    <br><br>
+                                                    <div class="button-items">
+                                                        <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                        <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
+                                                        <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light" onclick="return  confirm('Do You want to Insert Data Y/N')"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                    </div>
+                                                </form>
                                         </div>
                                     </div>
                                 </div> <!-- end col -->
@@ -366,7 +382,7 @@ if (isset($_SESSION['user_id'])) {
                                             <label for="example-text-input" class="col-sm-3 col-form-label">Item Name</label>
                                             <div class="col-sm-8">
                                                 <input class="form-control" type="text"  placeholder="Item Name" id="item_name" name="item_name" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : '') ?>" this.value = this.defaultValue;" onfocus="if (this.value == this.defaultValue)
-                                                            this.value = '';" required="">
+                                                        this.value = '';" required="">
                                                 <div id="item-msg" class="text-danger"></div>
 
                                             </div>
@@ -473,47 +489,43 @@ if (isset($_SESSION['user_id'])) {
         <script src="plugins/bootstrap-filestyle/js/bootstrap-filestyle.min.js"></script>
         <script src="plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js"></script>
         <!--<script src="plugins/datatables/jquery.dataTables.min.js"></script>-->
-        <script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
-        <!-- Buttons examples -->
-        <script src="plugins/datatables/dataTables.buttons.min.js"></script>
-        <script src="plugins/datatables/buttons.bootstrap4.min.js"></script>
-        <script src="plugins/datatables/jszip.min.js"></script>
-        <script src="plugins/datatables/pdfmake.min.js"></script>
-        <script src="plugins/datatables/vfs_fonts.js"></script>
-        <script src="plugins/datatables/buttons.html5.min.js"></script>
-        <script src="plugins/datatables/buttons.print.min.js"></script>
-        <script src="plugins/datatables/buttons.colVis.min.js"></script>
-        <!-- Responsive examples -->
-        <script src="plugins/datatables/dataTables.responsive.min.js"></script>
-        <script src="plugins/datatables/responsive.bootstrap4.min.js"></script>
-        <script src="assets/pages/datatables.init.js"></script>
 
         <!-- Plugins Init js -->
         <script src="assets/pages/form-advanced.js"></script>
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-
         <script type="text/javascript">
-                                        function numbers() {
-                                            var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;
-                                            var my_object = "inq_id=" + pidd;
-                                            $.ajax({
-                                                url: 'getViewData.php',
-                                                dataType: "html",
-                                                data: my_object,
-                                                cache: false,
-                                                success: function (Data) {
-                                                    //alert(Data);
-                                                    $('#view_data1').html(Data);
-                                                },
-                                                error: function (errorThrown) {
-                                                    alert(errorThrown);
-                                                    alert("There is an error with AJAX!");
-                                                }
+                                        $(function ()
+                                        {
+                                            $('#form_data').submit(function () {
+                                                $("input[type='submit']", this)
+                                                        .val("Please Wait...")
+                                                        .attr('disabled', 'disabled');
+                                                return true;
                                             });
-                                        }
-                                        ;
-                                        numbers();
+                                        });
+        </script>
+        <script type="text/javascript">
+            function numbers() {
+                var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;
+                var my_object = "inq_id=" + pidd;
+                $.ajax({
+                    url: 'getViewData.php',
+                    dataType: "html",
+                    data: my_object,
+                    cache: false,
+                    success: function (Data) {
+                        //alert(Data);
+                        $('#view_data1').html(Data);
+                    },
+                    error: function (errorThrown) {
+                        alert(errorThrown);
+                        alert("There is an error with AJAX!");
+                    }
+                });
+            }
+            ;
+            numbers();
         </script>
 
         <script type="text/javascript">
@@ -586,48 +598,28 @@ if (isset($_SESSION['user_id'])) {
         <script>
             function deleterow(inquiry_id)
             {
-                var values = $('input:checked').map(function () {
-                    return this.value;
-                }).get();
-               // alert(values);
-                var rowattri = 'no';
-               // alert(rowattri);
-                //            var totalamount = 0;
+    //                alert(inquiry_id);
+
+                var values = document.querySelector('.case:checked').value;
+                var rowattri = document.getElementById('row' + values).getAttribute('data');
                 var n = 1;
                 var count = $('#view_data1 tr ').length;
-                //alert(count);
-                //var amtremove = parseFloat(document.getElementById('total' + values).value);
 
                 for (var i = 1; i <= count; ++i) {
 
-                    //                var amt = parseFloat(document.getElementById('total' + i).value);
-                    //                totalamount = totalamount + amt;
-
                     var snumber = document.getElementById('snum' + i);
-                    //alert(snumber);
-                    //                var totaln = document.getElementById('total' + i);
                     var cb = document.getElementById('check' + i);
-                    //alert(cb);
                     var iqnty = document.getElementById('qnty' + i);
-                    //var icode = document.getElementById('item_code' + i);
-                    //                var irate = document.getElementById('rate' + i);
-                    //                var isubtotal = document.getElementById('sub_total' + i);
-                    //                var igst = document.getElementById('gst' + i);
+                    var icode = document.getElementById('item_code' + i);
                     var iunit = document.getElementById('unit' + i);
                     var rowid = document.getElementById('row' + i);
-                    //                var idbstock = document.getElementById('dbstock' + i);
-                    //                var itemstock = document.getElementById('itemstock' + i);
 
                     if (cb.checked) {
-
                         if (rowattri === 'no') {
-                            // alert(rowattri);
                             $('.case:checkbox:checked').parents("tr").remove();
-                            // document.getElementById("txt_total").value = parseFloat(totalamount - amtremove).toFixed(2);
-
                         } else {
                             var id = document.getElementById('i_id' + values).value;
-                            //print(id);
+    //                            alert(id);
                             var my_object = {"i_list_id": id, "inquiry_id": inquiry_id};
                             $.ajax({
                                 url: 'Delete.php',
@@ -635,12 +627,11 @@ if (isset($_SESSION['user_id'])) {
                                 data: my_object,
                                 cache: false,
                                 success: function (Data) {
-                                    //alert(Data);
                                     $('.case:checkbox:checked').parents("tr").remove();
-                                    // var rows = document.getElementById('item_table').getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
+    //                                    alert(Data);
                                     var rowcount = <?php echo (isset($_GET['type']) && isset($_GET['id']) ? $countrow[0][0] : '0') ?>;
                                     document.getElementById("row_count").value = rowcount - 1;
-
+    //                                    alert(rowcount);
                                 },
                                 error: function (errorThrown) {
                                     alert(errorThrown);
@@ -653,41 +644,16 @@ if (isset($_SESSION['user_id'])) {
                         snumber.value = n;
                         cb.id = 'check' + n;
                         cb.value = n;
-                        //                    icode.id = 'item_code' + n;
+                        icode.id = 'item_code' + n;
                         iqnty.id = 'qnty' + n;
-                        //                    totaln.id = 'total' + n;
-                        //                    irate.id = 'rate' + n;
-                        //                    isubtotal.id = 'sub_total' + n;
-                        //                    igst.id = 'gst' + n;
-                        //                        iname.id = 'item_name' + n;
                         iunit.id = 'unit' + n;
                         rowid.id = 'row' + n;
-                        //                    itemstock.id = 'itemstock' + n;
-                        //                    idbstock.id = 'dbstock' + n;
-
                         n++;
                     }
                 }
-                //            document.getElementById("txt_total").value = parseFloat(totalamount - amtremove).toFixed(2);
             }
             ;
 
-            function select_all() {
-                $('input[class=case]:checkbox').each(function () {
-                    if ($('input[class=check_all]:checkbox:checked').length === 0) {
-                        $(this).prop("checked", false);
-                    } else {
-                        $(this).prop("checked", true);
-                    }
-                });
-            }
-            function check() {
-                obj = $('table tr').find('span');
-                $.each(obj, function (key, value) {
-                    id = value.id;
-                    $('#' + id).html(key + 1);
-                });
-            }
 
         </script>
 
@@ -719,6 +685,16 @@ if (isset($_SESSION['user_id'])) {
             }
 
 
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').on(
+                        'select2:close',
+                        function () {
+                            $(this).focus();
+                        }
+                );
+            });
         </script>
     </body>
 

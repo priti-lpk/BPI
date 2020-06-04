@@ -16,7 +16,7 @@ if ($_POST['action'] == 'add') {
     $_POST['supplier_id'] = implode(",", $_POST['supplier_id']);
 
 
-    $sql1 = "INSERT INTO item_supplier (item_id, supplier_id,inq_id) VALUES ('" . $_POST['item_id'] . "','" . $_POST['supplier_id'] . "','" . $_POST['inquiry_id'] . "')";
+    $sql1 = "INSERT INTO item_supplier (item_id, supplier_id,inq_id,item_name,item_qty) VALUES ('" . $_POST['item_id'] . "','" . $_POST['supplier_id'] . "','" . $_POST['inquiry_id'] . "','".$_POST['item_name']."','".$_POST['item_qty']."')";
     mysqli_query($con, $sql1);
     // print_r($sql1);
     //echo "<script>alert('Successfully Inserted Inquiry Details');top.location='../Dashboard.php';</script>";

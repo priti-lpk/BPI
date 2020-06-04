@@ -54,6 +54,11 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
         <link href="../assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
         <link href="../assets/css/icons.css" rel="stylesheet" type="text/css">
         <link href="../assets/css/style.css" rel="stylesheet" type="text/css">
+        <style>
+            .fillrate{
+                color: red;
+            }
+        </style>
     </head>
 
     <body>
@@ -92,7 +97,9 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div><br>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr id="0">
@@ -125,30 +132,59 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     $count = count($data);
                                                     if ($count >= 1) {
                                                         foreach ($data as $subData) {
-                                                            echo "<tr id=" . $subData[0] . ">";
-                                                            echo "<td id='quo_id'>" . $subData[0] . "</td>";
-                                                            echo "<td>" . $subData[1] . "</td>";
-                                                            echo "<td>" . $subData[2] . "</td>";
-                                                            echo "<td>" . $subData[3] . "</td>";
-                                                            echo "<td>" . $subData[4] . "</td>";
-                                                            echo "<td>" . $subData[5] . "</td>";
-                                                            $iid = $subData[0];
-                                                            echo "<td id='rp" . $iid . "'><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' data-id='" . $iid . "' data-status='true' onclick='setrateID(this.id);' data-toggle='modal' data-target='#addrate' ><li id='li" . $iid . "' class='btn btn-default btn-sm'><b>Set Rate</b></li></button>";
-                                                            echo "<td><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
+                                                            if ($subData[8] == NULL) {
+                                                                echo "<div class='emptyrate'>";
+                                                                echo "<tr id=" . $subData[0] . ">";
+                                                                echo "<td id='quo_id'>" . $subData[0] . "</td>";
+                                                                echo "<td>" . $subData[1] . "</td>";
+                                                                echo "<td>" . $subData[2] . "</td>";
+                                                                echo "<td>" . $subData[3] . "</td>";
+                                                                echo "<td>" . $subData[4] . "</td>";
+                                                                echo "<td>" . $subData[5] . "</td>";
+                                                                $iid = $subData[0];
+                                                                echo "<td id='rp" . $iid . "'><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' data-id='" . $iid . "' data-status='true' onclick='setrateID(this.id);' data-toggle='modal' data-target='#addrate' ><li id='li" . $iid . "' class='btn btn-default btn-sm'><b>Set Rate</b></li></button>";
+                                                                echo "<td><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
 
-                                                            $date = $subData[6];
-                                                            $dates = date("d-m-Y", strtotime($date));
-                                                            echo "<td>" . $dates . "</td>";
-                                                            echo "<td>" . $subData[7] . "</td>";
-                                                            echo "<td id='nr" . $subData[0] . "'  class='send'>" . $subData[8] . "</td>";
+                                                                $date = $subData[6];
+                                                                $dates = date("d-m-Y", strtotime($date));
+                                                                echo "<td>" . $dates . "</td>";
+                                                                echo "<td>" . $subData[7] . "</td>";
+                                                                echo "<td id='nr" . $subData[0] . "'  class='send'>" . $subData[8] . "</td>";
 
-                                                            echo "<td><a href='Quotation.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                                echo "<td><a href='Quotation.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
 
-                                                            echo "<td><button class='btn btn-danger' id='" . $subData[0] . "' onclick='SetForDelete(this.id);'><i class='fa fa-trash-o'>Delete</button></td>";
+                                                                echo "<td><button class='btn btn-danger' id='" . $subData[0] . "' onclick='SetForDelete(this.id);'><i class='fa fa-trash-o'>Delete</button></td>";
 //                                                                        $timestamp = time() + 3600; // one hour
-                                                            echo "<td><a href='view/SendParty1.php?id=" . $subData[0] . "' class='btn btn-primary' value='" . $subData[0] . "' id='sp" . $subData[0] . "' ><i class='fa fa-edit'></i>Create Proforma Invoice</a></td>";
+                                                                echo "<td><a href='view/SendParty1.php?inq_id=" . $subData[9] . "&id=" . $subData[0] . "' class='btn btn-primary' value='" . $subData[0] . "' id='sp" . $subData[0] . "' ><i class='fa fa-edit'></i>Create Proforma Invoice</a></td>";
+                                                                echo '</tr>';
+                                                                echo "</div>";
+                                                            }else{
+                                                                echo "<div id='fillrate'>";
+                                                                echo "<tr id=" . $subData[0] . ">";
+                                                                echo "<td class='fillrate' id='quo_id'>" . $subData[0] . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[1] . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[2] . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[3] . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[4] . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[5] . "</td>";
+                                                                $iid = $subData[0];
+                                                                echo "<td id='rp" . $iid . "'><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' data-id='" . $iid . "' data-status='true' onclick='setrateID(this.id);' data-toggle='modal' data-target='#addrate' ><li id='li" . $iid . "' class='btn btn-default btn-sm'><b>Set Rate</b></li></button>";
+                                                                echo "<td><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
 
-                                                            echo '</tr>';
+                                                                $date = $subData[6];
+                                                                $dates = date("d-m-Y", strtotime($date));
+                                                                echo "<td class='fillrate'>" . $dates . "</td>";
+                                                                echo "<td class='fillrate'>" . $subData[7] . "</td>";
+                                                                echo "<td class='fillrate' id='nr" . $subData[0] . "'  class='send'>" . $subData[8] . "</td>";
+
+                                                                echo "<td><a href='Quotation.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+
+                                                                echo "<td><button class='btn btn-danger' id='" . $subData[0] . "' onclick='SetForDelete(this.id);'><i class='fa fa-trash-o'>Delete</button></td>";
+//                                                                        $timestamp = time() + 3600; // one hour
+                                                                echo "<td><a href='view/SendParty1.php?inq_id=" . $subData[9] . "&id=" . $subData[0] . "' class='btn btn-primary' value='" . $subData[0] . "' id='sp" . $subData[0] . "' ><i class='fa fa-edit'></i>Create Proforma Invoice</a></td>";
+                                                                echo '</tr>';
+                                                                echo "</div>";
+                                                            }
                                                         }
                                                     } else {
                                                         //echo 'No Data Available';
@@ -169,8 +205,6 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
                 </div> <!-- content -->
                 <div class="col-sm-6 col-md-3 m-t-30">
-                   
-
                     <div class="modal fade" id="addrate" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -201,7 +235,32 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> This is view of multiple quotation for one items.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the set rate then fill the rate of item.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the status button. it works the quotation is confirm or not.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the edit button then edit the quotation. And click the delete button the delete the quotation.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the proforma invoice button the fill the proforma invoice.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->

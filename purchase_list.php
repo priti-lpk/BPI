@@ -172,12 +172,12 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                                 foreach ($data as $subData) {
                                                                     echo "<tr>";
                                                                     echo "<td><input type='text' class='quotation_id' name='quotation_id' value='" . $subData[0] . "'></td>";
-                                                                    echo "<td><input type='text' class='itemname' name='item_name' value='" . $subData[1] . "'></td>";
-                                                                    echo "<td><input type='text' class='unit' name='unit' value='" . $subData[2] . "'></td>";
-                                                                    echo "<td><input type='text' class='qty' name='qty' value='" . $subData[3] . "'></td>";
+                                                                    echo "<td style='width:100px;'><input style='width:100px;' type='text' class='itemname' name='item_name' value='" . $subData[1] . "'></td>";
+                                                                    echo "<td style='width:50px;'><input style='width:50px;' type='text' class='unit' name='unit' value='" . $subData[2] . "'></td>";
+                                                                    echo "<td style='width:50px;'><input style='width:50px;' type='text' class='qty' name='qty' value='" . $subData[3] . "'></td>";
                                                                     echo "<td><input type='text'  class='rate'name='rate' value='" . $subData[4] . "'></td>";
 
-                                                                    echo "<td><select style='width:250px;' name='godawn_id' id = 'u_id' class ='form-control select2 godawn' required>";
+                                                                    echo "<td><select style='width:100px;' name='godawn_id' id = 'u_id' class ='form-control select2 godawn' required>";
                                                                     $dba = new DBAdapter();
                                                                     $Names = $dba->getRow("create_godawn", array("id", "godawn_name"), "1");
                                                                     $counts = count($Names);

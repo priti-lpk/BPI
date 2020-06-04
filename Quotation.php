@@ -18,7 +18,7 @@ if (isset($_GET['inquiry_id'])) {
     $id = $_GET['inquiry_id'];
 //    echo $id;
     $order_data = new DBAdapter();
-    $field = array("inquiry_item_list.id,inquiry_item_list.inq_id,create_item.item_name,unit_list.unit_name,inquiry_item_list.item_quantity,inquiry.reference_no,inquiry.party_id");
+    $field = array("inquiry_item_list.id,inquiry_item_list.inq_id,create_item.item_name,unit_list.unit_name,inquiry_item_list.item_quantity,inquiry.reference_no,inquiry.party_id,inquiry.user_id");
     $orderdata = $order_data->getRow("inquiry INNER JOIN inquiry_item_list ON inquiry.id=inquiry_item_list.inq_id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id INNER JOIN unit_list ON create_item.item_unit_id=unit_list.id", $field, "inquiry_item_list.id=" . $id);
 }
 if (isset($_SESSION['user_id'])) {
@@ -114,153 +114,353 @@ if (isset($_SESSION['user_id'])) {
                             </div>
                         </div>
                         <!-- end row -->
-
-                        <div class="page-content-wrapper">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card m-b-20">
-                                        <div class="card-body">
-                                            <div class="short" style=" margin-bottom:50px;">
-                                                <button type="button" style="float: right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addsupplier"><b>Add New Supplier</b></button>
-                                            </div>
-                                            <form action="customFile/AddQuotationPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
-
+                        <?php
+                        if (isset($_GET['inquiry_id'])) {
+                            $id = $_GET['inquiry_id'];
+//                            echo $id;
+                            ?>
+                            <div class="page-content-wrapper">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card m-b-20">
+                                            <div class="card-body">
                                                 <div class="form-group row">
-                                                    <input type="hidden" name="inquiry_item_id" value="<?php
-                                                    if (isset($_GET['id'])) {
-                                                        echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : '');
-                                                    } elseif (isset($_GET['inquiry_id'])) {
-                                                        echo $orderdata[0][0];
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>"/>
-                                                    <input type="hidden" name="inquiry_id" value="<?php
-                                                    if (isset($_GET['id'])) {
-                                                        echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : '');
-                                                    } elseif (isset($_GET['inquiry_id'])) {
-                                                        echo $orderdata[0][1];
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>"/>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Party</label>
-                                                    <div class="col-sm-4" id="supplierlist">
-                                                        <select class="form-control select2" name="supplier_id" id="supplier" required="">
-                                                            <option>Select Supplier</option>
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                            $data = $dba->getRow("supplier", array("id", "sup_name"), "1");
-                                                            print_r($data);
-                                                            foreach ($data as $subData) {
-
-                                                                echo" <option " . ($subData[0] == $edata[0][3] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
-                                                            }
+                                                    <div class="col-sm-12">
+                                                        <h4><b><?php // echo (isset($_GET['inquiry_id']) ? 'Ad Quotation' : '') ?></b></h4>
+                                                        <?php
+                                                        if (isset($_GET['inquiry_id'])) {
                                                             ?>
-                                                        </select>
-
+                                                            <div class="short" style=" margin-top:-20px;">
+                                                                <button type="button" style="float: right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addsupplier"><b>Add New Supplier</b></button>
+                                                            </div>                                      
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <div class="short" style=" margin-bottom:50px;">
+                                                                <button type="button" style="float: right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addsupplier"><b>Add New Supplier</b></button>
+                                                            </div>
+                                                            <?php
+                                                        }
+                                                        ?>
                                                     </div>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Item Name</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="Item Name" value="<?php
+                                                </div>
+
+
+                                                <form action="customFile/AddQuotationPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+
+                                                    <div class="form-group row">
+                                                        <input type="hidden" name="inquiry_item_id" value="<?php
                                                         if (isset($_GET['id'])) {
-                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][4] : '');
+                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : '');
                                                         } elseif (isset($_GET['inquiry_id'])) {
-                                                            echo $orderdata[0][2];
+                                                            echo $orderdata[0][0];
                                                         } else {
                                                             echo '';
                                                         }
-                                                        ?>" name="item_name" id="item_name" required="">
-                                                    </div>
-                                                    <input type="hidden" value="<?php
-                                                    if (isset($_GET['id'])) {
-                                                        echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][13] : '');
-                                                    } elseif (isset($_GET['inquiry_id'])) {
-                                                        echo $orderdata[0][5];
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>" name="reference_no" id="reference_no" class="form-control"required>
-                                                    <input type="hidden" value="<?php
-                                                    if (isset($_GET['id'])) {
-                                                        echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][14] : '');
-                                                    } elseif (isset($_GET['inquiry_id'])) {
-                                                        echo $orderdata[0][6];
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>" name="party_id" id="party_id" class="form-control"required>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Unit</label>
-                                                    <div class="col-sm-4">
-                                                        <select class="form-control select2" name="unit" id="unit_list" required="">
-                                                            <option>Select Unit</option>
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $data = $dba->getRow("unit_list", array("id", "unit_name"), "1");
-                                                            foreach ($data as $subData) {
-                                                                if (isset($_GET['id'])) {
-                                                                    echo " <option " . ($subData[1] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
-                                                                } elseif (isset($_GET['inquiry_id'])) {
-                                                                    echo " <option " . ($subData[1] == $orderdata[0][3] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
-                                                                } else {
-                                                                    echo" <option " . ($subData[0] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                        ?>"/>
+                                                        <input type="hidden" name="inquiry_id" value="<?php
+                                                        if (isset($_GET['id'])) {
+                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : '');
+                                                        } elseif (isset($_GET['inquiry_id'])) {
+                                                            echo $orderdata[0][1];
+                                                        } else {
+                                                            echo '';
+                                                        }
+                                                        ?>"/>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Select Party</label>
+                                                        <div class="col-sm-4" id="supplierlist">
+                                                            <select class="form-control select2" name="supplier_id" id="supplier" required="">
+                                                                <option>Select Supplier</option>
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                                $data = $dba->getRow("supplier", array("id", "sup_name"), "1");
+                                                                foreach ($data as $subData) {
+
+                                                                    echo" <option " . ($subData[0] == $edata[0][3] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
                                                                 }
-                                                            }
-                                                            ?>
-                                                        </select>
+                                                                ?>
+                                                            </select>
 
-                                                    </div>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">QTY.</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="Item Qty." value="<?php
+                                                        </div>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Item Name</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="Item Name" value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][4] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][2];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>" name="item_name" id="item_name" required="">
+                                                        </div>
+                                                        <input type="hidden" value="<?php
                                                         if (isset($_GET['id'])) {
-                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : '');
+                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][13] : '');
                                                         } elseif (isset($_GET['inquiry_id'])) {
-                                                            echo $orderdata[0][4];
+                                                            echo $orderdata[0][5];
                                                         } else {
                                                             echo '';
                                                         }
-                                                        ?>" name="qty" id="qty" required="">
+                                                        ?>" name="reference_no" id="reference_no" class="form-control"required>
+                                                        <input type="hidden" value="<?php
+                                                        if (isset($_GET['id'])) {
+                                                            echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][14] : '');
+                                                        } elseif (isset($_GET['inquiry_id'])) {
+                                                            echo $orderdata[0][6];
+                                                        } else {
+                                                            echo '';
+                                                        }
+                                                        ?>" name="party_id" id="party_id" class="form-control"required>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Select Unit</label>
+                                                        <div class="col-sm-4">
+                                                            <select class="form-control select2" name="unit" id="unit_list" required="">
+                                                                <option>Select Unit</option>
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $data = $dba->getRow("unit_list", array("id", "unit_name"), "1");
+                                                                foreach ($data as $subData) {
+                                                                    if (isset($_GET['id'])) {
+                                                                        echo " <option " . ($subData[1] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
+                                                                    } elseif (isset($_GET['inquiry_id'])) {
+                                                                        echo " <option " . ($subData[1] == $orderdata[0][3] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
+                                                                    } else {
+                                                                        echo" <option " . ($subData[0] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </select>
 
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Rate</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="Item Rate" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][7] : '') ?>" name="rate" id="rate" required="">
+                                                        </div>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">QTY.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="Item Qty." value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][4];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>" name="qty" id="qty" required="">
+                                                        </div>
                                                     </div>
-                                                    <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control"  id="datevalue" type="date" id="datevalue" value="<?php echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][8] : '') ?>" name="quotation_date" id="quotation_date" id="example-date-input"  required="">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
+                                                    <div class="form-group row">
 
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Remark</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="Remark" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][9] : '') ?>" name="remark" id="remark">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Rate</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="Item Rate" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][7] : '') ?>" name="rate" id="rate" required="">
+                                                        </div>
+                                                        <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control"  id="datevalue" type="date" id="datevalue" value="<?php echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][8] : '') ?>" name="quotation_date" id="quotation_date" id="example-date-input"  required="">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div class="form-group row">
 
-                                                <div class="button-items">
-                                                    <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
-                                                    <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
-                                                </div>
-                                            </form>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Remark</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="Remark" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][9] : '') ?>" name="remark" id="remark">
+                                                        </div>
+                                                    </div>
+                                                    <input class="form-control" type="hidden"   value="<?php echo (isset($_GET['inquiry_id']) ? $orderdata[0][7] : ''); ?>" name="user_id" id="user_id">
+
+                                                    <div class="button-items">
+                                                        <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                        <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
+                                                        <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> <!-- end col -->
-                            </div> <!-- end row -->
+                                    </div> <!-- end col -->
+                                </div> <!-- end row -->
 
-                            <!--end row-->
+                                <!--end row-->
 
 
-                        </div>
+                            </div>
+                            <?php
+                        } elseif (isset($_GET['type']) && isset($_GET['id'])) {
+                            ?>
+                            <div class="page-content-wrapper">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card m-b-20">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <h4><b><?php echo (isset($_GET['id']) ? 'Edit Quotation' : '') ?></b></h4>
+                                                        <?php
+                                                        if (isset($_GET['id'])) {
+                                                            ?>
+                                                            <div class="short" style=" margin-top: -50px">
+                                                                <button type="button" style="float: right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addsupplier"><b>Add New Supplier</b></button>
+                                                            </div>
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <div class="short" style=" margin-bottom:50px;">
+                                                                <button type="button" style="float: right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addsupplier"><b>Add New Supplier</b></button>
+                                                            </div>          
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                if (isset($_GET['id'])) {
+                                                    ?>
+                                                    <form action="customFile/AddQuotationPro.php" style="" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                        <?php
+                                                    } else {
+                                                        ?>
+                                                        <form action="customFile/AddQuotationPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                        <div class="form-group row">
+                                                            <input type="hidden" name="inquiry_item_id" value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][1] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][0];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>"/>
+                                                            <input type="hidden" name="inquiry_id" value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][1];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>"/>
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">Select Party</label>
+                                                            <div class="col-sm-4" id="supplierlist">
+                                                                <select class="form-control select2" name="supplier_id" id="supplier" required="">
+                                                                    <option>Select Supplier</option>
+                                                                    <?php
+                                                                    $dba = new DBAdapter();
+                                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                                    $data = $dba->getRow("supplier", array("id", "sup_name"), "1");
+                                                                    print_r($data);
+                                                                    foreach ($data as $subData) {
 
+                                                                        echo" <option " . ($subData[0] == $edata[0][3] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                    }
+                                                                    ?>
+                                                                </select>
+
+                                                            </div>
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">Item Name</label>
+                                                            <div class="col-sm-4">
+                                                                <input class="form-control" type="text"  placeholder="Item Name" value="<?php
+                                                                if (isset($_GET['id'])) {
+                                                                    echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][4] : '');
+                                                                } elseif (isset($_GET['inquiry_id'])) {
+                                                                    echo $orderdata[0][2];
+                                                                } else {
+                                                                    echo '';
+                                                                }
+                                                                ?>" name="item_name" id="item_name" required="">
+                                                            </div>
+                                                            <input type="hidden" value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][13] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][5];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>" name="reference_no" id="reference_no" class="form-control"required>
+                                                            <input type="hidden" value="<?php
+                                                            if (isset($_GET['id'])) {
+                                                                echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][14] : '');
+                                                            } elseif (isset($_GET['inquiry_id'])) {
+                                                                echo $orderdata[0][6];
+                                                            } else {
+                                                                echo '';
+                                                            }
+                                                            ?>" name="party_id" id="party_id" class="form-control"required>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">Select Unit</label>
+                                                            <div class="col-sm-4">
+                                                                <select class="form-control select2" name="unit" id="unit_list" required="">
+                                                                    <option>Select Unit</option>
+                                                                    <?php
+                                                                    $dba = new DBAdapter();
+                                                                    $data = $dba->getRow("unit_list", array("id", "unit_name"), "1");
+                                                                    foreach ($data as $subData) {
+                                                                        if (isset($_GET['id'])) {
+                                                                            echo " <option " . ($subData[1] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
+                                                                        } elseif (isset($_GET['inquiry_id'])) {
+                                                                            echo " <option " . ($subData[1] == $orderdata[0][3] ? 'selected' : '') . " value='" . $subData[1] . "'>" . $subData[1] . "</option> ";
+                                                                        } else {
+                                                                            echo" <option " . ($subData[0] == $edata[0][5] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </select>
+
+                                                            </div>
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">QTY.</label>
+                                                            <div class="col-sm-4">
+                                                                <input class="form-control" type="text"  placeholder="Item Qty." value="<?php
+                                                                if (isset($_GET['id'])) {
+                                                                    echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : '');
+                                                                } elseif (isset($_GET['inquiry_id'])) {
+                                                                    echo $orderdata[0][4];
+                                                                } else {
+                                                                    echo '';
+                                                                }
+                                                                ?>" name="qty" id="qty" required="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">Rate</label>
+                                                            <div class="col-sm-4">
+                                                                <input class="form-control" type="text"  placeholder="Item Rate" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][7] : '') ?>" name="rate" id="rate" required="">
+                                                            </div>
+                                                            <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
+                                                            <div class="col-sm-4">
+                                                                <input class="form-control"  id="datevalue" type="date" id="datevalue" value="<?php echo ( isset($_GET['type']) && isset($_GET['id']) ? $edata[0][8] : '') ?>" name="quotation_date" id="quotation_date" id="example-date-input"  required="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label">Remark</label>
+                                                            <div class="col-sm-4">
+                                                                <input class="form-control" type="text"  placeholder="Remark" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][9] : '') ?>" name="remark" id="remark">
+                                                            </div>
+                                                        </div>
+                                                        <input class="form-control" type="hidden"   value="<?php echo (isset($_GET['inquiry_id']) ? $orderdata[0][7] : ''); ?>" name="user_id" id="user_id">
+
+                                                        <div class="button-items">
+                                                            <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                            <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
+                                                            <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                        </div>
+                                                    </form>
+
+                                            </div>
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div> <!-- end row -->
+
+                                <!--end row-->
+
+
+                            </div>
+                        <?php } ?>
                         <!--end page content-->
 
                     </div> <!--container-fluid -->
@@ -279,31 +479,31 @@ if (isset($_SESSION['user_id'])) {
                                         <div class="form-group row">
                                             <label for="example-text-input" class="col-sm-4 col-form-label">Supplier Name</label>
                                             <div class="col-sm-7">
-                                                <input class="form-control" type="text"  placeholder="Supplier Name" id="sup_name" name="sup_name" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][2] : ''); ?>" required="">
+                                                <input class="form-control" type="text"  placeholder="Supplier Name" id="sup_name" name="sup_name" value="" required="">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-text-input" class="col-sm-4 col-form-label">Supplier Address</label>
                                             <div class="col-sm-7">
-                                                <input class="form-control" type="text"  placeholder="Supplier Address" id="sup_add" name="sup_add" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][3] : ''); ?>" required="">
+                                                <input class="form-control" type="text"  placeholder="Supplier Address" id="sup_add" name="sup_add" value="" required="">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-text-input" class="col-sm-4 col-form-label">Supplier Contact</label>
                                             <div class="col-sm-7">  
-                                                <input class="form-control" type="text"  placeholder="Supplier Contact" id="sup_contact" name="sup_contact" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][4] : ''); ?>" required="">
+                                                <input class="form-control" type="text"  placeholder="Supplier Contact" id="sup_contact" name="sup_contact" value="" required="">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-text-input" class="col-sm-4 col-form-label">Supplier Email</label>
                                             <div class="col-sm-7">
-                                                <input class="form-control" type="text"  placeholder="Supplier Email" id="sup_email" name="sup_email" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][5] : ''); ?>" required="">
+                                                <input class="form-control" type="text"  placeholder="Supplier Email" id="sup_email" name="sup_email" value="" required="">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="example-text-input" class="col-sm-4 col-form-label">GST No.</label>
                                             <div class="col-sm-7">
-                                                <input class="form-control" type="text"  placeholder="GST No." id="sup_gstno" name="sup_gstno" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : ''); ?>" required="">
+                                                <input class="form-control" type="text"  placeholder="GST No." id="sup_gstno" name="sup_gstno" value="" required="">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -318,7 +518,7 @@ if (isset($_SESSION['user_id'])) {
                                                     $result = mysqli_query($con, $sql);
 //                                                    $data = $dba->getRow("countries", array("id", "name"), "1");
                                                     foreach ($result as $subData) {
-                                                        echo "<option " . ($subData['id'] == $edata[0][9] ? 'selected' : '') . " value='" . $subData['id'] . "'>" . $subData['name'] . "</option> ";
+                                                        echo "<option value='" . $subData['id'] . "'>" . $subData['name'] . "</option> ";
                                                     }
                                                     ?>
                                                 </select>
@@ -337,7 +537,7 @@ if (isset($_SESSION['user_id'])) {
                                                         $dba = new DBAdapter();
                                                         $data = $dba->getRow("cities", array("id", "name"), "country_id=" . $edata[0][9]);
                                                         foreach ($data as $subData) {
-                                                            echo "<option " . ($subData[0] == $edata[0][10] ? 'selected' : '') . " value=" . $subData[0] . ">" . $subData[1] . "</option>";
+                                                            echo "<option value=" . $subData[0] . ">" . $subData[1] . "</option>";
                                                         }
                                                     }
                                                     ?>
@@ -652,7 +852,16 @@ if (isset($_SESSION['user_id'])) {
             }
 
         </script>
-
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').on(
+                        'select2:close',
+                        function () {
+                            $(this).focus();
+                        }
+                );
+            });
+        </script>
 
     </body>
 

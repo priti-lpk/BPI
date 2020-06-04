@@ -89,7 +89,10 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card m-b-20">
-                                            <div class="card-body">  
+                                            <div class="card-body">
+                                                <div class="col-sm-12" align="right">
+                                                    <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                                </div>
                                                 <?php
                                                 include_once 'shreeLib/DBAdapter.php';
                                                 if (isset($_GET['id'])) {
@@ -106,18 +109,35 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                         <div class="form-group row">
                                                             <label for="example-text-input" class="col-sm-2 col-form-label">Party Name</label>
                                                             <div class="col-sm-4">
-                                                                <input class="form-control" type="text"  placeholder="Party Name" id="godawn_name" name="godawn_name" value =  "<?php echo $subData[1] ?> " required="">
+                                                                <input class="form-control" type="text"  placeholder="Party Name" id="godawn_name" name="godawn_name" value =  "<?php echo $subData[1] ?> " required="" disabled="">
                                                             </div>
                                                             <label for="ticket-name" class="col-sm-1 control-label" id="lblpartydate">Date</label>
                                                             <div class="col-sm-3" id="partydue">
-                                                                <input type="date"  id="datevalueto" value="<?php echo $subData[2] ?>" name="to_date" id="to_date"  class="form-control" placeholder="Date" require2]d>
+                                                                <input type="date"  id="datevalueto" value="<?php echo $subData[2] ?>" name="to_date" id="to_date"  class="form-control" placeholder="Date" require2 disabled="">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label for="example-text-input" class="col-sm-2 col-form-label">Remark</label>
                                                             <div class="col-sm-4">
-                                                                <input class="form-control" type="text"  placeholder="Remark" id="godawn_name" name="godawn_name" value="<?php echo $subData[3] ?>" required="">
+                                                                <input class="form-control" type="text"  placeholder="Remark" id="godawn_name" name="godawn_name" value="<?php echo $subData[3] ?>" required="" disabled="">
                                                             </div>
+                                                            <label for="example-text-input" class="col-sm-2 col-form-label" style="margin-right: -88px;">Select User</label>
+                                                            <div class="col-sm-4">
+                                                                <?php
+                                                                $i = 1;
+                                                                echo "<select style='width:400px;' name='user_id[$i][]' id = 'u_id' class ='select2 select2-multiple' required  multiple >";
+                                                                $dba = new DBAdapter();
+                                                                $Names = $dba->getRow("module INNER JOIN role_rights ON module.id=role_rights.mod_id INNER JOIN role_master ON role_rights.role_id=role_master.id INNER JOIN create_user ON role_master.id=create_user.roles_id", array("create_user.id", "create_user.user_login_username"), "role_rights.role_create=1 AND role_rights.mod_id=8");
+                                                                $counts = count($Names);
+                                                                if ($counts >= 1) {
+                                                                    foreach ($Names as $name) {
+                                                                        echo "<option value=" . $name[0] . ">" . $name[1] . "</option>";
+                                                                    }
+                                                                }
+                                                                ?>
+                                                                </select>
+                                                            </div>
+                                                            <input class="form-control" type="hidden" name='data' id='data'>
                                                         </div>
                                                         <?php
                                                     }
@@ -137,10 +157,10 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                         <thead>
                                                             <tr>
-                                                                <th>Inquiry ID</th>
+                                                                <th>Sr No.</th>
                                                                 <th>Item Name</th>
                                                                 <th>Item Quantity</th>
-                                                                <th>Select User</th>
+                                                                <th>User</th>
                                                                 <th>Due Date</th>
                                                             </tr>
                                                         </thead>
@@ -154,34 +174,19 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                             include_once 'shreeLib/DBAdapter.php';
                                                             $dba = new DBAdapter();
                                                             $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                            //print_r($last_id);
                                                             $field = array("inquiry_item_list.id,create_item.item_name,inquiry_item_list.item_quantity,inquiry_item_list.item_id,inquiry_item_list.inq_id,inquiry.user_id");
                                                             $data = $dba->getRow("inquiry_item_list inner join create_item on inquiry_item_list.item_id=create_item.id INNER JOIN inquiry ON inquiry.id= inquiry_item_list.inq_id", $field, "inq_id=" . $_GET['id'] . " AND inquiry.branch_id=" . $last_id);
-                                                            //print_r($data);
                                                             $count = count($data);
-                                                            $i = 1;
                                                             if ($count >= 1) {
                                                                 foreach ($data as $subData) {
                                                                     echo "<tr>";
-                                                                    echo "<td><input type='text' style{border: none} name='inq_item_list_id[]' value='" . $subData[0] . "'></td>";
-                                                                    echo "<td><input type='text' name='item_name[]' value='" . $subData[1] . "'></td>";
-                                                                    echo "<td><input type='text' name='item_qnty[]' value='" . $subData[2] . "'></td>";
-                                                                    echo "<td><select style='width:100px;' name='user_id[$i][]' id = 'u_id' class ='select2 select2-multiple' required  multiple>";
-                                                                    $dba = new DBAdapter();
-                                                                    $Names = $dba->getRow("module INNER JOIN role_rights ON module.id=role_rights.mod_id INNER JOIN role_master ON role_rights.role_id=role_master.id INNER JOIN create_user ON role_master.id=create_user.roles_id", array("create_user.id", "create_user.user_login_username"), "role_rights.role_create=1 AND role_rights.mod_id=8");
-                                                                    $counts = count($Names);
-                                                                    if ($counts >= 1) {
-                                                                        foreach ($Names as $name) {
-                                                                            echo "<option value=" . $name[0] . ">" . $name[1] . "</option>";
-                                                                        }
-                                                                        echo "</select></td>";
-                                                                    } else {
-                                                                        
-                                                                    }
+                                                                    echo "<td><input type='text' style{border: none} class='inquiry' name='inq_item_list_id[]' id='inq' value='" . $subData[0] . "' readonly></td>";
+                                                                    echo "<td><input type='text' name='item_name[]' value='" . $subData[1] . "' readonly></td>";
+                                                                    echo "<td><input type='text' name='item_qnty[]' value='" . $subData[2] . "' readonly></td>";
+                                                                    echo "<td><input type='checkbox' name='user_id[]' id='" . $subData[0] . "' value='0' onclick='getuser(this.id)'></td>";
                                                                     echo "<td><input type='date' name='due_date[]' id='datevalue' class='form-control' required'></td>";
-                                                                    echo "<input type='hidden' name='inq_id' value='$subData[0]'>";
+                                                                    echo "<input type='hidden' name='inq_id' value='$subData[4]'>";
                                                                     echo "</tr>";
-                                                                    $i++;
                                                                 }
                                                             } else {
                                                                 
@@ -191,7 +196,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     </table>
                                                     <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'add' : 'add') ?>">
                                                     <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : "") ?>">
-                                                    <button type="submit" id="btn_save" name="btn_save" class="btn btn-primary"><i class="fa fa-floppy-o"></i><b> <?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Save' : 'Save') ?></b></button>
+                                                    <button type="submit" id="btn_save" name="btn_save" class="btn btn-primary" onclick="GetSelected();"><i class="fa fa-floppy-o"></i><b> <?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Save' : 'Save') ?></b></button>
 
                                                 </form>
                                             </div>
@@ -199,7 +204,62 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                     </div> <!-- end col -->
                                 </div>
                             </div>
-                        <?php } ?>
+                        <?php } else {
+                            ?>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card m-b-20">
+                                        <div class="card-body">
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
+                                            <h4 class="mt-0 header-title">View Of Inquiry List</h4><br>
+                                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Reference No.</th>
+                                                        <th>Date</th>
+                                                        <th>Remark</th>
+                                                        <th>Send</th> 
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    include_once 'shreeLib/DBAdapter.php';
+                                                    $dba = new DBAdapter();
+                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                    $field = array("inquiry.id,inquiry.inq_date,inquiry.inq_remark,inquiry_send_to.inq_id,inquiry.reference_no");
+                                                    $data = $dba->getRow("inquiry  left join inquiry_send_to on inquiry.id=inquiry_send_to.inq_id", $field, "inquiry.status='on' AND inquiry_send_to.inq_id IS Null");
+                                                    $count = count($data);
+                                                    //print_r($count);
+                                                    $i = 1;
+                                                    if ($count >= 1) {
+                                                        foreach ($data as $subData) {
+                                                            echo "<tr>";
+                                                            echo "<td>" . $i++ . "</td>";
+                                                            // echo "<td>" . $subData[1] . "</td>";
+                                                            echo "<td>" . $subData[4] . "</td>";
+                                                            $date1 = $subData[1];
+                                                            $dates1 = date("d-m-Y", strtotime($date1));
+                                                            echo "<td>" . $dates1 . "</td>";
+                                                            echo "<td>" . $subData[2] . "</td>";
+                                                            echo "<td><a href='inquiry_main_details.php?id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-save'></i> Send</a></td>";
+                                                            echo "</tr>";
+                                                        }
+                                                    } else {
+                                                        // echo 'No Data Available';
+                                                    }
+                                                    ?> 
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <!--end col--> 
+                            </div>
+                            <?php }
+                        ?>
                         <!-- end page content-->
 
                     </div> <!-- container-fluid -->
@@ -210,7 +270,29 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
             </div>
 
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> first of all select the users you want send the inquiry.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> After select the checkbox you want send the inquiry for its users.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
             <!-- ============================================================== -->
             <!-- End Right content here -->
             <!-- ============================================================== -->
@@ -261,6 +343,28 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
+        <script>
+                                                        $("#u_id").on('change', function () {
+                                                            var selected = new Array();
+                                                            var countries = [];
+                                                            $.each($(".select2 option:selected"), function () {
+                                                                countries.push($(this).val());
+                                                            });
+                                                            var user = countries.join(",");
+                                                            document.getElementById('data').value = user;
+                                                        }
+                                                        );
+        </script>
+        <script>
+            function getuser(iid) {
+                var data = document.getElementById('data').value;
+                if (document.getElementById(iid).checked) {
+                    document.getElementById(iid).value = data;
+                } else {
+                    document.getElementById(iid).value = "";
+                }
+            }
+        </script>
         <script type="text/javascript">
             function numbers() {
                 var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;

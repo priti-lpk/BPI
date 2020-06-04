@@ -91,8 +91,13 @@ if (isset($_SESSION['user_id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">                   
-                                            <form action="customFile/addGodawnPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                        <div class="card-body">   
+                                            <div class="form-group row">
+                                                <div class="col-sm-10">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit Godawn' : '') ?></b></h4>
+                                                </div>
+                                            </div>
+                                            <form action="" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Godawn Name</label>
                                                     <div class="col-sm-4">
@@ -112,7 +117,7 @@ if (isset($_SESSION['user_id'])) {
                                                 <div class="button-items">
                                                     <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
                                                     <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                    <button type="submit" id="btn_save" name="save" class="btn btn-primary waves-effect waves-light" >Save</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -157,7 +162,7 @@ if (isset($_SESSION['user_id'])) {
                                                             echo "<td>" . $subData[3] . "</td>";
 
                                                             if ($role_data[0][1] == 1) {
-                                                                echo "<td><a href='Godawn.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                                echo "<td><a href='Godawn.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
                                                             }
                                                             if ($role_data[0][2] == 1) {
                                                                 echo "<td> <button class='btn btn-danger btn_delete' id='" . $subData[0] . "' onclick='SetForDelete(this.id);'><i class='fa fa-trash'>Delete</button></td>";
@@ -238,6 +243,43 @@ if (isset($_SESSION['user_id'])) {
         <script src="assets/pages/form-advanced.js"></script>
         <!-- App js -->
         <script src="assets/js/app.js"></script>
+        <script type="text/javascript">
+            $("#btn_save").on('click', function () {
+                var godawn_name = document.getElementById("godawn_name").value;
+                var godawn_address = document.getElementById("godawn_address").value;
+                var contact = document.getElementById("contact").value;
+                var act = document.getElementById("action").value;
+                var eid = document.getElementById("id").value;
+//                                                                alert(act);
+                var dataString = {"godawn_name": godawn_name, "godawn_address": godawn_address, "contact": contact, "action": act, "id": eid};
+                $.ajax
+                        ({
+                            url: "customFile/addGodawnPro.php",
+                            datatype: "html",
+                            data: dataString,
+                            cache: false,
+                            success: function (Data)
+                            {
+//                                                                                alert(Data);
+//                                alert("success");
+
+                            }
+
+                        });
+            });
+
+        </script>
+        <script type="text/javascript">
+            $(function ()
+            {
+                $('#form_data').submit(function () {
+                    $("input[type='submit']", this)
+                            .val("Please Wait...")
+                            .attr('disabled', 'disabled');
+                    return true;
+                });
+            });
+        </script>
         <script type="text/javascript">
 
             $('#item_name').focusout(function () {

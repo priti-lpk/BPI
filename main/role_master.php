@@ -102,8 +102,8 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     </thead>
                                                     <tbody id="view_data1" name="view_data">
                                                         <?php
-                                                        $sql = "SELECT id, mod_name, mod_order,mod_role from module order by mod_order limit 10";
-                                                        //print_r($sql);
+                                                        $sql = "SELECT id, mod_name, mod_order,mod_role from module order by mod_order limit 11";
+//                                                        print_r($sql);
                                                         $result = mysqli_query($con, $sql);
                                                         while ($row = mysqli_fetch_array($result)) {
                                                             ?>

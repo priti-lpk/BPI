@@ -59,7 +59,26 @@ body {
   color: #5b626b;
   font-size: 13.5px;
 }
-
+.text-white hr{
+    border-top: 1px solid #ffffff2e;
+}
+.text-white .totalpost{
+    height: 70px;
+    width: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+    border: 1px solid #ffffff2e;
+    text-align: center;
+    background: none !important;
+    color: #fff;
+}
+.viewpost{
+    font-size: 15px;
+}
+.text-white .ml-2 a{
+    float: right;
+    color:#ffffff;
+}
 html {
   overflow-x: hidden;
   position: relative;

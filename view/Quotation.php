@@ -92,11 +92,13 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div><br>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>No.</th>
+                                                        <th>Sr No.</th>
                                                         <th>Supplier Name</th>
                                                         <th>Item Name</th>
                                                         <th></th>
@@ -120,7 +122,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     include_once '../shreeLib/DBAdapter.php';
                                                     $dba = new DBAdapter();
                                                     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                    $sql = "select (add_quotation.id) as qid,supplier.sup_name,add_quotation.item_name,add_quotation.unit,add_quotation.qty,add_quotation.rate,add_quotation.quotation_date,add_quotation.remark,create_party.party_name,inquiry.id,add_quotation.inquiry_id,inquiry.inq_date,inquiry.inq_remark FROM add_quotation INNER JOIN inquiry ON add_quotation.inquiry_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id INNER JOIN supplier ON create_party.id=supplier.id  where add_quotation.branch_id=" . $last_id;
+                                                    $sql = "select (add_quotation.id) as qid,supplier.sup_name,add_quotation.item_name,add_quotation.unit,add_quotation.qty,add_quotation.rate,add_quotation.quotation_date,add_quotation.remark,inquiry.id,add_quotation.inquiry_id,inquiry.inq_date,inquiry.inq_remark,create_party.party_name FROM add_quotation INNER JOIN inquiry ON add_quotation.inquiry_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id LEFT JOIN supplier ON add_quotation.supplier_id=supplier.id";
                                                     $result = mysqli_query($con, $sql);
 //                                                                print_r($sql);
                                                     $count = count($sql);
@@ -144,7 +146,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                             echo "<td>" . $row['remark'] . "</td>";
 
                                                             if ($role_data[0][1] == 1) {
-                                                                echo "<td><a href = 'Quotation.php?type=edit&id=" . $row['qid'] . "' class = 'btn btn-primary' ><i class = 'fa fa-edit'></i> Edit</a></td>";
+                                                                echo "<td><a href = 'Quotation.php?type=edit&id=" . $row['qid'] . "' target='_blank' class = 'btn btn-primary' ><i class = 'fa fa-edit'></i> Edit</a></td>";
                                                             }
                                                             if ($role_data[0][2] == 1) {
                                                                 echo "<td><button class = 'btn btn-danger' id = '" . $row['qid'] . "' onclick = 'SetForDelete(this.id);'><i class = 'fa fa-trash-o'>Delete</button></td></tr>";
@@ -169,7 +171,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
                 </div> <!-- content -->
                 <div class="col-sm-6 col-md-3 m-t-30">
-                                     <div class="modal fade" id="addparty" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="addparty" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -200,7 +202,30 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
             </div>
 
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> You can view the quotation.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the view inquiry item then show the item inquiry.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the edit button then edit the item quotation and click the delete button then delete the item quotation.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
             <!-- ============================================================== -->
             <!-- End Right content here -->
             <!-- ============================================================== -->

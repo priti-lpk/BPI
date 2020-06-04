@@ -1,4 +1,6 @@
 function addrow() {
+    $('#add_more').attr("disabled", true);
+
     var i = $('.item_table tr ').length;
     var my_object = "item_code=" + i;
     $.ajax({
@@ -6,12 +8,16 @@ function addrow() {
         dataType: "html",
         data: my_object,
         success: function (data1) {
-            //alert(data1);
             //  count = $('.item_table tr ').length;
             var data = "<tr id='row" + i + "' data='no'><td><input type = 'checkbox' class = 'case' id='check" + i + "' name='check[]' value='" + i + "'></td><td><input type='text' id = 'snum" + i + "' value='" + i + "' class='snum' /></td>";
-            data += "<td>" + data1 + "</td><td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]' required readonly/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]' onblur='addrow();'/></td></tr>";
+            data += "<td>" + data1 + "</td><td><input type='text' id='unit" + i + "' class='unit1' name='item_unit[]'  readonly/></td><td><input type='text' id='qnty" + i + "' class='qnty1' name='item_quantity[]' onchange='changeQnty(this);' required=''/></td><td><input style='width:420px;' type='text' id='remark" + i + "' class='remark1' name='remark[]' /></td></tr>";
             $('#item_table').append(data);
             i++;
+        },
+        complete: function () {
+            //Ajax request is finished, so we can enable
+            //the button again.
+            $('#add_more').attr("disabled", false);
         },
         error: function (errorThrown) {
             alert(errorThrown);
@@ -20,25 +26,19 @@ function addrow() {
     });
 }
 ;
-
 function getValue(rowid) {
     var i = rowid.parentNode.parentNode.rowIndex;
-     //alert(i);
     var value = $("#item_code" + i).find(":selected").val();
     var dataString = 'id=' + value;
-
     $.ajax({
         url: 'suggestvalue.php',
         dataType: "html",
         data: dataString,
         cache: false,
         success: function (Data) {
-            $('#qnty' + i).val('');
-
-            var data = Data.split(",");
-            //$('#item_name' + i).val(data[0]);
-            $('#unit' + i).val(data[0]);
-
+//            alert(Data);
+//            $('#unit' + i).val('');
+            $('#unit' + i).val(Data);
         },
         error: function (errorThrown) {
             alert(errorThrown);
@@ -50,19 +50,15 @@ function getValue(rowid) {
 function rowgetValue(rowid) {
     var i = rowid;
     var value = $("#item_code" + i).find(":selected").val();
-
     var dataString = 'id=' + value;
-
     $.ajax({
         url: 'suggestvalue.php',
         dataType: "html",
         data: dataString,
         cache: false,
         success: function (Data) {
-            $('#qnty' + i).val('');
-
-            var data = Data.split(",");
-            $('#unit' + i).val(data[0]);
+//            console.log(Data);
+            $('#unit' + i).val(Data);
         },
         error: function (errorThrown) {
             alert(errorThrown);
@@ -71,7 +67,6 @@ function rowgetValue(rowid) {
     });
 }
 ;
-
 function changeQnty(qntyid) {
     //alert(qntyid);
     var i = qntyid.parentNode.parentNode.rowIndex;

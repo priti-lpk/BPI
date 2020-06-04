@@ -88,8 +88,13 @@ if (isset($_SESSION['user_id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">                   
-                                            <form action="customFile/addPartyPro.php" id="form_data" name="party" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <div class="col-sm-10">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit Party' : '') ?></b></h4>
+                                                </div>
+                                            </div>
+                                            <form action="" id="form_data" name="party" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Party Name</label>
                                                     <div class="col-sm-4">
@@ -109,6 +114,20 @@ if (isset($_SESSION['user_id'])) {
                                                     <div class="col-sm-4">
                                                         <input class="form-control" type="text"  placeholder="Party Address" id="party_address" name="party_address" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][5] : ''); ?>" required="">
                                                     </div>
+                                                    <?php
+                                                    include_once 'shreeLib/DBAdapter.php';
+                                                    include_once 'shreeLib/dbconn.php';
+                                                    include_once 'shreeLib/Controls.php';
+                                                    $dba = new DBAdapter();
+                                                    $cdba = new Controls();
+                                                    if (!isset($_SESSION)) {
+                                                        session_start();
+                                                    }
+                                                    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
+                                                    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                    ?>
+                                                    <input type="hidden" name="party_created_by" id="party_created_by" value='<?php echo $createdby; ?>'>
+                                                    <input type="hidden" name="branch_id" id="branch_id" value='<?php echo $last_id; ?>'>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Select Country</label>
@@ -148,8 +167,7 @@ if (isset($_SESSION['user_id'])) {
                                                 <div class = "button-items">
                                                     <input type = "hidden" name = "action" id = "action" value = "<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
                                                     <input type = "hidden" name = "id" id = "id" value = "<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                    <button type = "submit" id = "btn_save" class = "btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save')
-                                                            ?></button>
+                                                    <button type = "submit" id = "btn_save" class = "btn btn-primary waves-effect waves-light">Save</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -197,7 +215,7 @@ if (isset($_SESSION['user_id'])) {
                                                             echo "<td>" . $subData[5] . "</td>";
                                                             echo "<td>" . $subData[6] . "</td>";
                                                             if ($role_data[0][1] == 1) {
-                                                                echo "<td><a href='Party.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                                echo "<td><a href='Party.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
                                                             }
 
                                                             if ($role_data[0][2] == 1) {
@@ -280,18 +298,57 @@ if (isset($_SESSION['user_id'])) {
         <script src="assets/pages/form-advanced.js"></script>
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-        <script>
-//                                                            $(document).on('focus', '.select2.select2-container', function (e) {
-//                                                                // only open on original attempt - close focus event should not fire open
-//                                                                if (e.originalEvent && $(this).find(".select2-selection--single").length > 0) {
-//                                                                    $(this).siblings('select').select2('open');
-//                                                                }
-//                                                            });
-//                                                            $(document).on('focus', '.select2', function (e) {
-//                                                                if (e.originalEvent) {
-//                                                                    $(this).siblings('select').select2('open');
-//                                                                }
-//                                                            });
+        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                $('select').on(
+                                                                        'select2:close',
+                                                                        function () {
+                                                                            $(this).focus();
+                                                                        }
+                                                                );
+                                                            });
+        </script>
+        <script type="text/javascript">
+            $("#btn_save").on('click', function () {
+                var party_name = document.getElementById("party_name").value;
+                var party_contact = document.getElementById("party_contact").value;
+                var party_email = document.getElementById("party_email").value;
+                var party_address = document.getElementById("party_address").value;
+                var countries = document.getElementById("countries").value;
+                var cities = document.getElementById("cities").value;
+                var party_created_by = document.getElementById("party_created_by").value;
+                var branch_id = document.getElementById("branch_id").value;
+                var act = document.getElementById("action").value;
+                var eid = document.getElementById("id").value;
+//                alert(party_created_by);
+//                alert(branch_id);
+                var dataString = {"party_name": party_name, "party_contact": party_contact, "party_email": party_email, "party_address": party_address, "countries": countries, "cities": cities, "party_created_by": party_created_by, "branch_id": branch_id, "action": act, "id": eid};
+                $.ajax
+                        ({
+                            url: "customFile/addPartyPro.php",
+                            datatype: "html",
+                            data: dataString,
+                            cache: false,
+                            success: function (Data)
+                            {
+                                alert(Data);
+                                alert("Success");
+                            }
+
+                        });
+            });
+
+        </script>
+        <script type="text/javascript">
+            $(function ()
+            {
+                $('#form_data').submit(function () {
+                    $("input[type='submit']", this)
+                            .val("Please Wait...")
+                            .attr('disabled', 'disabled');
+                    return true;
+                });
+            });
         </script>
         <script type="text/javascript">
             function countrychange()

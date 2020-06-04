@@ -4,101 +4,33 @@ include_once '../shreeLib/DBAdapter.php';
 include_once '../shreeLib/dbconn.php';
 include_once '../shreeLib/Controls.php';
 
-if ($_POST['action'] == 'add') {
+if ($_GET['action'] == 'add') {
 
-    if (!isset($_SESSION)) {
-        session_start();
-    }
-
+//    if (!isset($_SESSION)) {
+//        session_start();
+//    }
     $dba = new DBAdapter();
     $cdba = new Controls();
-    $create = $_POST['party_name'];
-
-    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
-    $_POST['party_created_by'] = $createdby;
-
+//    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
+    unset($_GET['action']);
+    unset($_GET['id']);
 //    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-//
-//    $_POST['branch_id'] = $last_id;
-    // $id = $_POST['id'];
-    unset($_POST['action']);
-    unset($_POST['id']);
-    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-
-    $_POST['branch_id'] = $last_id;
-    $result = $dba->setData("create_party", $_POST);
-
-    $responce = array();
-
-    if ($result) {
-
-        $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-        echo "<script>alert('Successfully Inserted Party');top.location='../Party.php';</script>";
-
-//        header('location:../Party.php');
-    } else {
-
-        $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
-    }
-
-    echo json_encode($responce);
-
-    unset($_POST);
-} elseif ($_POST['action'] == 'edit') {
+    $sql1 = "INSERT INTO create_party (branch_id,party_name,party_contact,party_email,party_address,party_created_by,country_id,city_id) VALUES ('" . $_GET['branch_id'] . "','" . $_GET['party_name'] . "','" . $_GET['party_contact'] . "','" . $_GET['party_email'] . "','" . $_GET['party_address'] . "','" . $_GET['party_created_by'] . "','" . $_GET['countries'] . "','" . $_GET['cities'] . "')";
+    mysqli_query($con, $sql1);
+    echo $sql1;
+} elseif ($_GET['action'] == 'edit') {
 
     include_once '../shreeLib/DBAdapter.php';
-
     $dba = new DBAdapter();
-
-    $id = $_POST['id'];
-
+    $id = $_GET['id'];
     if (!isset($_SESSION)) {
         session_start();
     }
     $cdba = new Controls();
-    $create = $_POST['party_name'];
-
-    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
-
-    $_POST['party_created_by'] = $createdby;
-    unset($_POST['action']);
-    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-
-    $_POST['branch_id'] = $last_id;
-    if ($dba->updateRow("create_party", $_POST, "id=" . $id)) {
-        $msg = "Edit Successfully";
-        echo "<script>alert('Successfully Edited Party');top.location='../Party.php';</script>";
-    } else {
-        $msg = "Edit Fail Try Again";
-    }
-} elseif ($_POST['action'] == 'delete') {
-
-    include_once '../shreeLib/DBAdapter.php';
-
-    $dba = new DBAdapter();
-
-    $id = $_POST['party_id'];
-
-
-    unset($_POST['action']);
-
-    unset($_POST['party_id']);
-
-    $result = $dba->deleteRow("party_list", $_POST, "id=" . $id);
-
-    $responce = array();
-
-    if ($result) {
-
-        $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-
-        header('location:../AddParty.php');
-    } else {
-
-        $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
-    }
-
-    echo json_encode($responce);
+    unset($_GET['action']);
+    $sql2 = "update create_party set party_name='" . $_GET['party_name'] . "',party_contact='" . $_GET['party_contact'] . "', party_email='" . $_GET['party_email'] . "', party_address='" . $_GET['party_address'] . "',country_id='" . $_GET['countries'] . "',city_id='" . $_GET['cities'] . "' where id=" . $id;
+    mysqli_query($con, $sql2);
+//    echo $sql2;
 }
 ?>
 

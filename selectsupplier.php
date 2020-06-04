@@ -12,7 +12,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 }
 if (isset($_GET['item_id'])) {
     $edba = new DBAdapter();
-    $edata1 = $edba->getRow("inquiry_send_to inner join inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id", array("create_item.id", "create_item.item_name","inquiry_send_to.inq_id"), "inquiry_send_to.id=" . $_GET['item_id']);
+    $edata1 = $edba->getRow("inquiry_send_to inner join inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id", array("create_item.id", "create_item.item_name", "inquiry_send_to.inq_id","inquiry_item_list.item_quantity"), "inquiry_send_to.id=" . $_GET['item_id']);
     echo "<input type='hidden' id='inq_item_list_id' value='" . $_GET['item_id'] . "'>";
 }
 if (isset($_SESSION['user_id'])) {
@@ -95,11 +95,12 @@ if (isset($_SESSION['user_id'])) {
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Item Name</label>
                                                     <div class="col-sm-3" style="margin-left: -80px;">
-                                                        <input class="form-control" type="text"  placeholder="Item Name" id="item_id" name="item_id" value="<?php echo $edata1[0][1]; ?>" required="">
+                                                        <input class="form-control" type="text"  placeholder="Item Name" id="item_name" name="item_name" value="<?php echo $edata1[0][1]; ?>" required="">
                                                     </div>
-                                                    <input class="form-control" type="hidden"  placeholder="Item Name" id="inquiry_id" name="inquiry_id" value="<?php echo $edata1[0][2]; ?>" required="">
+                                                    <input class="form-control" type="hidden"  placeholder="Inquiry" id="inquiry_id" name="inquiry_id" value="<?php echo $edata1[0][2]; ?>" required="">
 
                                                     <input class="form-control" type="hidden" id="item_id" name="item_id" value="<?php echo $edata1[0][0]; ?>" required="">
+                                                    <input class="form-control" type="hidden" id="item_qty" name="item_qty" value="<?php echo $edata1[0][3]; ?>" required="">
 
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Select Supplier</label>
                                                     <div class = "col-sm-6" style="margin-left: -50px;"sss>

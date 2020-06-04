@@ -45,15 +45,7 @@ if ($_POST['action'] == 'add') {
                 mysqli_query($con, $sql4);
             }
         }
-//        if ($mod[5] == 'send_inquiry') {
-//            $role_view = isset($_POST['role_view'][6]) ? 1 : 0;
-//            $role_delete = isset($_POST['role_delete'][6]) ? 1 : 0;
-//
-//            if ($role_view == 1) {
-//                
-//               // print_r($sql4);
-//            }
-        //}
+
         if ($mod[6] == 'user') {
             $role_view = isset($_POST['role_view'][7]) ? 1 : 0;
             $role_delete = isset($_POST['role_delete'][7]) ? 1 : 0;
@@ -83,7 +75,17 @@ if ($_POST['action'] == 'add') {
                 mysqli_query($con, $sql7);
                 //print_r($sql7);
             }
+        }if ($mod[10] == 'invoice') {
+            $role_view = isset($_POST['role_view'][11]) ? 1 : 0;
+            $role_delete = isset($_POST['role_delete'][11]) ? 1 : 0;
+
+            if ($role_view == 1) {
+                $sql7 = "INSERT INTO  role_rights (role_id,mod_id,role_create,role_edit,role_view,role_delete) VALUES ('" . $last_id . "','18','1','1','" . $role_view . "','" . $role_delete . "')";
+                mysqli_query($con, $sql7);
+                //print_r($sql7);
+            }
         }
+        
         echo "<script>alert('Successfully Inserted Role');top.location='../role_master.php';</script>";
 //        header('location:../role_master.php');
     }
@@ -159,6 +161,16 @@ if ($_POST['action'] == 'add') {
 
             if ($role_view == 1) {
                 $sql7 = "update role_rights (role_id='" . $last_id . "',mod_id='16',role_create='1',role_edit'1',role_view'" . $role_view . "',role_delete='" . $role_delete . "' where id=" . $id;
+                mysqli_query($con, $sql7);
+                print_r($sql7);
+            }
+        }
+        if ($mod[10] == 'invoice') {
+            $role_view = isset($_POST['role_view'][11]) ? 1 : 0;
+            $role_delete = isset($_POST['role_delete'][11]) ? 1 : 0;
+
+            if ($role_view == 1) {
+                $sql7 = "update role_rights (role_id='" . $last_id . "',mod_id='18',role_create='1',role_edit'1',role_view'" . $role_view . "',role_delete='" . $role_delete . "' where id=" . $id;
                 mysqli_query($con, $sql7);
                 print_r($sql7);
             }

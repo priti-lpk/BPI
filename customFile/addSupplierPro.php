@@ -4,73 +4,36 @@ include_once '../shreeLib/DBAdapter.php';
 include_once '../shreeLib/dbconn.php';
 include_once '../shreeLib/Controls.php';
 
-if ($_POST['action'] == 'add') {
-
-    if (!isset($_SESSION)) {
-        session_start();
-    }
-
-    $dba = new DBAdapter();
-    $cdba = new Controls();
-    $create = $_POST['sup_name'];
-
-    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
-    $_POST['created_user'] = $createdby;
-
-//    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
+if ($_GET['action'] == 'add') {
 //
-//    $_POST['branch_id'] = $last_id;
-    // $id = $_POST['id'];
-    unset($_POST['action']);
-    unset($_POST['id']);
-    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-
-    $_POST['branch_id'] = $last_id;
-    $result = $dba->setData("supplier", $_POST);
-
-    $responce = array();
-
-    if ($result) {
-
-        $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-        echo "<script>alert('Successfully Inserted Supplier');top.location='../Supplier.php';</script>";
-
-//        header('location:../Supplier.php');
-    } else {
-
-        $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
-    }
-
-    echo json_encode($responce);
-
-    unset($_POST);
-} elseif ($_POST['action'] == 'edit') {
-
-    include_once '../shreeLib/DBAdapter.php';
+//    if (!isset($_SESSION)) {
+//        session_start();
+//    }
 
     $dba = new DBAdapter();
+    $cdba = new Controls();
+//    $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
 
-    $id = $_POST['id'];
+    unset($_GET['action']);
+    unset($_GET['id']);
+//    $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
 
+    $sql1 = "INSERT INTO supplier (branch_id,sup_name,sup_add,sup_contact,sup_email,sup_gstno,created_user,country_id,city_id) VALUES ('" . $_GET['branch_id'] . "','" . $_GET['sup_name'] . "','" . $_GET['sup_add'] . "','" . $_GET['sup_contact'] . "','" . $_GET['sup_email'] . "','" . $_GET['sup_gstno'] . "','" . $_GET['created_user'] . "','" . $_GET['countries'] . "','" . $_GET['cities'] . "')";
+    mysqli_query($con, $sql1);
+} elseif ($_GET['action'] == 'edit') {
+    include_once '../shreeLib/DBAdapter.php';
+    $dba = new DBAdapter();
+    $id = $_GET['id'];
     if (!isset($_SESSION)) {
         session_start();
     }
     $cdba = new Controls();
-    //$create = $_POST['supplier_name'];
-
     $createdby = $dba->createdby($_SESSION['user_login_username']);   // print_r($createdby);
-
-    $_POST['created_user'] = $createdby;
-    unset($_POST['action']);
+    unset($_GET['action']);
     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-
-    $_POST['branch_id'] = $last_id;
-    if ($dba->updateRow("supplier", $_POST, "id=" . $id)) {
-        $msg = "Edit Successfully";
-        echo "<script>alert('Successfully Edited Supplier');top.location='../Supplier.php';</script>";
-    } else {
-        $msg = "Edit Fail Try Again";
-    }
+    $sql2 = "update supplier set branch_id='" . $last_id . "',sup_name='" . $_GET['sup_name'] . "', sup_add='" . $_GET['sup_add'] . "',sup_contact='".$_GET['sup_contact']."',sup_email='".$_GET['sup_email']."',sup_gstno='".$_GET['sup_gstno']."',country_id='".$_GET['countries']."',city_id='".$_GET['cities']."' where id=" . $id;
+    mysqli_query($con, $sql2);
+//    echo $sql2;
 }
 ?>
 

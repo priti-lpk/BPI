@@ -45,7 +45,73 @@ if ($_POST) {
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/metismenu.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
-        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">    
+        <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+
+        
+        <script>
+            var firebaseConfig = {
+                apiKey: "AIzaSyBr3R7w9wlq05ZxBtdOVmrQztB5fVa3-xQ",
+                authDomain: "account-657f6.firebaseapp.com",
+                databaseURL: "https://account-657f6.firebaseio.com",
+                projectId: "account-657f6",
+                storageBucket: "account-657f6.appspot.com",
+                messagingSenderId: "722396636779",
+//                appId: "1:722396636779:web:17cb8ad1e2a2bef6"
+            };
+            firebase.initializeApp(firebaseConfig);
+
+
+            const messaging = firebase.messaging();
+            messaging.requestPermission().then(function () {
+                console.log('Notification permission granted.');
+//                if (isTokenSentToServer()) {
+//                    console.log('oken already saved..');
+//                } else {
+                getRegToken();
+//                }
+            }).catch(function (err) {
+                console.log('Unable to get permission to notify.', err);
+            });
+
+            function getRegToken(argument) {
+
+                messaging.getToken()
+                        .then(function (currentToken) {
+                            if (currentToken) {
+                                //                                sendTokenToServer(currentToken);
+                                console.log(currentToken);
+                                setTokenSentToServer(true);
+                            } else {
+                                console.log('No Instance ID token available. Request permission to generate one.');
+                                setTokenSentToServer(false);
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log('An error occurred while retrieving token. ', err);
+                            showToken('Error retrieving Instance ID token. ', err);
+                            setTokenSentToServer(false);
+                        });
+
+            }
+            function setTokenSentToServer(sent) {
+                window.localStorage.setItem('sentToServer', sent ? 1 : 0);
+            }
+            function isTokenSentToServer() {
+                return window.localStorage.getItem('sentToServer') == 1;
+            }
+            messaging.onMessage(function (payload) {
+                console.log('Message received. ', payload);
+                notificationTitle = payload.data.title;
+                notificationOptions = {
+                    body: payload.data.body
+
+                }
+
+                var notification = new Notification(notificationTitle, notificationOptions);
+            });
+
+        </script>
     </head>
 
     <body>
@@ -58,9 +124,9 @@ if ($_POST) {
             <div class="card">
                 <div class="card-body">
 
-<!--                    <h3 class="text-center m-0">
-                        <a href="index.php" class="logo logo-admin"><img src="logo/logo-1.png" height="80" alt="logo"></a>
-                    </h3>-->
+                    <!--                    <h3 class="text-center m-0">
+                                            <a href="index.php" class="logo logo-admin"><img src="logo/logo-1.png" height="80" alt="logo"></a>
+                                        </h3>-->
 
                     <div class="p-3">
                         <h4 class="text-muted font-18 m-b-5 text-center">Welcome Back !</h4>
@@ -85,11 +151,11 @@ if ($_POST) {
                                 </div>
 
                             </div>
-                             <?php
-                        if ($_POST) {
-                            echo $msg;
-                        }
-                        ?>
+                            <?php
+                            if ($_POST) {
+                                echo $msg;
+                            }
+                            ?>
                             <div class="form-group m-t-10 mb-0 row">
                                 <div class="col-12 m-t-20">
                                     <a href="pages-recoverpw.html" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>

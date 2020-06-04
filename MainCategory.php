@@ -90,7 +90,12 @@ if (isset($_SESSION['user_id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">                   
+                                        <div class="card-body">  
+                                            <div class="form-group row">
+                                                <div class="col-sm-10">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit Category' : '') ?></b></h4>
+                                                </div>
+                                            </div>
                                             <form action="customFile/addMainCategoryPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label">Main Catgeory</label>
@@ -101,7 +106,7 @@ if (isset($_SESSION['user_id'])) {
                                                 <div class="button-items">
                                                     <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
                                                     <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
+                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light">Save</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -114,7 +119,7 @@ if (isset($_SESSION['user_id'])) {
                                     <div class="card m-b-20">
                                         <div class="card-body">
 
-                                            <h4 class="mt-0 header-title">View of Branch</h4><br>
+                                            <h4 class="mt-0 header-title">View of Main Category</h4><br>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
@@ -141,7 +146,7 @@ if (isset($_SESSION['user_id'])) {
                                                             echo "<td>" . $subData[0] . "</td>";
                                                             echo "<td>" . $subData[1] . "</td>";
                                                             if ($role_data[0][1] == 1) {
-                                                                echo "<td><a href='MainCategory.php?type=edit&id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
+                                                                echo "<td><a href='MainCategory.php?type=edit&id=" . $subData[0] . "' target='_blank' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-edit'></i> Edit</a></td>";
                                                             }
 
 //                                                                    if ($role_data[0][2] == 1) {
@@ -222,37 +227,18 @@ if (isset($_SESSION['user_id'])) {
         <script src="assets/pages/form-advanced.js"></script>
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-        <script>
-            function approveuser(sid) {
-                $.ajax({
-                    url: "updatestatus.php",
-                    type: "POST",
-                    data: {
-                        sid: sid,
-                        status: $("#" + sid).data('status'),
-                        action: "mainstatus",
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        //alert(data);
-                        if (data.status) {
-                            //alert("sucess");
-                            window.location.reload();
-                        } else {
-                            alert("fail");
-                        }
-
-                    },
-                    fail: function () {
-                        swal("Error!", "Error while performing operation!", "error");
-                    },
-                    error: function (data, status, jg) {
-                        swal("Error!", data.responseText, "error");
-                    }
+        <script type="text/javascript">
+            $(function ()
+            {
+                $('#form_data').submit(function () {
+                    $("input[type='submit']", this)
+                            .val("Please Wait...")
+                            .attr('disabled', 'disabled');
+                    return true;
                 });
-            }
-            //           
+            });
         </script>
+
         <script type="text/javascript">
 
             function SetForDelete(id) {

@@ -127,11 +127,11 @@ include_once 'shreeLib/DBAdapter.php';
                                                             echo "<input type='hidden' name='id' value='" . $subData[0] . "'>";
                                                             echo "<td><input type='text' class='quotation_id'name='quotation_id' value='" . $subData[1] . "'></td>";
                                                             echo "<td><input type='text' class='itemname' name='item_name' value='" . $subData[2] . "'></td>";
-                                                            echo "<td><input type='text' class='unit' name='unit' value='" . $subData[3] . "'></td>";
-                                                            echo "<td><input type='text' class='qty' name='qty' value='" . $subData[4] . "'></td>";
-                                                            echo "<td><input type='text' class='rate' name='rate' value='" . $subData[5] . "'></td>";
+                                                            echo "<td style='width:50px;'><input style='width:50px;' type='text' class='unit' name='unit' value='" . $subData[3] . "'></td>";
+                                                            echo "<td style='width:50px;'><input style='width:50px;' type='text' class='qty' name='qty' value='" . $subData[4] . "'></td>";
+                                                            echo "<td style='width:50px;'><input style='width:50px;' type='text' class='rate' name='rate' value='" . $subData[5] . "'></td>";
 
-                                                            echo "<td><select style='width:300px;' name='godawn_id' id = 'u_id' class ='form-control select2 godawn' required>";
+                                                            echo "<td><select style='width:100px;' name='godawn_id' id = 'u_id' class ='form-control select2 godawn' required>";
                                                             $dba = new DBAdapter();
                                                             $data1 = $dba->getRow("create_godawn", array("id", "godawn_name"), "1");
 //                                                                    $tagids = explode(",", $subData[6]);

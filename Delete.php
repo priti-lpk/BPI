@@ -93,7 +93,7 @@ if (isset($_GET)) {
             $sql1 = "delete from inquiry where id=" . $id;
             $result3 = mysqli_query($con, $sql1);
             $responce = array("status" => TRUE, "msg" => "Operation Successful!");
-            header("location:view/Inquiry.php");
+            header("location:view/Dashboard.php");
         }
         if ($_GET['type'] == 'quotation') {
 
@@ -133,36 +133,27 @@ if (isset($_GET)) {
             header("location:view/InquiryMainDetails.php");
         }
     } elseif (isset($_GET['inquiry_id'])) {
-
+//        echo $_GET['inquiry_id'];
         include_once 'shreeLib/Controls.php';
         $cdba = new Controls();
         $dba = new DBAdapter();
-
         $query = "SELECT inquiry_item_list.item_id,inquiry_item_list.item_unit, inquiry_item_list.item_quantity,create_item.item_name FROM inquiry_item_list INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id WHERE inquiry_item_list.id=" . $_GET['i_list_id'];
-        //print_r($query);
         $result = mysqli_query($con, $query);
-
         $id = $_GET['i_list_id'];
         $plid = "";
         $itemname = "";
         $itemunit = "";
         $itemqnty = "";
-
         while ($rows = mysqli_fetch_array($result)) {
             $itemid = $rows['item_id'];
-            $itemqnty = $rows['item_qnty'];
-            $plid = $rows['pl_id'];
+            $itemqnty = $rows['item_quantity'];
             $itemname = $rows['item_name'];
             $itemunit = $rows['item_unit'];
-            $itemqnty = $rows['item_qnty'];
         }
         if ($result) {
-
             $sql = "delete from inquiry_item_list where id=" . $_GET['i_list_id'];
             $result = mysqli_query($con, $sql);
-            //  $responce = array("status" => TRUE, "msg" => "Operation Successful!");
         } else {
-
             $responce = array("status" => FALSE, "msg" => "Oops Operation Fail");
         }
     }

@@ -3,7 +3,6 @@ ob_start();
 //include './shreeLib/session_info.php';
 include_once './shreeLib/dbconn.php';
 include_once 'shreeLib/DBAdapter.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -82,8 +81,36 @@ include_once 'shreeLib/DBAdapter.php';
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-10">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit Send Inquiry' : '') ?></b></h4>
+                                                </div>
+                                            </div>
+                                            
                                             <form action = "customFile/inquiry_main_detailsPro.php" id = "form_data" class = "form-horizontal" role = "form" method = "post" enctype = "multipart/form-data" >
+<!--                                                <div class="form-group row">
+                                                    <label for="example-text-input" class="col-sm-2 col-form-label" style="margin-right: -88px;">Select User</label>
+                                                    <div class="col-sm-4">
+                                                        <?php
+                                                        $i = 1;
+                                                        echo "<select style='width:400px;' name='user_id[$i][]' id = 'u_id' class ='select2 select2-multiple'   multiple >";
+                                                        $dba = new DBAdapter();
+                                                        $Names = $dba->getRow("module INNER JOIN role_rights ON module.id=role_rights.mod_id INNER JOIN role_master ON role_rights.role_id=role_master.id INNER JOIN create_user ON role_master.id=create_user.roles_id", array("create_user.id", "create_user.user_login_username"), "role_rights.role_create=1 AND role_rights.mod_id=8");
+                                                        $counts = count($Names);
+                                                        if ($counts >= 1) {
+                                                            foreach ($Names as $name) {
+                                                                echo "<option value=" . $name[0] . ">" . $name[1] . "</option>";
+                                                            }
+                                                        }
+                                                        ?>
+                                                        </select>
+                                                        <input class="form-control" type="hidden" name='data' id='data'>
 
+                                                    </div>
+                                                </div>-->
                                                 <h4 class="mt-0 header-title">View Of Inquiry</h4>
                                                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
@@ -97,42 +124,35 @@ include_once 'shreeLib/DBAdapter.php';
                                                     </thead>
 
                                                     <tbody id="view_data1" name="view_data">
-
                                                         <?php
                                                         $id = $_GET['id'];
-
                                                         include_once 'shreeLib/DBAdapter.php';
                                                         $dba = new DBAdapter();
                                                         $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                        $field = array("inquiry_send_to.id,inquiry_send_to.inq_id,create_item.item_name,inquiry_item_list.item_quantity,inquiry_send_to.user_id,inquiry_send_to.due_date");
-                                                        $data = $dba->getRow("inquiry_send_to INNER JOIN inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id", $field, "inquiry_send_to.id=" . $_GET['id'] . " AND inquiry_send_to.branch_id=" . $last_id);
-
+                                                        $field = array("inquiry_send_to.id,inquiry_send_to.inq_id,create_item.item_name,inquiry_item_list.item_quantity,inquiry_send_to.user_id,inquiry_send_to.due_date,inquiry_item_list.id");
+                                                        $data = $dba->getRow("inquiry_send_to INNER JOIN inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id", $field, "inquiry_send_to.id=" . $_GET['id']);
                                                         $i = 1;
                                                         $inq = '';
-                                                        foreach ($data as $subData) {
-                                                            $inq = $subData[1];
-                                                            echo "<tr>";
-                                                            echo "<td><input type='text' name='id[]' value='" . $subData[0] . "'></td>";
-                                                            echo "<td><input type='text' name='inq_id[]' value='" . $subData[2] . "'></td>";
-                                                            echo "<td><input type='text' name='inq_item_list_id[]' value='" . $subData[3] . "'></td>";
-                                                            echo "<td><select style='width:300px;' name='user_id[$i][]' id = 'u_id' class ='select2 select2-multiple' required  multiple>";
-                                                            $dba = new DBAdapter();
-                                                            $data1 = $dba->getRow("create_user", array("id", "user_login_username"), "1");
-                                                            $tagids = explode(",", $subData[4]);
-                                                            foreach ($data1 as $subData1) {
-                                                                if (isset($_GET['id'])) {
-                                                                    if (in_array($subData1[0], $tagids)) {
-                                                                        echo "<option value=" . $subData1[0] . " selected>" . $subData1[1] . "</option>";
-                                                                    } else {
-                                                                        echo "<option value=" . $subData1[0] . ">" . $subData1[1] . "</option>";
-                                                                    }
+                                                        $count = count($data);
+                                                        if ($count >= 1) {
+                                                            foreach ($data as $subData) {
+                                                                $inq = $subData[1];
+                                                                echo "<tr>";
+                                                                echo "<td><input type='text' name='id[]' value='" . $subData[0] . "'></td>";
+                                                                echo "<td><input type='text' name='inq_id[]' value='" . $subData[2] . "'></td>";
+                                                                echo "<input type='hidden' name='inq_item_list_id[]' value='" . $subData[6] . "'>";
+                                                                echo "<td><input type='text' name='item_qty[]' value='" . $subData[3] . "'></td>";
+                                                                if ($subData['4'] == '0') {
+                                                                    echo "<td><input type='checkbox' name='user_id' id='" . $subData[6] . "' value='0' onclick='getuser(this.id)'></td>";
                                                                 } else {
-                                                                    echo "<option value=" . $subData1[0] . ">" . $subData1[1] . "</option>";
+                                                                    echo "<td><input type='checkbox' name='user_id' id='" . $subData[6] . "' value='" . $subData[4] . "' onclick='getuser(this.id)' checked></td>";
                                                                 }
+                                                                echo "<td><input type='date' name='due_date' id='datevalue' value='" . $subData[5] . "'class='form-control' required'></td>";
+                                                                echo "</tr>";
+                                                                $i++;
                                                             }
-                                                            echo "<td><input type='date' name='due_date[]' id='datevalue' value='" . $subData[5] . "'class='form-control' required'></td>";
-                                                            echo "</tr>";
-                                                            $i++;
+                                                        } else {
+                                                            
                                                         }
                                                         ?>
                                                     </tbody> 
@@ -158,7 +178,29 @@ include_once 'shreeLib/DBAdapter.php';
                 <?php include 'footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> This is view of Allocate User Inquiry.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> First of all select the user than click the checkbox what you allocate the inquiry.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->
@@ -210,6 +252,28 @@ include_once 'shreeLib/DBAdapter.php';
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
+        <script>
+            $("#u_id").on('change', function () {
+                var selected = new Array();
+                var countries = [];
+                $.each($(".select2 option:selected"), function () {
+                    countries.push($(this).val());
+                });
+                var user = countries.join(",");
+                document.getElementById('data').value = user;
+            }
+            );
+        </script>
+        <script>
+            function getuser(iid) {
+                var data = document.getElementById('data').value;
+                if (document.getElementById(iid).checked) {
+                    document.getElementById(iid).value = data;
+                } else {
+                    document.getElementById(iid).value = "";
+                }
+            }
+        </script>
         <script type="text/javascript">
             function numbers() {
                 var pidd =<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>;

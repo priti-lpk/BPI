@@ -7,7 +7,6 @@ if (!isset($_SESSION)) {
 }
 $dba = new DBAdapter();
 $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-
 if (isset($_GET['inq_id'])) {
 
     $id = $_GET['inq_id'];
@@ -17,10 +16,9 @@ if (isset($_GET['inq_id'])) {
     while ($rows = mysqli_fetch_array($resultset)) {
         echo "<tr id='row" . $k . "' data='yes'>";
         echo "<input type='hidden' id='i_id" . $k . "' name='i_id[]' value=" . $rows['id'] . ">";
-        echo "<input type='hidden' id='i_quantity" . $k . "' name='i_quantity[]' value=" . $rows['item_quantity'] . ">";
         echo "<td><input type = 'checkbox' class = 'case' id='check" . $k . "' name='check[]' value=" . $k . "></td>";
         echo " <td><input type='text' id = 'snum" . $k . "' value='" . $k . "' class='snum' /></td>";
-        echo "<td><select style='width:300px;' onchange='getValue(this);'  name='item_id[]' id = 'item_code" . $k . "' class ='change_item_dropdown_ajax' > <option>Select Item</option>";
+        echo "<td><select style='width:300px;' onchange='getValue(this);'  name='item_id[]' id = 'item_code" . $k . "' class ='form-control select2 chosen' > <option>Select Item</option>";
         $dba = new DBAdapter();
         $Names = $dba->getRow("create_item INNER JOIN main_category ON create_item.cat_id=main_category.id", array("create_item.id", "create_item.item_name"), "1 order by create_item.id asc");
 
@@ -397,8 +395,8 @@ if (isset($_GET['inq_id'])) {
 //}
 ?>
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('.chosen').select2();
+    });
 
-    $(".change_item_dropdown_ajax").select2("destroy");
-    $(".change_item_dropdown_ajax").select2();
-
-</script>   
+</script> 

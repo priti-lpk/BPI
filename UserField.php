@@ -11,7 +11,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
     $field1 = array("COUNT(mod_id)");
     $countrow = $edba->getRow("role_rights", $field1, "user_id=" . $_GET['id']);
-    //$crow= count($countrow[0][1]);
+//$crow= count($countrow[0][1]);
     echo "<input type='hidden' id='rowcount' value='" . $countrow[0][0] . "'>";
 }
 ?>
@@ -80,98 +80,121 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">     
-                                            <button type="button" style="float:right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addbranch"><b>Add New Branch</b></button><br><br>
-
-                                            <form action="customFile/UserFieldPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
-
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Branch</label>
-                                                    <div class="col-sm-4" id="branchlist1">
-                                                        <select class="form-control select2" name="branch_id" id="create_branch" onchange="clear_rdbtn();" required="">
-                                                            <option>Select Branch</option>
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $data = $dba->getRow("create_branch", array("id", "branch_name"), "branch_status='true'");
-                                                            foreach ($data as $subData) {
-                                                                echo" <option " . ($subData[0] == $edata[0][1] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Role</label>
-                                                    <div class="col-sm-4" id="sub_list">
-                                                        <select class="form-control select2" name="roles_id" id="role_master" onchange="clear_rdbtn();getrole();" required="">
-                                                            <option>Select Role</option>
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $role_implode = $dba->getLastID("role_rights_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                            $roles = json_decode($role_implode, TRUE);
-
-                                                            $roless = implode(",", $roles);
-                                                            foreach ($roles as $key => $value) {
-                                                                $data = $dba->getRow("role_master", array("id", "role_name"), "id=" . $value);
-                                                                echo '<option value="' . $data[0][0] . '">' . $data[0][1] . '</option>';
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
+                                        <div class="card-body">  
+                                            <div class="form-group row">
+                                                <div class="col-sm-12">
+                                                    <h4><b><?php echo (isset($_GET['id']) ? 'Edit User' : '') ?></b></h4>
+                                                    <?php
+                                                    if (isset($_GET['id'])) {
+                                                        ?>
+                                                        <button type="button"  style="float: right;margin-top: -50px"id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addbranch"><b>Add New Branch</b></button><br><br>
+                                                        <?php
+                                                    } else {
+                                                        ?>
+                                                        <button type="button" style="float:right;" id="enable" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#addbranch"><b>Add New Branch</b></button><br><br>
+                                                        <?php
+                                                    }
+                                                    ?>
                                                 </div>
-                                                <div class="form-group row">
+                                            </div>
+                                            <?php
+                                            if (isset($_GET['id'])) {
+                                                ?>
+                                                <form action="customFile/UserFieldPro.php" style="margin-top: -50px" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                    <?php
+                                                } else {
+                                                    ?>
+                                                    <form action="customFile/UserFieldPro.php" id="form_data" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" >  
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Select Branch</label>
+                                                        <div class="col-sm-4" id="branchlist1">
+                                                            <select class="form-control select2" name="branch_id" id="create_branch" onchange="clear_rdbtn();" required="">
+                                                                <option>Select Branch</option>
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $data = $dba->getRow("create_branch", array("id", "branch_name"), "branch_status='true'");
+                                                                foreach ($data as $subData) {
+                                                                    echo" <option " . ($subData[0] == $edata[0][1] ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Select Role</label>
+                                                        <div class="col-sm-4" id="sub_list">
+                                                            <select class="form-control select2" name="roles_id" id="role_master" onchange="clear_rdbtn();getrole();" required="">
+                                                                <option>Select Role</option>
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $role_implode = $dba->getLastID("role_rights_id", "create_user", "id=" . $_SESSION['user_id']);
+                                                                $roles = json_decode($role_implode, TRUE);
 
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Role Rights</label>
-                                                    <div class = "col-sm-10">
-                                                        <select name="role_rights_id[]" id="role_master1" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ...">
-                                                            <?php
-                                                            $dba = new DBAdapter();
-                                                            $data = $dba->getRow("role_master", array("id", "role_name"), "1");
-                                                            $json = json_decode($edata[0][3], true);
-                                                            foreach ($data as $subData) {
-                                                                echo" <option " . ($subData[0] == in_array($subData[0], $json) ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
-                                                            }
-                                                            ?>
-                                                        </select>
+                                                                $roless = implode(",", $roles);
+                                                                foreach ($roles as $key => $value) {
+                                                                    $data = $dba->getRow("role_master", array("id", "role_name"), "id=" . $value);
+                                                                    echo '<option value="' . $data[0][0] . '">' . $data[0][1] . '</option>';
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
 
-                                                        <input name="disable" type="hidden" id="disable" value="0">
-                                                    </div>
-                                                    <input type="hidden" name="role_user_id" value="<?php echo $_SESSION['user_id'] ?>"/>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Role Rights</label>
+                                                        <div class = "col-sm-10">
+                                                            <select name="role_rights_id[]" id="role_master1" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ...">
+                                                                <?php
+                                                                $dba = new DBAdapter();
+                                                                $data = $dba->getRow("role_master", array("id", "role_name"), "1");
+                                                                $json = json_decode($edata[0][3], true);
+                                                                foreach ($data as $subData) {
+                                                                    echo" <option " . ($subData[0] == in_array($subData[0], $json) ? 'selected' : '') . " value='" . $subData[0] . "'>" . $subData[1] . "</option> ";
+                                                                }
+                                                                ?>
+                                                            </select>
 
-                                                </div>
+                                                            <input name="disable" type="hidden" id="disable" value="0">
+                                                        </div>
+                                                        <input type="hidden" name="role_user_id" value="<?php echo $_SESSION['user_id'] ?>"/>
 
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">User FullName</label>
-                                                    <div class="col-sm-10">
-                                                        <input class="form-control" type="text"  placeholder="User Fullname" id="user_fullname" name="user_fullname" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][5] : ''); ?>" required="">
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">User Contact</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="User Contact" id="user_contact" name="user_contact" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : ''); ?>" required="">
+
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">User FullName</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" type="text"  placeholder="User Fullname" id="user_fullname" name="user_fullname" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][5] : ''); ?>" required="">
+                                                        </div>
                                                     </div>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">User Email</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="User Email" id="user_email" name="user_email" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][7] : ''); ?>" required="">
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">User Contact</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="User Contact" id="user_contact" name="user_contact" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][6] : ''); ?>" required="">
+                                                        </div>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">User Email</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="User Email" id="user_email" name="user_email" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][7] : ''); ?>" required="">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Login Username</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="text"  placeholder="Login Username" id="user_login_username" name="user_login_username" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][8] : ''); ?>" required="">
-                                                        <div id="user-msg" class="text-danger"></div>
+                                                    <div class="form-group row">
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Login Username</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="text"  placeholder="Login Username" id="user_login_username" name="user_login_username" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][8] : ''); ?>" required="">
+                                                            <div id="user-msg" class="text-danger"></div>
+                                                        </div>
+                                                        <label for="example-text-input" class="col-sm-2 col-form-label">Login Password</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" type="password"  placeholder="Login Password" id="user_login_password" name="user_login_password" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][9] : ''); ?>" required="">
+                                                            <div id="pass-conf" class="text-danger"></div>
+                                                        </div>
                                                     </div>
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Login Password</label>
-                                                    <div class="col-sm-4">
-                                                        <input class="form-control" type="password"  placeholder="Login Password" id="user_login_password" name="user_login_password" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $edata[0][9] : ''); ?>" required="">
-                                                        <div id="pass-conf" class="text-danger"></div>
+                                                    <div class="button-items">
+                                                        <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
+                                                        <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>"/>
+                                                        <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light">Save</button>
                                                     </div>
-                                                </div>
-                                                <div class="button-items">
-                                                    <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
-                                                    <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $edata[0][0] : '') ?>"/>
-                                                    <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['type']) && isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
-                                                </div>
-                                            </form>
+                                                </form>
                                         </div>
                                     </div>
                                 </div> <!-- end col -->
@@ -204,25 +227,25 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                             <div class="form-group row">
                                 <label for="example-text-input" class="col-sm-4 col-form-label">Branch Name</label>
                                 <div class="col-sm-7">
-                                    <input class="form-control" type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $datas[0][1] : ''); ?>" required="">
+                                    <input class="form-control" type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" value="" required="">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="example-text-input" class="col-sm-4 col-form-label">Branch Address</label>
                                 <div class="col-sm-7">
-                                    <input class="form-control" type="text"  placeholder="Branch Address" id="branch_address" name="branch_address" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $datas[0][2] : ''); ?>" required="">
+                                    <input class="form-control" type="text"  placeholder="Branch Address" id="branch_address" name="branch_address" value="" required="">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="example-text-input" class="col-sm-4 col-form-label">Branch Contact</label>
                                 <div class="col-sm-7">
-                                    <input class="form-control" type="text"  placeholder="Branch Contact" id="branch_contact" name="branch_contact" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $datas[0][3] : ''); ?>" required="">
+                                    <input class="form-control" type="text"  placeholder="Branch Contact" id="branch_contact" name="branch_contact" value="" required="">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="example-text-input" class="col-sm-4 col-form-label">Branch Email</label>
                                 <div class="col-sm-7">
-                                    <input class="form-control" type="text"  placeholder="Branch Email" id="branch_email" name="branch_email" value="<?php echo (isset($_GET['type']) && isset($_GET['id']) ? $datas[0][4] : ''); ?>" required="">
+                                    <input class="form-control" type="text"  placeholder="Branch Email" id="branch_email" name="branch_email" value="" required="">
                                 </div>
                             </div>
 
@@ -516,6 +539,16 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
     function SetForDelete(id) {
         location.href = "Delete.php?type=main_category&id=" + id;
     }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').on(
+                'select2:close',
+                function () {
+                    $(this).focus();
+                }
+        );
+    });
 </script>
 </body>
 

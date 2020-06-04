@@ -4,15 +4,12 @@ ob_start();
 include_once 'shreeLib/DBAdapter.php';
 include_once 'shreeLib/dbconn.php';
 if (isset($_GET['id'])) {
+    $dba = new DBAdapter();
     $id = $_GET['id'];
 
-    $sql = "SELECT create_item.id,unit_list.unit_name FROM create_item inner join unit_list on create_item.item_unit_id=unit_list.id WHERE create_item.id=" . $id;
-    //print_r($sql);
-    $resultset = mysqli_query($con, $sql);
-    while ($rows = mysqli_fetch_assoc($resultset)) {
-        
-        $unit_id = $rows['unit_name'];
-
+    $data = $dba->getRow("create_item inner join unit_list on create_item.item_unit_id=unit_list.id", array("create_item.id", "unit_list.unit_name"), " create_item.id=" . $id);
+    foreach ($data as $subData) {
+        $unit_id = $subData[1];
         echo $unit_id;
     }
 } elseif (isset($_GET['order_id'])) {

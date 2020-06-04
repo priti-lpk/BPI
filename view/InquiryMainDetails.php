@@ -93,7 +93,9 @@ if (isset($_SESSION['user_id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
@@ -114,9 +116,9 @@ if (isset($_SESSION['user_id'])) {
                                                     include_once '../shreeLib/DBAdapter.php';
                                                     $dba = new DBAdapter();
                                                     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                    $sql = "SELECT inquiry.id,create_item.id,inquiry_send_to.id,inquiry.inq_date,inquiry_send_to.inq_item_list_id,inquiry_item_list.item_quantity,create_item.item_name,inquiry.reference_no,inquiry_item_list.item_id FROM inquiry_send_to INNER JOIN inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN inquiry ON inquiry_item_list.inq_id=inquiry.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id where inquiry_send_to.branch_id=" . $last_id." ORDER BY inquiry_send_to.id ASC";
+                                                    $sql = "SELECT inquiry.id,create_item.id,inquiry_send_to.id,inquiry.inq_date,inquiry_send_to.inq_item_list_id,inquiry_item_list.item_quantity,create_item.item_name,inquiry.reference_no,inquiry_item_list.item_id FROM inquiry_send_to INNER JOIN inquiry_item_list ON inquiry_send_to.inq_item_list_id=inquiry_item_list.id INNER JOIN inquiry ON inquiry_item_list.inq_id=inquiry.id INNER JOIN create_item ON inquiry_item_list.item_id=create_item.id where find_in_set('" . $_SESSION['user_id'] . "',inquiry_send_to.user_id) ORDER BY inquiry_send_to.id ASC";
                                                     $result = mysqli_query($con, $sql);
-                                                   // print_r($sql);
+                                                    //print_r($sql);
                                                     $i = 1;
                                                     while ($row = mysqli_fetch_array($result)) {
                                                         echo "<tr>";
@@ -124,7 +126,7 @@ if (isset($_SESSION['user_id'])) {
                                                         echo "<td>" . $row['reference_no'] . "</td>";
                                                         echo "<td>" . $row['item_name'] . "</td>";
                                                         echo "<td>" . $row['item_quantity'] . "</td>";
-                                                        
+
                                                         //$user = $row['user_id'];
 //                                                                    echo $user;
                                                         //$userarray = explode(',', $user);
@@ -140,7 +142,7 @@ if (isset($_SESSION['user_id'])) {
                                                         $dates1 = date("d-m-Y", strtotime($date1));
                                                         echo "<td>" . $dates1 . "</td>";
                                                         echo "<td><a href='selectsupplier.php?item_id=" . $row[2] . "' class='btn btn-primary' id='" . $row['id'] . "'><i class='fa fa-save'></i> Select Supplier</a>&nbsp;&nbsp;";
-                                                        echo "<a href='view/selectsupplier.php?inq_id=".$row[0]."' class='btn btn-primary' id='" . $row['id'] . "'><i class='fa fa-save'></i> View Item Supplier</a></td>";
+                                                        echo "<a href='view/selectsupplier.php?inq_id=" . $row[0] . "' class='btn btn-primary' id='" . $row['id'] . "'><i class='fa fa-save'></i> View Item Supplier</a></td>";
 
                                                         //if ($role_data[0][1] == 1) {
 //                                                        echo "<td><a href='InquiryDetailsedit.php?id=" . $row['id'] . "' class='btn btn-primary' id='" . $row['inq_id'] . "'><i class='fa fa-save'></i> Edit</a></td>";
@@ -169,7 +171,30 @@ if (isset($_SESSION['user_id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> It is a view of Inquiry send details.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the select supplier button then select the supplier you want this  for item.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the view item supplier button then view the supplier items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->

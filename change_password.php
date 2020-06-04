@@ -251,7 +251,7 @@ include_once 'shreeLib/DBAdapter.php';
                                 $('#changePass').html('Changing Now...');
                             },
                             success: function (data) {
-                                //  alert(data);
+                                  //alert(data);
                                 if (data == 1)
                                 {
                                     //				$('#compare').html('Password changed successfully');

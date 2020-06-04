@@ -74,7 +74,7 @@ class DBAdapter {
             echo 'Data can not fetch<br>';
             return FALSE;
         }
-        echo $query;
+        //echo $query;
     }
 
     function getRow($table, $field, $clause) {
@@ -95,7 +95,7 @@ class DBAdapter {
         }
         $query = $text . $string . " from " . $table . " where " . $clause;
 //        echo '</br>';echo '</br>';echo '</br>';echo '</br>';
-        //echo $query;
+//        echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             $i = 0;

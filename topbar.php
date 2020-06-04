@@ -63,7 +63,7 @@ if (!isset($_SESSION)) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                             <!-- item-->
-                            <a class="dropdown-item" href="UserField.php?type=edit&id=<?php echo $_SESSION['user_id']?>"><i class="mdi mdi-account"></i>Change User Details</a>
+                            <a class="dropdown-item" href="UserField.php?type=edit&id=<?php echo $_SESSION['user_id'] ?> " target='_blank'><i class="mdi mdi-account"></i>Change User Details</a>
                             <div class="dropdown-divider"></div>                            
                             <a class="dropdown-item" href="change_password.php"><i class="mdi mdi-account-circle m-r-5"></i>Change Password</a>
                             <div class="dropdown-divider"></div>
@@ -72,8 +72,28 @@ if (!isset($_SESSION)) {
                     </div>
                 </li>
             </ul>
-
         </nav>
-
     </div>
 
+<!--            <script type="text/javascript">
+                var id = document.getElementById("id").value;
+                var name = document.getElementById("pname" + id).value;
+                if (window.Notification && Notification.permission !== "denied") {
+                    Notification.requestPermission(function (status) {  // status is "granted", if accepted by user
+                        var n = new Notification('Blue Pearl International Import Export', {
+                            body: name + ' Approved Inquiry !',
+                        });
+                    });
+                }
+            </script> -->
+
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+    <script>
+        MsgElem = document.getElementById("msg")
+        TokenElem = document.getElementById("token")
+        NotisElem = document.getElementById("notis")
+        ErrElem = document.getElementById("err")
+    </script>

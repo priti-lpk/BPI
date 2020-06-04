@@ -97,11 +97,14 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card m-b-20">
-                                        <div class="card-body">                   
+                                        <div class="card-body"> 
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
                                             <form action="" id="form_data" class="form-horizontal" role="form" method="get" enctype="multipart/form-data" >  
 
                                                 <div class="form-group row">
-                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Party</label>
+                                                    <label for="example-text-input" class="col-sm-2 col-form-label">Select Godawn</label>
                                                     <div class="col-sm-5" id="godawn">       
                                                         <select class="form-control select2" name="godawn_id" id="godawn_id" required="">
                                                             <option>Select Godawn</option>
@@ -134,17 +137,15 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                 <thead>
                                                     <tr>
                                                         <th>No.</th>
-                                                        <th>Party Name</th>
+                                                        <th>Reference No.</th>
                                                         <th>Item Name</th>
-                                                        <th>Unit</th>
+<!--                                                        <th>Unit</th>
                                                         <th>Qty.</th>
-                                                        <th>Rate</th>
-                                                        <!--<th>User Name</th>-->
+                                                        <th>Rate</th>-->
+                                                        <th>Total</th>
                                                         <th>Purchase Date</th>
-
-                                                        <?php //if ($role_data[0][1] == 1) { ?>
-                                                        <th>Edit</th> <?php // }                         ?>
-                                                        <?php //if ($role_data[0][2] == 1) { ?> <th>Delete</th><?php //} ?>
+<!--                                                        <th>Edit</th> 
+                                                        <th>Delete</th>-->
                                                     </tr>
                                                 </thead>
 
@@ -154,27 +155,24 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                         include_once '../shreeLib/DBAdapter.php';
                                                         $dba = new DBAdapter();
                                                         $id = $_GET['godawn_id'];
-                                                        $sql = "SELECT purchase_list.id,create_party.party_name,purchase_list.item_name,purchase_list.unit,purchase_list.qty,purchase_list.rate,purchase_list.purchase_date FROM purchase_list INNER JOIN add_quotation ON purchase_list.quotation_id=add_quotation.id INNER JOIN create_party ON add_quotation.party_id=create_party.id  where purchase_list.godawn_id=" . $id;
+                                                        $sql = "SELECT inquiry.reference_no,purchase_list.item_name,purchase_list.total_amount,purchase_list.purchase_date FROM `purchase_list` INNER JOIN inquiry ON purchase_list.inq_id=inquiry.id where purchase_list.godawn_id=" . $id;
                                                         $result = mysqli_query($con, $sql);
-//                                                                    print_r($sql);
-                                                        $i = 0;
+//                                                        print_r($sql);
+                                                        $i = 1;
                                                         while ($row = mysqli_fetch_array($result)) {
                                                             echo "<tr>";
-                                                            echo "<td>" . $row['id'] . "</td>";
-                                                            echo "<td>" . $row['party_name'] . "</td>";
+                                                            echo "<td>" . $i++ . "</td>";
+                                                            echo "<td>" . $row['reference_no'] . "</td>";
                                                             echo "<td>" . $row['item_name'] . "</td>";
-                                                            echo "<td>" . $row['unit'] . "</td>";
-                                                            echo "<td>" . $row['qty'] . "</td>";
-                                                            echo "<td>" . $row['rate'] . "</td>";
+//                                                            echo "<td>" . $row['unit'] . "</td>";
+//                                                            echo "<td>" . $row['qty'] . "</td>";
+//                                                            echo "<td>" . $row['rate'] . "</td>";
+                                                            echo "<td>" . $row['total_amount'] . "</td>";
                                                             $date1 = $row['purchase_date'];
                                                             $dates1 = date("d-m-Y", strtotime($date1));
                                                             echo "<td>" . $dates1 . "</td>";
-                                                            //if ($role_data[0][1] == 1) {
-                                                            echo "<td><a href='purchase_listedit.php?id=" . $row['id'] . "' class='btn btn-primary' id='" . $row['id'] . "'><i class='fa fa-save'></i> Edit</a></td>";
-                                                            //}
-                                                            //if ($role_data[0][2] == 1) {
-                                                            echo "<td><button class = 'btn btn-danger' id = '" . $row['id'] . "' onclick = 'SetForDelete(this.id);'><i class = 'fa fa-trash-o'>Delete</button></td></tr>";
-                                                            //}
+//                                                            echo "<td><a href='purchase_listedit.php?id=" . $row['id'] . "' class='btn btn-primary' id='" . $row['id'] . "'><i class='fa fa-save'></i> Edit</a></td>";
+//                                                            echo "<td><button class = 'btn btn-danger' id = '" . $row['id'] . "' onclick = 'SetForDelete(this.id);'><i class = 'fa fa-trash-o'>Delete</button></td></tr>";
                                                             echo "</tr>";
                                                         }
                                                     }
@@ -196,7 +194,29 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> You can view the purchase List.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> First of all select the godawn and then search the purchse items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->
@@ -308,6 +328,16 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                 location.href = "Delete.php?type=purchase&id=" + id;
 
             }
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').on(
+                        'select2:close',
+                        function () {
+                            $(this).focus();
+                        }
+                );
+            });
         </script>
     </body>
 

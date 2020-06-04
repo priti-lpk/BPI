@@ -56,57 +56,87 @@ if (!isset($_SESSION)) {
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">Welcome to Blue Pearl International Dashboard</li>
                                     </ol>
-
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12">
-                                <div class="card m-b-20">
-                                    <div class="card-body">
-
-                                        <h4 class="mt-0 header-title">View Of Inquiry List</h4><br>
-                                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Party Name</th>
-                                                    <th>Date</th>
-                                                    <th>Remark</th>
-                                                    <th>Send</th> 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                            <div class = "col-xl-4 col-md-6">
+                                <div class = "card bg-primary mini-stat position-relative">
+                                    <div class = "card-body">
+                                        <div class = "mini-stat-desc" style="font-size: 20px;">
+                                            <div class="text-white">
                                                 <?php
-                                                include_once 'shreeLib/DBAdapter.php';
+                                                include_once './shreeLib/DBAdapter.php';
                                                 $dba = new DBAdapter();
-                                                $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                $field = array("inquiry.id,create_party.party_name,inquiry.inq_date,inquiry.inq_remark,inquiry_send_to.inq_id");
-                                                $data = $dba->getRow("inquiry_send_to RIGHT JOIN inquiry ON inquiry_send_to.inq_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id", $field, "inquiry_send_to.inq_id IS Null");
-                                                $count = count($data);
-                                                //print_r($count);
+                                                $data = $dba->getRow("inquiry left join inquiry_send_to on inquiry.id=inquiry_send_to.inq_id", array("count(inquiry.id) as total"), " inquiry_send_to.inq_id IS Null");
                                                 $i = 1;
-                                                if ($count >= 1) {
-                                                    foreach ($data as $subData) {
-                                                        echo "<tr>";
-                                                        echo "<td>" . $i++ . "</td>";
-                                                        echo "<td>" . $subData[1] . "</td>";
-                                                        $date1 = $subData[2];
-                                                        $dates1 = date("d-m-Y", strtotime($date1));
-                                                        echo "<td>" . $dates1 . "</td>";
-                                                        echo "<td>" . $subData[3] . "</td>";
-                                                        echo "<td><a href='inquiry_main_details.php?id=" . $subData[0] . "' class='btn btn-primary' id='" . $subData[0] . "'><i class='fa fa-save'></i> Send</a></td>";
-                                                        echo "</tr>";
+                                                if (!empty($data)) {
+
+                                                    foreach ($data as $row) {
+                                                        ?>
+                                                        <button class="totalpost"><h3 style="font-size: 22px;"><?= $row[0] ?></h3></button>&nbsp;&nbsp;Total Inquiry
+                                                        <hr>
+                                                        <span class = "ml-2 viewpost"><a href="view_send.php">View Inquiry</a></span>
+                                                        <?php
                                                     }
-                                                } else {
-                                                    // echo 'No Data Available';
                                                 }
-                                                ?> 
-                                            </tbody>
-                                        </table>
+                                                ?>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
+                            <div class = "col-xl-4 col-md-6">
+                                <div class = "card bg-primary mini-stat position-relative">
+                                    <div class = "card-body">
+                                        <div class = "mini-stat-desc" style="font-size: 20px;">
+                                            <div class = "text-white">
+                                                <?php
+                                                include_once './shreeLib/DBAdapter.php';
+                                                $dba = new DBAdapter();
+                                                $data = $dba->getRow("add_quotation", array("count(id) as total"), "1");
+                                                $i = 1;
+                                                if (!empty($data)) {
+                                                    foreach ($data as $row) {
+                                                        ?>
+                                                        <button class="totalpost"><h3 style="font-size: 22px;"><?= $row[0] ?></h3></button>&nbsp;&nbsp;Total Quotation
+                                                        <hr>
+                                                        <span class = "ml-2 viewpost"><a href="view/Quotation.php">View Quotation</a></span>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "col-xl-4 col-md-6">
+                                <div class = "card bg-primary mini-stat position-relative">
+                                    <div class = "card-body">
+                                        <div class = "mini-stat-desc" style="font-size: 20px;">
+                                            <div class = "text-white">
+                                                <?php
+                                                include_once './shreeLib/DBAdapter.php';
+                                                $dba = new DBAdapter();
+                                                $data = $dba->getRow("purchase_list", array("count(id) as total"), "1");
+                                                $i = 1;
+                                                if (!empty($data)) {
+                                                    foreach ($data as $row) {
+                                                        ?>
+                                                        <button class="totalpost"><h3 style="font-size: 22px;"><?= $row[0] ?></h3></button>&nbsp;&nbsp;Total Purchase
+                                                        <hr>
+                                                        <span class = "ml-2 viewpost"><a href="view/Purchase.php">View Purchase</a></span>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col--> 
                         </div>
                         <!-- end row -->
 
@@ -164,38 +194,40 @@ if (!isset($_SESSION)) {
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
-        <script>
-            if (window.Notification && Notification.permission !== "denied") {
-                Notification.requestPermission(function (status) {  // status is "granted", if accepted by user
-                    var n = new Notification('Blue Pearl International Import Export', {
-                        body: 'I am the body text!',
-                        //icon: 'assets/images/bg.jpg' // optional
-                    });
-                });
-            }
+<!--        <script>
+            window.onbeforeunload = function (event) {
+                var message = 'Important: Please click on \'Save\' button to leave this page.';
+                if (typeof event == 'undefined') {
+                    event = window.event;
+                }
+                if (event) {
+                    event.returnValue = message;
+                }
+                return message;
+            };
+        </script>-->
 
-        </script>
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-        <script>
-            var OneSignal = window.OneSignal || [];
-            OneSignal.push(function () {
-                OneSignal.init({
-                    appId: "c76f642c-0cee-4596-bb34-f06ba04bcce3",
-                });
-            });
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/sw.js').then(function (registration) {
-                        // Registration was successful
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    }, function (err) {
-                        // registration failed :(
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-                });
-            }
+<!--        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+ <script>
+     var OneSignal = window.OneSignal || [];
+     OneSignal.push(function () {
+         OneSignal.init({
+             appId: "c76f642c-0cee-4596-bb34-f06ba04bcce3",
+         });
+     });
+     if ('serviceWorker' in navigator) {
+         window.addEventListener('load', function () {
+             navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                 // Registration was successful
+                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
+             }, function (err) {
+                 // registration failed :(
+                 console.log('ServiceWorker registration failed: ', err);
+             });
+         });
+     }
 
-        </script>
+ </script>-->
     </body>
 
 </html>

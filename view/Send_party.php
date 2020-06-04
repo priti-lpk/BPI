@@ -92,18 +92,20 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                 <div class="col-12">
                                     <div class="card m-b-20">
                                         <div class="card-body">
-
-                                            <h4 class="mt-0 header-title">View Of Send Party</h4>
+                                            <div class="col-sm-12" align="right">
+                                                <td><a href = '#addinstruction' style="color: black;margin-right: -0px;" data-toggle = 'modal'><i class="fa fa-info-circle"></i></a>
+                                            </div>
+                                            <h4 class="mt-0 header-title">View Of Proforma Invoice</h4>
                                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>No.</th>
                                                         <th>Party Name</th>
                                                         <th>Invoice Date</th>
-                                                        <th>Inquiry No.</th>
+                                                        <th>Reference No.</th>
                                                         <th>Delivery</th>
                                                         <th>Total Amount</th>
-                                                        <!--<th>Edit</th>--> 
+                                                        <th>View Item</th> 
 
                                                     </tr>
                                                 </thead>
@@ -115,7 +117,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     include_once '../shreeLib/DBAdapter.php';
                                                     $dba = new DBAdapter();
 //                                                                $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
-                                                    $sql = "SELECT send_party.id,create_party.party_name,send_party.invoice_date,send_party.inquiry_no,send_party.delivery,send_party.total_amount FROM send_party INNER JOIN create_party ON send_party.party_id=create_party.id ";
+                                                    $sql = "SELECT send_party.id,create_party.party_name,send_party.invoice_date,send_party.inquiry_no,send_party.delivery,send_party.total_amount,inquiry.reference_no FROM send_party INNER JOIN create_party ON send_party.party_id=create_party.id INNER JOIN inquiry ON send_party.inquiry_no=inquiry.id ";
                                                     $result = mysqli_query($con, $sql);
 //                                                                print_r($sql);
                                                     $count = count($sql);
@@ -127,13 +129,12 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                             echo "<td>" . $row['party_name'] . "</td>";
                                                             $date1 = $row['invoice_date'];
                                                             $dates1 = date("d-m-Y", strtotime($date1));
-
                                                             echo "<td>" . $dates1 . "</td>";
-                                                            echo "<td>" . $row['inquiry_no'] . "</td>";
+                                                            echo "<td>" . $row['reference_no'] . "</td>";
                                                             echo "<td>" . $row['delivery'] . "</td>";
-                                                            echo "<td>" . $row['total_amount'] . "</td>";
+                                                            echo "<td>" . $row['total_amount'] . "$</td>";
                                                             //  if ($role_data[0][1] == 1) {
-//                                                            echo "<td><a href = 'view/SendPartyInfo.php?type=edit&id=" . $row['id'] . "' class = 'btn btn-primary' id = '" . $row['id'] . "'><i class = 'fa fa-edit'></i> Edit</a></td>";
+                                                            echo "<td><a href = 'view/ViewSendItem.php?id=" . $row['id'] . "' class = 'btn btn-primary' id = '" . $row['id'] . "'><i class = 'fa fa-list fw'></i> View Item</a></td>";
 //                                                                        }
 //                                                                        if ($role_data[0][2] == 1) {
 //                                                                        echo "<td><button class = 'btn btn-danger' id = '" . $row['id'] . "' onclick = 'SetForDelete(this.id);'><i class = 'fa fa-trash-o'>Delete</button></td></tr>";
@@ -187,7 +188,29 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                 <?php include '../footer.php' ?>
 
             </div>
-
+            <div class="col-sm-6 col-md-3 m-t-30">
+                <div class="modal fade" id="addinstruction" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">View Instruction</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <p><i class="fa fa-hand-point-right"></i> It is a view of proforma invoice.</p>
+                                        <p><i class="fa fa-hand-point-right"></i> You can click the view item button then view the proforma invoice items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
 
             <!-- ============================================================== -->
             <!-- End Right content here -->
