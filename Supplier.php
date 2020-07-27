@@ -213,7 +213,7 @@ if (isset($_SESSION['user_id'])) {
                                                     // $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
 
                                                     $field = array("supplier.id,supplier.sup_name,supplier.sup_add,supplier.sup_contact,supplier.sup_email,supplier.sup_gstno,countries.name,cities.name");
-                                                    $data = $dba->getRow("supplier INNER JOIN countries ON supplier.country_id=countries.id INNER JOIN cities ON supplier.city_id=cities.id", $field, "1");
+                                                    $data = $dba->getRow("supplier LEFT JOIN countries ON supplier.country_id=countries.id LEFT JOIN cities ON supplier.city_id=cities.id", $field, "1");
                                                     $count = count($data);
                                                     if ($count >= 1) {
                                                         foreach ($data as $subData) {

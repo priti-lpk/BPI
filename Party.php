@@ -202,7 +202,7 @@ if (isset($_SESSION['user_id'])) {
                                                     $dba = new DBAdapter();
                                                     //$last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
                                                     $field = array("create_party.id,create_party.party_name,create_party.party_contact,create_party.party_email,create_party.party_address,countries.name,cities.name");
-                                                    $data = $dba->getRow("create_party INNER JOIN countries ON create_party.country_id=countries.id INNER JOIN cities ON create_party.city_id=cities.id", $field, "1");
+                                                    $data = $dba->getRow("create_party LEFT JOIN countries ON create_party.country_id=countries.id LEFT JOIN cities ON create_party.city_id=cities.id", $field, "1");
                                                     $count = count($data);
                                                     if ($count >= 1) {
                                                         foreach ($data as $subData) {

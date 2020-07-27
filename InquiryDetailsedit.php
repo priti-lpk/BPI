@@ -91,7 +91,7 @@ include_once 'shreeLib/DBAdapter.php';
                                             </div>
                                             
                                             <form action = "customFile/inquiry_main_detailsPro.php" id = "form_data" class = "form-horizontal" role = "form" method = "post" enctype = "multipart/form-data" >
-<!--                                                <div class="form-group row">
+                                                <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label" style="margin-right: -88px;">Select User</label>
                                                     <div class="col-sm-4">
                                                         <?php
@@ -110,7 +110,7 @@ include_once 'shreeLib/DBAdapter.php';
                                                         <input class="form-control" type="hidden" name='data' id='data'>
 
                                                     </div>
-                                                </div>-->
+                                                </div>
                                                 <h4 class="mt-0 header-title">View Of Inquiry</h4>
                                                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                                     <thead>
