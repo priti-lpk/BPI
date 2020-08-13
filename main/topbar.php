@@ -54,8 +54,8 @@ if (!isset($_SESSION)) {
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                             <!-- item-->
-                            <!--<a class="dropdown-item" href="change_password.php"><i class="mdi mdi-account-circle m-r-5"></i>Change Password</a>-->
-                            <!--<div class="dropdown-divider"></div>-->
+                            <a class="dropdown-item" href="change_password.php"><i class="mdi mdi-account-circle m-r-5"></i>Change Password</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="shreeLib/destroy.php"><i class="mdi mdi-power text-danger"></i>Logout</a>
                         <!--</div>-->                                                                    
                     </div>

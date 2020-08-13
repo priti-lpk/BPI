@@ -68,10 +68,10 @@ include_once 'shreeLib/DBAdapter.php';
                                                 <div class="form-group row">
                                                     <?php
 //                                                    include_once './config/session_info.php';
-                                                    if ($_SESSION['user_id']) {
+//                                                    if ($_SESSION['user_id']) {
                                                         ?>
-                                                        <input type = "hidden" name = "pwd_id" id = "pwd_id" value = "<?php echo $_SESSION['user_id']; ?>">
-                                                    <?php } ?>
+                                                        <!--<input type = "hidden" name = "pwd_id" id = "pwd_id" value = "<?php // echo $_SESSI/ON['user_id']; ?>">-->
+                                                    <?php // } ?>
                                                     <label for = "example-text-input" class = "col-sm-2 col-form-label">Old password</label>
                                                     <div class = "col-sm-10">
                                                         <input class = "form-control" type = "text" value = "" id = "old_pwd" name = "old_pwd" placeholder = "Old password" required>
@@ -176,8 +176,8 @@ include_once 'shreeLib/DBAdapter.php';
                 var bothMatched = 0;
 
                 $('#old_pwd').on('blur', function () {
-                    var dataString = 'id=' + $('#pwd_id').val() + '&old=' + $('#old_pwd').val();
-                    // alert(dataString);
+                    var dataString = 'old=' + $('#old_pwd').val();
+//                     alert(dataString);
                     if (!$('#old_pwd').val() == '')
                     {
                         $.ajax({
