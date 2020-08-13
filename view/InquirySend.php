@@ -140,8 +140,13 @@ include_once '../shreeLib/DBAdapter.php';
                                                                 echo "<td>" . $dates1 . "</td>";
                                                             }
                                                             $field1 = array("add_quotation.id");
-                                                            $data1 = $dba->getRow("add_quotation", $field1, "inquiry_item_id=" . $subData[0]);
-                                                            $count1 = count($data1);
+//                                                            print_r($subData[0]);
+                                                            $sql = "SELECT id FROM add_quotation where inquiry_item_id=" . $subData[0];
+//                                                            print_r($sql);
+                                                            $resultset = mysqli_query($con, $sql);
+//                                                            $data1 = $dba->getRow("add_quotation", $field1, "inquiry_item_id=" . $subData[0]);
+//                                                            count(($data1))
+                                                            $count1 = mysqli_num_rows($resultset);
                                                             $iid = $subData[0];
                                                             $date1 = $subData[9];
                                                             $dates1 = date("d-m-Y", strtotime($date1));
@@ -151,6 +156,7 @@ include_once '../shreeLib/DBAdapter.php';
                                                             echo "&nbsp;&nbsp;<button type = 'submit' href = '#addinq' class = 'btn btn-primary' data-toggle = 'modal' data-id = '$iid' data-party-name = '" . $subData[8] . "' data-inq-date = '" . $dates1 . "'data-inq-remark = '" . $subData[10] . "'data-item-name = '" . $subData[1] . "' data-unit = '" . $subData[2] . "'data-quantity = '" . $subData[3] . "'data-item-remark = '" . $subData[4] . "'>View Inquiry</button></td>";
 
                                                             echo "</tr>";
+//                                                            exit;
                                                         }
                                                     }
                                                     ?>

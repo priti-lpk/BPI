@@ -173,7 +173,7 @@ if (isset($_SESSION['user_id'])) {
                                                     <div class="button-items">
                                                         <input type="hidden" name="action" id="action" value="<?php echo (isset($_GET['id']) ? 'edit' : 'add') ?>"/>
                                                         <input type="hidden" name="id" id="id" value="<?php echo (isset($_GET['id']) ? $_GET['id'] : '') ?>"/>
-                                                        <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light">Save</button>
+                                                        <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><?php echo (isset($_GET['id']) ? 'Edit' : 'Save') ?></button>
                                                     </div>
                                                 </form>
                                         </div>

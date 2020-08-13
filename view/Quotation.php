@@ -124,9 +124,9 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     $last_id = $dba->getLastID("branch_id", "create_user", "id=" . $_SESSION['user_id']);
                                                     $sql = "select (add_quotation.id) as qid,supplier.sup_name,add_quotation.item_name,add_quotation.unit,add_quotation.qty,add_quotation.rate,add_quotation.quotation_date,add_quotation.remark,inquiry.id,add_quotation.inquiry_id,inquiry.inq_date,inquiry.inq_remark,create_party.party_name FROM add_quotation INNER JOIN inquiry ON add_quotation.inquiry_id=inquiry.id INNER JOIN create_party ON inquiry.party_id=create_party.id LEFT JOIN supplier ON add_quotation.supplier_id=supplier.id";
                                                     $result = mysqli_query($con, $sql);
-//                                                                print_r($sql);
-                                                    $count = count($sql);
-//                                                                echo $count;
+//                                                    print_r($sql);
+                                                    $count = mysqli_num_rows($result);
+//                                                    echo $count;
                                                     if ($count >= 1) {
                                                         while ($row = mysqli_fetch_array($result)) {
                                                             echo "<tr>";
