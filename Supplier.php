@@ -163,7 +163,9 @@ if (isset($_SESSION['user_id'])) {
                                                             $editdata = isset($_GET['type']);
                                                             if ($editdata == 1) {
                                                                 $dba = new DBAdapter();
-                                                                $data = $dba->getRow("cities", array("id", "name"), "country_id=" . $edata[0][9]);
+                                                                $sql = "select * from cities where country_id=" . $edata[0][9] . " ORDER BY name";
+                                                                $data = mysqli_query($con, $sql);
+//                                                                $data = $dba->getRow("cities", array("id", "name"), "country_id=" . $edata[0][9]);
                                                                 foreach ($data as $subData) {
                                                                     echo "<option " . ($subData[0] == $edata[0][10] ? 'selected' : '') . " value=" . $subData[0] . ">" . $subData[1] . "</option>";
                                                                 }

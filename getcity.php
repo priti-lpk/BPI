@@ -2,12 +2,14 @@
 include 'shreeLib/dbconn.php';
 include_once 'shreeLib/DBAdapter.php';
 $dba = new DBAdapter();
-$data = $dba->getRow("cities", array("id", "name"), "country_id='" . $_GET['countries'] . "'");
+$sql = "select * from cities where country_id='" . $_GET['countries'] . "' ORDER BY name";
+$data = mysqli_query($con, $sql);
+//$data = $dba->getRow("cities", array("id", "name"), "country_id='" . $_GET['countries'] . "'");
 echo '<select class="form-control select2" name="city_id" id="cities" required="">';
 echo '<option>Select City</option>';
 foreach ($data as $subData) {
 
-    echo "<option value=" . $subData[0] . ">" . $subData[1] . "</option>";
+    echo "<option value=" . $subData['id'] . ">" . $subData['name'] . "</option>";
 }
 echo '</select>';
 ?>

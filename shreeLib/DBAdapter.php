@@ -95,7 +95,7 @@ class DBAdapter {
         }
         $query = $text . $string . " from " . $table . " where " . $clause;
 //        echo '</br>';echo '</br>';echo '</br>';echo '</br>';
-//        echo $query;
+        //echo $query;
         $result = mysqli_query($this->con, $query);
         if ($result) {
             $i = 0;

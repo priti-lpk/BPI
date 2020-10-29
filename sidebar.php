@@ -55,11 +55,20 @@ if (!isset($_SESSION['user_id'])) {
                 $result = mysqli_query($con, $sql);
                 $row = mysqli_fetch_array($result);
                 $id = $row[1];
+//                echo $id;
                 if ($id == 'Manager') {
                     $id = $row['roles_id'];
 //                        echo $id;
                     ?>
                     <!--<li><a href="view/PartyQuotationMsg.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Party Quatation Status</span></a></li>-->
+                    <li><a href="view/Send_party.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Performa Invoice</span></a></li>
+
+                <?php
+                }if ($id == 'Purchase') {
+                    $id = $row['roles_id'];
+//                        echo $id;
+                    ?>
+                        <!--<li><a href="view/PartyQuotationMsg.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Party Quatation Status</span></a></li>-->
                     <li><a href="view/Send_party.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Performa Invoice</span></a></li>
 
                 <?php } ?> 
