@@ -143,7 +143,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                                 echo "<td>" . $subData[5] . "</td>";
                                                                 $iid = $subData[0];
                                                                 echo "<td id='rp" . $iid . "'><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' data-id='" . $iid . "' data-status='true' onclick='setrateID(this.id);' data-toggle='modal' data-target='#addrate' ><li id='li" . $iid . "' class='btn btn-default btn-sm'><b>Set Rate</b></li></button>";
-                                                                echo "<td><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
+                                                                echo "<td><input type='checkbox' id='" . $iid . "' value='Confirm' onclick='doAction(this)'>";
 
                                                                 $date = $subData[6];
                                                                 $dates = date("d-m-Y", strtotime($date));
@@ -158,7 +158,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                                 echo "<td><a href='view/SendParty1.php?inq_id=" . $subData[9] . "&id=" . $subData[0] . "' class='btn btn-primary' value='" . $subData[0] . "' id='sp" . $subData[0] . "' ><i class='fa fa-edit'></i>Create Proforma Invoice</a></td>";
                                                                 echo '</tr>';
                                                                 echo "</div>";
-                                                            }else{
+                                                            } else {
                                                                 echo "<div id='fillrate'>";
                                                                 echo "<tr id=" . $subData[0] . ">";
                                                                 echo "<td class='fillrate' id='quo_id'>" . $subData[0] . "</td>";
@@ -169,7 +169,8 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                                 echo "<td class='fillrate'>" . $subData[5] . "</td>";
                                                                 $iid = $subData[0];
                                                                 echo "<td id='rp" . $iid . "'><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' data-id='" . $iid . "' data-status='true' onclick='setrateID(this.id);' data-toggle='modal' data-target='#addrate' ><li id='li" . $iid . "' class='btn btn-default btn-sm'><b>Set Rate</b></li></button>";
-                                                                echo "<td><button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
+                                                                echo "<td><input type='checkbox' id='" . $iid . "' value='Confirm' onclick='doAction(this)'>";
+//<button style='padding: 0px 0px;' class='btn btn-primary waves-effect waves-light' id='" . $iid . "'value='" . $iid . "' onclick='doAction(this.value)'><li class='btn btn-default btn-sm'><b>Select</b></li></button>";
 
                                                                 $date = $subData[6];
                                                                 $dates = date("d-m-Y", strtotime($date));
@@ -192,7 +193,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                     ?>    
                                                 </tbody>
                                             </table>
-                                            <input name="status" id="status1" type="hidden" value="Confirm">
+                                            <!--<input name="status" id="status1" type="text" value="Confirm">-->
 
                                         </div>
                                     </div>
@@ -316,21 +317,22 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script>
-                                        function doAction(value)
+                                        function doAction(k)
                                         {
-                                            var id = value;
-                                            //                            alert(id);
-                                            var status = document.getElementById("status1").value = "Confirm";
-                                            //                            alert(status);
+                                            var id = k.id;
+                                            if (k.checked == true) {
+                                                var status = "Confirm";
+                                            } else {
+                                                var status = "Not";
+                                            }
                                             var my_object = {"quotation_id": id, "status1": status};
-
                                             $.ajax({
                                                 type: "POST",
                                                 url: "customFile/addstatusquotation.php",
                                                 data: my_object,
                                                 success: function (data) {
-                                                    //                                    alert(data);
-                                                    //alert("sucess");
+//                                                    alert(data);
+                                                    alert("sucess");
                                                 },
                                                 error: function (errorThrown) {
                                                     alert(errorThrown);
@@ -366,7 +368,6 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
 
             function SetForDelete(id) {
                 location.href = "Delete.php?type=quotation&id=" + id;
-
             }
         </script>
     </body>
