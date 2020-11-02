@@ -89,7 +89,7 @@ include_once 'shreeLib/DBAdapter.php';
                                                     <h4><b><?php echo (isset($_GET['id']) ? 'Edit Send Inquiry' : '') ?></b></h4>
                                                 </div>
                                             </div>
-                                            
+
                                             <form action = "customFile/inquiry_main_detailsPro.php" id = "form_data" class = "form-horizontal" role = "form" method = "post" enctype = "multipart/form-data" >
                                                 <div class="form-group row">
                                                     <label for="example-text-input" class="col-sm-2 col-form-label" style="margin-right: -88px;">Select User</label>
@@ -143,9 +143,9 @@ include_once 'shreeLib/DBAdapter.php';
                                                                 echo "<input type='hidden' name='inq_item_list_id[]' value='" . $subData[6] . "'>";
                                                                 echo "<td><input type='text' name='item_qty[]' value='" . $subData[3] . "'></td>";
                                                                 if ($subData['4'] == '0') {
-                                                                    echo "<td><input type='checkbox' name='user_id' id='" . $subData[6] . "' value='0' onclick='getuser(this.id)'></td>";
+                                                                    echo "<td><input type='checkbox' class='user' name='user_id' id='" . $subData[6] . "' value='0' onclick='getuser(this.id)'></td>";
                                                                 } else {
-                                                                    echo "<td><input type='checkbox' name='user_id' id='" . $subData[6] . "' value='" . $subData[4] . "' onclick='getuser(this.id)' checked></td>";
+                                                                    echo "<td><input type='checkbox' class='user' name='user_id' id='" . $subData[6] . "' value='" . $subData[4] . "' onclick='getuser(this.id)' checked></td>";
                                                                 }
                                                                 echo "<td><input type='date' name='due_date' id='datevalue' value='" . $subData[5] . "'class='form-control' required'></td>";
                                                                 echo "</tr>";
@@ -261,6 +261,7 @@ include_once 'shreeLib/DBAdapter.php';
                 });
                 var user = countries.join(",");
                 document.getElementById('data').value = user;
+                $(".user").val(user);
             }
             );
         </script>

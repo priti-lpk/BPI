@@ -183,7 +183,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                                     echo "<td><input type='text' style{border: none} class='inquiry' name='inq_item_list_id[]' id='inq' value='" . $subData[0] . "' readonly></td>";
                                                                     echo "<td><input type='text' name='item_name[]' value='" . $subData[1] . "' readonly></td>";
                                                                     echo "<td><input type='text' name='item_qnty[]' value='" . $subData[2] . "' readonly></td>";
-                                                                    echo "<td><input type='checkbox' name='user_id[]' id='" . $subData[0] . "' value='0' onclick='getuser(this.id)'></td>";
+                                                                    echo "<td><input type='checkbox' class='user' name='user_id[]' id='" . $subData[0] . "' value='0' onclick='getuser(this.id)'></td>";
                                                                     echo "<td><input type='date' name='due_date[]' id='datevalue' class='form-control' required'></td>";
                                                                     echo "<input type='hidden' name='inq_id' value='$subData[4]'>";
                                                                     echo "</tr>";
@@ -352,6 +352,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
                                                             });
                                                             var user = countries.join(",");
                                                             document.getElementById('data').value = user;
+                                                            $(".user").val(user);
                                                         }
                                                         );
         </script>
