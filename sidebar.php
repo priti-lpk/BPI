@@ -27,6 +27,7 @@ if (!isset($_SESSION['user_id'])) {
                 $dba = new DBAdapter();
                 $data1 = $dba->getRow("module", array("mod_master"), "1 group by mod_master");
                 $count = count($data1);
+//                print_r($data1);
                 for ($i = 0; $i < $count; $i++) {
                     ?>
                     <li>
@@ -38,9 +39,15 @@ if (!isset($_SESSION['user_id'])) {
                             $result = mysqli_query($con, $sql);
                             while ($row = mysqli_fetch_array($result)) {
                                 $uid = $row['mod_pagename'];
-                                ?>
-                                <li><a href="<?= $uid ?>"><?= $row['mod_name'] ?></a></li>
-                                <?php
+                                if ($row['mod_name'] == 'Add Quotation') {
+                                    ?>
+
+                                    <?php
+                                } else {
+                                    ?>
+                                    <li><a href="<?= $uid ?>"><?= $row['mod_name'] ?></a></li>
+                                    <?php
+                                }
                             }
                             ?> 
                         </ul>
@@ -63,12 +70,12 @@ if (!isset($_SESSION['user_id'])) {
                     <!--<li><a href="view/PartyQuotationMsg.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Party Quatation Status</span></a></li>-->
                     <li><a href="view/Send_party.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Performa Invoice</span></a></li>
 
-                <?php
+                    <?php
                 }if ($id == 'Purchase') {
                     $id = $row['roles_id'];
 //                        echo $id;
                     ?>
-                        <!--<li><a href="view/PartyQuotationMsg.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Party Quatation Status</span></a></li>-->
+                                <!--<li><a href="view/PartyQuotationMsg.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Party Quatation Status</span></a></li>-->
                     <li><a href="view/Send_party.php" class="waves-effect"><i class="mdi mdi-view-day"></i><span>Performa Invoice</span></a></li>
 
                 <?php } ?> 
