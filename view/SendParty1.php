@@ -229,30 +229,29 @@ function displaywords($number) {
                                                         <td colspan="3"><u><b>BANK DETAILS</b></u><br><br><br><br><br></td>
                                                     </tr>
                                                     <tr>
-                                                        <td rowspan="2" colspan="3"><u><b>CONSIGNEE:<br><br><br><br><br></b></u></td>
-                                                        <td><b>COUNTRY OF ORIGIN<br><br></b></td>
-                                                        <td colspan="2"><b>COUNTRY OF FINAL DESTINATION<br><br></b></td>
-
+                                                        <td rowspan="2" colspan="3"><textarea  class="consignee" name="consignee" rows="3" cols="90" style="width: 390px"></textarea></td>
+                                                        <td><b><input type="text" name="country_of_origin" class="country_of_origin" style="border: double;width: 200px"></b></td>
+                                                        <td colspan="2"><b><input type="text" name="country_of_final" class="country_of_final" style="border: double;width: 200px"></b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="3"><b>BUYER OTHER THAN CONSIGNEE:<br><br></b></td> 
+                                                        <td colspan="3"><b><input type="text" name="buyer_consignee" class="buyer_consignee" style="border: double;width: 200px"></b></td> 
                                                     </tr>
                                                     <tr>
                                                     <center><td>
-                                                            <b>PRE-CARRIAGE BY</b><br>
+                                                            <b><input type="text" name="pre_carriage_by" class="pre_carriage_by" style="border: double;width: 200px"></b><br>
                                                         </td></center>
-                                                    <center><td colspan="2"><b>PRE-CARRIAGE RECEIPT AT</b><br></td>  </center>     
+                                                    <center><td colspan="2"><b><input type="text" name="pre_carriage_at" class="pre_carriage_at" style="border: double;width: 200px"></b><br></td>  </center>     
                                                     <td colspan="2"><b>B/L NO.:-</b>&nbsp;&nbsp;<input type="text" name="bl_no" class="bl_no" style="border: double;width: 200px"><br><br><b>S.B No.:-</b>&nbsp;&nbsp;<input type="text" name="sb_no" class="sb_no" style="border: double;width: 200px"></td>
                                                     <td><b>DATE:-&nbsp;</b><input type="date" name="bl_date" class="bl_date" id="datevalue" style="border:none" ><br><b>DATE:-</b>&nbsp;<input type="date" name="sb_date" class="sb_date" id="datevalue1" style="border:none" ></td>
                                                     </tr>
                                                     <tr>
-                                                    <center><td><b>VESSEL/FLIGHT No.</b><br></td></center>
-                                                    <td colspan="2"><b><center>PORT OF LOADING</center></b><br></td>
+                                                    <center><td><b><input type="text" name="flight_no" class="flight_no" style="border: double;width: 200px"></b><br></td></center>
+                                                    <td colspan="2"><b><center><input type="text" name="port_of_loading" class="port_of_loading" style="border: double;width: 200px"></center></b><br></td>
                                                     <td colspan="3" rowspan="2"><b><center>TERMS OF DELIVERY AND PAYMENTS:</center><br>DELIVERY:-&nbsp;&nbsp;<input type="text" name="delivery" class="delivery" style="border: double;width: 390px"><br><br>PAYMENT:-&nbsp;&nbsp;&nbsp;<input type="text" name="payment" class="payment" style="border: double;width: 380px"></b><br><br></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><b><center>PORT OF DISCHARGE</center></b><br></td>
-                                                        <td colspan="2"><b><center>FINAL DESTINATION</center></b><br></td>
+                                                        <td><b><center><input type="text" name="port_of_discharge" class="port_of_discharge" style="border: double;width: 200px"></center></b><br></td>
+                                                        <td colspan="2"><b><center><input type="text" name="final_destination" class="final_destination" style="border: double;width: 200px"></center></b><br></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>MARK & CONT.NO.</b></td>
@@ -399,7 +398,7 @@ function displaywords($number) {
 
                                                 <a href="javascript:window.print()"><button type="submit" name="print" id="print" onclick="window.print()" class="btn btn-primary"><i class="fa fa-floppy-o"></i>Save & Print</button></a>
                                             </form>
-                                            <!--</table>-->
+                                            <!--</table> "-->
                                             <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 
                                         </div>
@@ -469,27 +468,27 @@ function displaywords($number) {
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script type="text/javascript">
-            var today1 = new Date();
-            var dd = today1.getDate();
-            var mm = today1.getMonth() + 1;
-            var yyyy = today1.getFullYear();
-            if (dd < 10) {
-                dd = "0" + dd;
-            }
-            if (mm < 10) {
-                mm = "0" + mm;
-            }
-            var date = yyyy + "-" + mm + "-" + dd;
-            document.getElementById("datevalue").value = date;
-            document.getElementById("datevalue1").value = date;
-            document.getElementById("datevalue2").value = date;
+                                                            var today1 = new Date();
+                                                            var dd = today1.getDate();
+                                                            var mm = today1.getMonth() + 1;
+                                                            var yyyy = today1.getFullYear();
+                                                            if (dd < 10) {
+                                                                dd = "0" + dd;
+                                                            }
+                                                            if (mm < 10) {
+                                                                mm = "0" + mm;
+                                                            }
+                                                            var date = yyyy + "-" + mm + "-" + dd;
+                                                            document.getElementById("datevalue").value = date;
+                                                            document.getElementById("datevalue1").value = date;
+                                                            document.getElementById("datevalue2").value = date;
         </script>
         <script>
 
             $("#print").click(function () {
                 //get the form values
                 var qid = $('.quo_id').val();
-                // alert(sid);
+//                 alert(qid);
                 var pno = $('.p_invoice_no').val();
                 var invoice_date = $('.invoice_date').val();
                 var exporter_no = $('.exporter_no').val();
@@ -512,6 +511,19 @@ function displaywords($number) {
                 var party_id = $('.party_id').val();
                 var sup_id = $('.sup_id').val();
                 var user_id = $('.user_id').val();
+
+                var consignee = $('.consignee').val();
+//                alert(consignee);
+                var country_of_origin = $('.country_of_origin').val();
+                var country_of_final = $('.country_of_final').val();
+                var buyer_consignee = $('.buyer_consignee').val();
+//                alert(buyer_consignee);
+                var pre_carriage_by = $('.pre_carriage_by').val();
+                var pre_carriage_at = $('.pre_carriage_at').val();
+                var flight_no = $('.flight_no').val();
+                var port_of_loading = $('.port_of_loading').val();
+                var port_of_discharge = $('.port_of_discharge').val();
+                var final_destination = $('.final_destination').val();
 //                                                                                                                                                    alert(sid);
                 var id = document.getElementsByClassName("item_id");
                 var item_id = [];
@@ -559,18 +571,18 @@ function displaywords($number) {
                 }
                 item_amount = item_amount.join(",");
                 //make the postdata
-                var postData = 'quo_id[]=' + qid + '&p_invoice_no[]=' + pno + '&invoice_date[]=' + invoice_date + '&exporter_no[]=' + exporter_no + '&inquiry_no[]=' + inquiry_no + '&buyer_order_no[]=' + buyer_order_no + '&bl_no[]=' + bl_no + '&sb_no[]=' + sb_no + '&bl_date[]=' + bl_date + '&sb_date[]=' + sb_date + '&delivery[]=' + delivery + '&payment[]=' + payment + '&fob_value[]=' + fob_value + '&cf_freight[]=' + cf_freight + '&cif_freight[]=' + cif_freight + '&cf_value[]=' + cf_value + '&insurance[]=' + insurance + '&cif_value[]=' + cif_value + '&total_amount[]=' + total_amount + '&party_id[]=' + party_id + '&sup_id[]=' + sup_id + '&user_id=' + user_id + '&item_id[]=' + item_id + "&item_name[]=" + item_name + '&item_qty[]=' + item_qty + '&item_unit[]=' + item_unit + '&item_rate[]=' + item_rate + '&item_amount[]=' + item_amount;
-                //call your input.php script in the background, when it returns it will call the success function if the request was successful or the error one if there was an issue (like a 404, 500 or any other error status)
-//                                                                                                                                                    alert(postData);
+                var postData = 'quo_id[]=' + qid + '&p_invoice_no[]=' + pno + '&invoice_date[]=' + invoice_date + '&exporter_no[]=' + exporter_no + '&inquiry_no[]=' + inquiry_no + '&buyer_order_no[]=' + buyer_order_no + '&bl_no[]=' + bl_no + '&sb_no[]=' + sb_no + '&bl_date[]=' + bl_date + '&sb_date[]=' + sb_date + '&delivery[]=' + delivery + '&payment[]=' + payment + '&fob_value[]=' + fob_value + '&cf_freight[]=' + cf_freight + '&cif_freight[]=' + cif_freight + '&cf_value[]=' + cf_value + '&insurance[]=' + insurance + '&cif_value[]=' + cif_value + '&total_amount[]=' + total_amount + '&party_id[]=' + party_id + '&sup_id[]=' + sup_id + '&user_id[]=' + user_id + '&consignee[]=' + consignee + '&country_of_origin[]=' + country_of_origin + '&country_of_final[]=' + country_of_final + '&buyer_consignee[]=' + buyer_consignee + '&pre_carriage_by[]=' + pre_carriage_by + '&pre_carriage_at[]=' + pre_carriage_at + '&flight_no[]=' + flight_no + '&port_of_loading[]=' + port_of_loading + '&port_of_discharge[]=' + port_of_discharge + '&final_destination[]=' + final_destination + '&item_id[]=' + item_id + "&item_name[]=" + item_name + '&item_qty[]=' + item_qty + '&item_unit[]=' + item_unit + '&item_rate[]=' + item_rate + '&item_amount[]=' + item_amount;
+//                //call your input.php script in the background, when it returns it will call the success function if the request was successful or the error one if there was an issue (like a 404, 500 or any other error status)
+//                alert(postData);
                 $.ajax({
                     type: "POST",
                     url: "customFile/addProformaInvoice.php",
                     data: postData,
                     success: function (data)
                     {
-                        //alert('success');
-//                                                                                                                                                            alert(data);
-//                                                                                                                                                            console.log(data);
+//                        alert(data);
+//                        console.log(data);
+//                        console.log(data);
                     },
                     error: function (errorThrown) {
                         alert(errorThrown);

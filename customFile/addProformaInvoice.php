@@ -6,13 +6,8 @@ include_once '../shreeLib/dbconn.php';
 include_once '../shreeLib/Controls.php';
 //echo 'das';
 if ($_POST) {
-//    echo "df";
     $dba = new DBAdapter();
     unset($_POST['action']);
-
-
-//    echo $sql1;
-
     $totalrow = count($_POST['item_id']);
     for ($i = 0; $i < $totalrow; $i++) {
 //        $_POST['invoice_date'][$i] = date('Y-m-d', strtotime($_POST['invoice_date'][$i]));
@@ -61,7 +56,18 @@ if ($_POST) {
         $sup_id = $_POST['sup_id'][$i];
 //        echo $sup_id;
         $user_id = $_POST['user_id'][$i];
-        $sql1 = "INSERT INTO send_party (quo_id , p_invoice_no , invoice_date,exporter_no,inquiry_no,buyer_order_no,bl_no,sb_no,bl_date,sb_date,delivery,payment,fob_value,cf_freight,cif_freight,cf_value,insurance,cif_value,total_amount,party_id,sup_id,user_id) VALUES ('" . $quo_id . "','" . $p_invoice_no . "','" . $invoice_date . "','" . $exporter_no . "','" . $inquiry_no . "','" . $buyer_order_no . "','" . $bl_no . "','" . $sb_no . "','" . $bl_date . "','" . $sb_date . "','" . $delivery . "','" . $payment . "','" . $fob_value . "','" . $cf_freight . "','" . $cif_freight . "','" . $cf_value . "','" . $insurance . "','" . $cif_value . "','" . $total_amount . "','" . $party_id . "','" . $sup_id . "','" . $user_id . "')";
+        $consignee = $_POST['consignee'][$i];
+        $country_of_origin = $_POST['country_of_origin'][$i];
+        $country_of_final = $_POST['country_of_final'][$i];
+        $buyer_consignee = $_POST['buyer_consignee'][$i];
+        $pre_carriage_by = $_POST['pre_carriage_by'][$i];
+        $pre_carriage_at = $_POST['pre_carriage_at'][$i];
+        $flight_no = $_POST['flight_no'][$i];
+        $port_of_loading = $_POST['port_of_loading'][$i];
+        $port_of_discharge = $_POST['port_of_discharge'][$i];
+        $final_destination = $_POST['final_destination'][$i];
+
+        $sql1 = "INSERT INTO send_party (quo_id , p_invoice_no , invoice_date,exporter_no,inquiry_no,buyer_order_no,bl_no,sb_no,bl_date,sb_date,delivery,payment,fob_value,cf_freight,cif_freight,cf_value,insurance,cif_value,total_amount,party_id,sup_id,user_id,consignee,country_of_origin,country_of_final,buyer_consignee,pre_carriage_by,pre_carriage_at,flight_no,port_of_loading,port_of_discharge,final_destination) VALUES ('" . $quo_id . "','" . $p_invoice_no . "','" . $invoice_date . "','" . $exporter_no . "','" . $inquiry_no . "','" . $buyer_order_no . "','" . $bl_no . "','" . $sb_no . "','" . $bl_date . "','" . $sb_date . "','" . $delivery . "','" . $payment . "','" . $fob_value . "','" . $cf_freight . "','" . $cif_freight . "','" . $cf_value . "','" . $insurance . "','" . $cif_value . "','" . $total_amount . "','" . $party_id . "','" . $sup_id . "','" . $user_id . "','" . $consignee . "','" . $country_of_origin . "','" . $country_of_final . "','" . $buyer_consignee . "','" . $pre_carriage_by . "','" . $pre_carriage_at . "','" . $flight_no . "','" . $port_of_loading . "','" . $port_of_discharge . "','" . $final_destination . "')";
         mysqli_query($con, $sql1);
 //        echo $sql1;   
         $last_id = $dba->getLastID("id", "send_party", "1");
